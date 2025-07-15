@@ -1,15 +1,6 @@
-import { Flex } from "@chakra-ui/react";
-import { Inbox } from "@components/Inbox";
+import { Login } from "@screens/Login";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/")({
-  component: RouteComponent,
+  component: Login,
 });
-
-function RouteComponent() {
-  return (
-    <Flex h="100%">
-      <Inbox />
-    </Flex>
-  );
-}

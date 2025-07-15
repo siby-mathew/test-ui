@@ -1,32 +1,35 @@
-import { Flex } from "@chakra-ui/react";
-import { Navbar } from "@components/Navbar";
-import { Sidebar } from "@components/Sidebar";
-import { Outlet } from "@tanstack/react-router";
+import { Box, Flex } from "@chakra-ui/react";
+import { usePrivy } from "@privy-io/react-auth";
+import { Outlet, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 export const AppMainLayout: React.FC = () => {
+  const { ready, authenticated } = usePrivy();
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<boolean>(!1);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStatus(!0);
+    }, 1500);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, []);
+  if (!status || !ready) {
+    return <Box>Loading...</Box>;
+  }
+
+  if (ready && !authenticated) {
+    navigate({ to: "/" });
+  } else {
+    navigate({ to: "/u/solmail/inbox/all" });
+  }
   return (
-    <Flex w="100%" h="100vh" direction={"row"}>
-      <Flex as={"aside"} w="300px" maxW={"300px"}>
-        <Sidebar />
-      </Flex>
-      <Flex
-        bg="surface.300"
-        flex={"auto"}
-        borderLeftRadius={20}
-        direction={"column"}
-        boxShadow={`-1px 0px 0px 0px #181818`}
-      >
-        <Flex
-          as={"nav"}
-          borderBottom={"solid 1px"}
-          borderBottomColor={"#1a1a1a"}
-        >
-          <Navbar />
-        </Flex>
-        <Flex data-body flex={"auto"}>
-          <Outlet />
-        </Flex>
-      </Flex>
+    <Flex minH={"100vh"} w="full">
+      <Outlet />
     </Flex>
   );
 };

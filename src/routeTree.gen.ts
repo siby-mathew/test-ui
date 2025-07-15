@@ -8,50 +8,77 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as LayoutRouteImport } from './routes/_layout'
-import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { createFileRoute } from '@tanstack/react-router'
 
-const LayoutRoute = LayoutRouteImport.update({
-  id: '/_layout',
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as ULayoutRouteImport } from './routes/u/_layout'
+import { Route as ULayoutSolmailInboxIdRouteImport } from './routes/u/_layout/solmail/inbox/$id'
+
+const URouteImport = createFileRoute('/u')()
+
+const URoute = URouteImport.update({
+  id: '/u',
+  path: '/u',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutIndexRoute = LayoutIndexRouteImport.update({
-  id: '/',
+  id: '/_layout/',
   path: '/',
-  getParentRoute: () => LayoutRoute,
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ULayoutRoute = ULayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => URoute,
+} as any)
+const ULayoutSolmailInboxIdRoute = ULayoutSolmailInboxIdRouteImport.update({
+  id: '/solmail/inbox/$id',
+  path: '/solmail/inbox/$id',
+  getParentRoute: () => ULayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
 }
 export interface FileRoutesByTo {
+  '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_layout': typeof LayoutRouteWithChildren
+  '/u': typeof URouteWithChildren
+  '/u/_layout': typeof ULayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/u/_layout/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/u' | '/' | '/u/solmail/inbox/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/_layout' | '/_layout/'
+  to: '/u' | '/' | '/u/solmail/inbox/$id'
+  id:
+    | '__root__'
+    | '/u'
+    | '/u/_layout'
+    | '/_layout/'
+    | '/u/_layout/solmail/inbox/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  LayoutRoute: typeof LayoutRouteWithChildren
+  URoute: typeof URouteWithChildren
+  LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutRouteImport
+    '/u': {
+      id: '/u'
+      path: '/u'
+      fullPath: '/u'
+      preLoaderRoute: typeof URouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/': {
@@ -59,24 +86,49 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexRouteImport
-      parentRoute: typeof LayoutRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/_layout': {
+      id: '/u/_layout'
+      path: '/u'
+      fullPath: '/u'
+      preLoaderRoute: typeof ULayoutRouteImport
+      parentRoute: typeof URoute
+    }
+    '/u/_layout/solmail/inbox/$id': {
+      id: '/u/_layout/solmail/inbox/$id'
+      path: '/solmail/inbox/$id'
+      fullPath: '/u/solmail/inbox/$id'
+      preLoaderRoute: typeof ULayoutSolmailInboxIdRouteImport
+      parentRoute: typeof ULayoutRoute
     }
   }
 }
 
-interface LayoutRouteChildren {
-  LayoutIndexRoute: typeof LayoutIndexRoute
+interface ULayoutRouteChildren {
+  ULayoutSolmailInboxIdRoute: typeof ULayoutSolmailInboxIdRoute
 }
 
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutIndexRoute: LayoutIndexRoute,
+const ULayoutRouteChildren: ULayoutRouteChildren = {
+  ULayoutSolmailInboxIdRoute: ULayoutSolmailInboxIdRoute,
 }
 
-const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
+const ULayoutRouteWithChildren =
+  ULayoutRoute._addFileChildren(ULayoutRouteChildren)
+
+interface URouteChildren {
+  ULayoutRoute: typeof ULayoutRouteWithChildren
+}
+
+const URouteChildren: URouteChildren = {
+  ULayoutRoute: ULayoutRouteWithChildren,
+}
+
+const URouteWithChildren = URoute._addFileChildren(URouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  LayoutRoute: LayoutRouteWithChildren,
+  URoute: URouteWithChildren,
+  LayoutIndexRoute: LayoutIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

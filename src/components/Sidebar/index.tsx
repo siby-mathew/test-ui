@@ -11,6 +11,7 @@ import {
   MenuButton,
   chakra,
   Link as ChakraLink,
+  useClipboard,
 } from "@chakra-ui/react";
 import { config } from "@const/config";
 import { SOLMAIL_MENU } from "@const/menu";
@@ -19,7 +20,13 @@ import { BsArrowUpRightSquareFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
 import { LiaWalletSolid } from "react-icons/lia";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { shortenPrincipalId } from "@utils/index";
 import type { MenuConfig } from "src/@types";
+import PrivyLogo from "@assets/privy.jpg";
+import JupiterLogo from "@assets/jupiter.svg";
+import { TbCopyCheckFilled } from "react-icons/tb";
+
+import { useSolanaWallets } from "@privy-io/react-auth";
 
 const AppSwitch: React.FC = () => {
   return (
@@ -97,59 +104,75 @@ export const Sidebar: React.FC = () => {
           direction={"column"}
         >
           <Flex fontSize={14} opacity={0.5} alignItems={"center"}>
-            <Icon as={LiaWalletSolid} mr={2} /> Wallets
+            <Icon as={LiaWalletSolid} mr={2} /> Wallet
           </Flex>
 
           <VStack py={2} align={"start"} w="full">
-            <Wallet
-              name="Privy"
-              address={"C1n...RoA"}
-              onExport={() => {}}
-              logo="https://pbs.twimg.com/profile_images/1902346061005676544/e6WybE_v_400x400.jpg"
-            />
-            <Wallet
-              name="Phantom"
-              address={"59h...9Bi"}
-              logo="https://yt3.googleusercontent.com/0yNbMsS0-rUrtVJmKd6d0xTDmLDEn1qu_KkivaeIC3UmCuXntxE-CJZRhWoy93JXij1YSJFMhA=s900-c-k-c0x00ffffff-no-rj"
-            />
+            <WalletList />
           </VStack>
         </Flex>
       </Flex>
-      <Flex
-        direction={"column"}
-        borderTop={"solid 1px"}
-        pt={3}
-        borderTopColor={"surface.300"}
-      >
-        <Flex alignItems={"center"} fontSize={13} gap={2}>
-          <ChakraLink
-            as={Link}
-            to="#"
-            display={"inline-flex"}
-            alignItems={"center"}
-            target="_blank"
-          >
-            <Image boxSize={"13px"} mr={1} src={config.logo} />
-            <chakra.span textDecoration={"underline"}>Solmail</chakra.span>
+      <SidebarFooter />
+    </Flex>
+  );
+};
+
+const SidebarFooter: React.FC = () => {
+  return (
+    <Flex
+      direction={"column"}
+      borderTop={"solid 1px"}
+      pt={3}
+      borderTopColor={"surface.300"}
+    >
+      <Flex alignItems={"center"} fontSize={13} gap={2}>
+        <ChakraLink
+          as={Link}
+          to="#"
+          display={"inline-flex"}
+          alignItems={"center"}
+          target="_blank"
+        >
+          <Image boxSize={"13px"} mr={1} src={config.logo} />
+          <chakra.span textDecoration={"underline"}>Solmail</chakra.span>
+        </ChakraLink>
+        <chakra.span>
+          <ChakraLink textDecoration={"underline"} to="./" as={Link}>
+            {shortenPrincipalId(config.SOLMAIL_CONTRACT)}{" "}
+            <Icon fontSize={13} as={FaCopy} ml={2} />
           </ChakraLink>
-          <chakra.span>
-            <ChakraLink textDecoration={"underline"} to="./" as={Link}>
-              C8c...z5KF <Icon fontSize={13} as={FaCopy} ml={2} />
-            </ChakraLink>
-          </chakra.span>
-          <chakra.span>
-            <Image
-              boxSize={"13px"}
-              borderRadius={"50%"}
-              src="https://portfolio.jup.ag/icon.svg?22ee72dc09734fa6"
-            />
-          </chakra.span>
-        </Flex>
-        <Flex mt={1} opacity={0.7} fontSize={12}>
-          Solmail © 2025 All rights reserved.
-        </Flex>
+        </chakra.span>
+        <chakra.span>
+          <Image boxSize={"13px"} borderRadius={"50%"} src={JupiterLogo} />
+        </chakra.span>
+      </Flex>
+      <Flex mt={1} opacity={0.7} fontSize={12}>
+        Solmail © 2025 All rights reserved.
       </Flex>
     </Flex>
+  );
+};
+
+const WalletList: React.FC = () => {
+  const { wallets, exportWallet } = useSolanaWallets();
+  return (
+    <>
+      {wallets &&
+        wallets.length > 0 &&
+        wallets.map((wallet) => {
+          const isSolanaEmbedded =
+            wallet.type === "solana" && wallet.walletClientType === "privy";
+
+          return (
+            <Wallet
+              name={wallet.meta.name}
+              address={wallet.address?.toString()}
+              onExport={isSolanaEmbedded ? exportWallet : undefined}
+              logo={!isSolanaEmbedded ? (wallet.meta.icon ?? "") : PrivyLogo}
+            />
+          );
+        })}
+    </>
   );
 };
 
@@ -190,6 +213,7 @@ type WalletProps = {
 };
 
 const Wallet: React.FC<WalletProps> = ({ logo, name, address, onExport }) => {
+  const { onCopy, hasCopied } = useClipboard(address ?? "");
   return (
     <Flex
       direction={"row"}
@@ -197,10 +221,14 @@ const Wallet: React.FC<WalletProps> = ({ logo, name, address, onExport }) => {
       position={"relative"}
       w="100%"
       cursor={"pointer"}
+      transition={"all ease .2s"}
+      _hover={{
+        opacity: 0.8,
+      }}
     >
       <Flex fontSize={13} w="100%" alignItems={"center"}>
-        <Image boxSize={"20px"} borderRadius={5} src={logo} alt={name} />
-        <chakra.span mx={2}>{address}</chakra.span>
+        <Image boxSize={"18px"} borderRadius={5} src={logo} alt={name} />
+        <chakra.span mx={2}>{shortenPrincipalId(address)}</chakra.span>
         <Flex flex={"auto"} justifyContent={"flex-end"} alignItems={"center"}>
           {onExport && (
             <Box
@@ -211,17 +239,18 @@ const Wallet: React.FC<WalletProps> = ({ logo, name, address, onExport }) => {
                 opacity: 1,
               }}
             >
-              <Icon as={BsArrowUpRightSquareFill} />
+              <Icon fontSize={12} as={BsArrowUpRightSquareFill} />
             </Box>
           )}
           <Box
             p={1}
             opacity={0.2}
+            onClick={onCopy}
             _hover={{
               opacity: 1,
             }}
           >
-            <Icon as={FaCopy} />
+            <Icon as={hasCopied ? TbCopyCheckFilled : FaCopy} />
           </Box>
         </Flex>
       </Flex>
