@@ -64,7 +64,7 @@ export const MailCard: React.FC<any> = ({
         whiteSpace={"nowrap"}
         overflow={"hidden"}
         textOverflow={"ellipsis"}
-        fontWeight={"medium"}
+        // fontWeight={"medium"}
       >
         {subject}
       </Box>
