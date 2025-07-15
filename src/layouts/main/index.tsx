@@ -16,7 +16,11 @@ export const AppMainLayout: React.FC = () => {
         direction={"column"}
         boxShadow={`-1px 0px 0px 0px #181818`}
       >
-        <Flex as={"nav"}>
+        <Flex
+          as={"nav"}
+          borderBottom={"solid 1px"}
+          borderBottomColor={"#1a1a1a"}
+        >
           <Navbar />
         </Flex>
         <Flex data-body flex={"auto"}>
