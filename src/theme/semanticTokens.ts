@@ -1,0 +1,72 @@
+export const colors = {
+  dark: {
+    100: "#0f0f0f",
+    200: "#0a0a0a",
+    300: "#141414",
+    400: "#1f1f1f",
+    500: "#2a2a2a",
+    600: "#333333",
+    700: "#404040",
+    800: "#4d4d4d",
+    900: "#5a5a5a",
+  },
+  light: {
+    100: "#e4e4e4",
+    200: "#d4d4d4",
+    300: "#c4c4c4",
+    400: "#b4b4b4",
+    500: "#a4a4a4",
+    600: "#949494",
+    700: "#848484",
+    800: "#747474",
+    900: "#646464",
+  },
+  solana: {
+    start: "#f087ff",
+    middle: "#a256ff",
+    end: "#1efa9b",
+  },
+};
+export const semanticTokens = {
+  colors: {
+    solana: `linear-gradient(135deg, ${colors.solana.start}, ${colors.solana.middle},${colors.solana.end})`,
+    surface: {
+      100: {
+        default: "light.100",
+        _dark: "dark.100",
+      },
+      200: {
+        default: "light.200",
+        _dark: "dark.200",
+      },
+      300: {
+        default: "light.300",
+        _dark: "dark.300",
+      },
+      400: {
+        default: "light.400",
+        _dark: "dark.400",
+      },
+      500: {
+        default: "light.500",
+        _dark: "dark.500",
+      },
+      600: {
+        default: "light.600",
+        _dark: "dark.600",
+      },
+      700: {
+        default: "light.700",
+        _dark: "dark.700",
+      },
+      800: {
+        default: "light.800",
+        _dark: "dark.800",
+      },
+      900: {
+        default: "light.900",
+        _dark: "dark.900",
+      },
+    },
+  },
+};
