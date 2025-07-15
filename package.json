@@ -57,7 +57,7 @@
     "react-hook-form": "^7.59.0",
     "react-icons": "^5.5.0",
     "react-ipfs-uploader": "^1.3.0",
-    "react-quill": "^2.0.0",
+ 
     "react-scrollbars-custom": "^4.1.1",
     "react-singleton-hook": "^4.0.1",
     "react-toastify": "^11.0.5",
