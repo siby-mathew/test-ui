@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import { SolBalance } from "@components/SolBalance";
 import { UserProfileCard } from "@components/UserProfile";
 
 export const Navbar: React.FC = () => {
@@ -12,10 +13,9 @@ export const Navbar: React.FC = () => {
       alignItems={"center"}
       justifyContent={"space-between"}
     >
-      <Flex fontWeight={"medium"} fontSize={20}>
-        Inbox (5)
-      </Flex>
-      <Flex>
+      <Flex></Flex>
+      <Flex gap={3}>
+        <SolBalance />
         <UserProfileCard />
       </Flex>
     </Flex>

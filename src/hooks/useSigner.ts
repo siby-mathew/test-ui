@@ -37,7 +37,7 @@ export const useSigner = () => {
           "generate-nonce",
           true
         );
-      console.log(data);
+
       return data;
     } catch (err) {
       console.error(err);

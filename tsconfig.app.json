@@ -19,9 +19,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
     "baseUrl": "./",
     "paths": {
       "@components/*": ["src/components/*"],
@@ -32,7 +33,8 @@
       "@screens/*": ["src/screens/*"],
       "@state/*": ["src/state/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@theme/*": ["src/theme/*"]
+      "@theme/*": ["src/theme/*"],
+      "@integrations/*": ["src/integrations/*"]
     }
   },
   "include": ["src"]

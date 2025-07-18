@@ -1,42 +1,33 @@
-import {
-  Box,
-  Flex,
-  type BoxProps,
-  Image,
-  Icon,
-  chakra,
-} from "@chakra-ui/react";
-import { BsFillFilePdfFill } from "react-icons/bs";
+import { Box, Flex, LinkBox, LinkOverlay } from "@chakra-ui/react";
+import { Attachment } from "@components/Attachment";
+import { Avatar } from "@components/Avatar";
+import { CustomSkeleton } from "@components/CustomSkeleton";
+import { SolanaPayRequest } from "@components/SolanaPayRequest";
+import { useEncryptionKey } from "@hooks/useEncryptionKey";
+import { useMailBody } from "@hooks/useMailBody";
+import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { Link } from "@tanstack/react-router";
+import { decryptData, shortenPrincipalId, trim } from "@utils/string";
+import { formatTime } from "@utils/time";
 
-const Avatar: React.FC<{ name: string } & BoxProps> = ({
-  name = "",
-  ...boxProps
-}) => {
-  return (
-    <Flex
-      boxSize={"30px"}
-      bg="surface.500"
-      borderRadius={"50%"}
-      fontWeight={"bold"}
-      left={0}
-      top={0}
-      position={"absolute"}
-      {...boxProps}
-      alignItems={"center"}
-      justifyContent={"center"}
-      as={Image}
-      src={`https://picsum.photos/15/15?id=${name}`}
-    />
-  );
-};
+import { MailBoxLabels, type FormattedMailBox } from "src/types";
 
-export const MailCard: React.FC<any> = ({
-  address,
-  body,
+export const MailCard: React.FC<FormattedMailBox> = ({
+  from,
   subject,
-  file,
-  time,
+  iv,
+  createdAt,
+  encKey,
+  id,
+  to,
 }) => {
+  const { data, isLoading } = useEncryptionKey(encKey);
+  const decodedSubject = !isLoading ? decryptData(subject, iv, data) : "";
+  const { context, id: contextId } = useMailBoxContext();
+  const { textContent, hasSmartView } = useMailBody(id, context);
+  const addres =
+    context !== MailBoxLabels.outbox ? from?.toString() : to?.toString();
+  const isActive = contextId && contextId === id;
   return (
     <Box
       p={2}
@@ -47,36 +38,72 @@ export const MailCard: React.FC<any> = ({
       transition={"all ease .2s"}
       borderRadius={10}
       fontSize={14}
+      as={LinkBox}
       pr={5}
+      bg={isActive ? "surface.300" : ""}
       _hover={{
         bg: "surface.300",
       }}
-      //   borderBottom={"solid 1px "}
-      //   borderBottomColor={"surface.400"}
     >
-      <Avatar bg={`surface.500`} top={2} left={"10px"} name={address} />
+      <Avatar top={2} left={"10px"} name={addres} />
       <Flex mb={"2px"} justifyContent={"space-between"} opacity={0.5}>
-        <Flex>{address}</Flex>
-        <Flex fontSize={12}>{time}</Flex>
+        <Flex>{shortenPrincipalId(addres)}</Flex>
+        <Flex fontSize={12}>{formatTime(Number(createdAt) * 1000)}</Flex>
       </Flex>
       <Box
         maxW={"100%"}
         whiteSpace={"nowrap"}
         overflow={"hidden"}
         textOverflow={"ellipsis"}
-        // fontWeight={"medium"}
       >
-        {subject}
+        <CustomSkeleton isLoading={isLoading}>{decodedSubject}</CustomSkeleton>
       </Box>
       <Box opacity={0.4} fontSize={12}>
-        {body?.slice(0, file ? 30 : 70)}...
+        <CustomSkeleton isLoading={isLoading}>
+          {trim(textContent, hasSmartView ? 30 : 60, "...", "(No content)")}
+        </CustomSkeleton>
       </Box>
-      {file && (
-        <Flex alignItems={"center"} mt={2}>
-          <Icon color={"red.500"} as={BsFillFilePdfFill} mr={2} />
-          <chakra.span opacity={0.5}>{file}</chakra.span>
+      {hasSmartView && <SmartView id={id} />}
+      <LinkOverlay as={Link} to={`/u/solmail/${context}/${id.toString()}`} />
+    </Box>
+  );
+};
+const MAX_ATTACHMENTS_TO_SHOW = 1;
+const SmartView: React.FC<{ id: string }> = ({ id }) => {
+  const { context } = useMailBoxContext();
+  const { attachments, payments } = useMailBody(id, context);
+  return (
+    <Flex
+      direction={"row"}
+      flexWrap={"wrap"}
+      gap={1}
+      alignItems={"center"}
+      mt={1}
+    >
+      {payments && payments.length > 0 && (
+        <SolanaPayRequest
+          amount={payments[0].amount}
+          token={payments[0].token}
+        />
+      )}
+      {attachments.length > 0 &&
+        attachments.slice(0, MAX_ATTACHMENTS_TO_SHOW).map((attachment) => {
+          return <Attachment name={attachment.name} />;
+        })}
+
+      {attachments && attachments.length > MAX_ATTACHMENTS_TO_SHOW && (
+        <Flex
+          bg="surface.600"
+          fontSize={12}
+          p="3px"
+          px="8px"
+          borderRadius={"5"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          +1
         </Flex>
       )}
-    </Box>
+    </Flex>
   );
 };

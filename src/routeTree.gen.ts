@@ -13,6 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
+import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
+import { Route as ULayoutSolmailSpamIdRouteImport } from './routes/u/_layout/solmail/spam/$id'
+import { Route as ULayoutSolmailOutboxIdRouteImport } from './routes/u/_layout/solmail/outbox/$id'
 import { Route as ULayoutSolmailInboxIdRouteImport } from './routes/u/_layout/solmail/inbox/$id'
 
 const URouteImport = createFileRoute('/u')()
@@ -31,6 +34,21 @@ const ULayoutRoute = ULayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => URoute,
 } as any)
+const ULayoutSolmailTrashIdRoute = ULayoutSolmailTrashIdRouteImport.update({
+  id: '/solmail/trash/$id',
+  path: '/solmail/trash/$id',
+  getParentRoute: () => ULayoutRoute,
+} as any)
+const ULayoutSolmailSpamIdRoute = ULayoutSolmailSpamIdRouteImport.update({
+  id: '/solmail/spam/$id',
+  path: '/solmail/spam/$id',
+  getParentRoute: () => ULayoutRoute,
+} as any)
+const ULayoutSolmailOutboxIdRoute = ULayoutSolmailOutboxIdRouteImport.update({
+  id: '/solmail/outbox/$id',
+  path: '/solmail/outbox/$id',
+  getParentRoute: () => ULayoutRoute,
+} as any)
 const ULayoutSolmailInboxIdRoute = ULayoutSolmailInboxIdRouteImport.update({
   id: '/solmail/inbox/$id',
   path: '/solmail/inbox/$id',
@@ -41,11 +59,17 @@ export interface FileRoutesByFullPath {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
   '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
+  '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
+  '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
+  '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
 }
 export interface FileRoutesByTo {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
   '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
+  '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
+  '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
+  '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,18 +77,36 @@ export interface FileRoutesById {
   '/u/_layout': typeof ULayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
   '/u/_layout/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
+  '/u/_layout/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
+  '/u/_layout/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
+  '/u/_layout/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/u' | '/' | '/u/solmail/inbox/$id'
+  fullPaths:
+    | '/u'
+    | '/'
+    | '/u/solmail/inbox/$id'
+    | '/u/solmail/outbox/$id'
+    | '/u/solmail/spam/$id'
+    | '/u/solmail/trash/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/u' | '/' | '/u/solmail/inbox/$id'
+  to:
+    | '/u'
+    | '/'
+    | '/u/solmail/inbox/$id'
+    | '/u/solmail/outbox/$id'
+    | '/u/solmail/spam/$id'
+    | '/u/solmail/trash/$id'
   id:
     | '__root__'
     | '/u'
     | '/u/_layout'
     | '/_layout/'
     | '/u/_layout/solmail/inbox/$id'
+    | '/u/_layout/solmail/outbox/$id'
+    | '/u/_layout/solmail/spam/$id'
+    | '/u/_layout/solmail/trash/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,6 +137,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ULayoutRouteImport
       parentRoute: typeof URoute
     }
+    '/u/_layout/solmail/trash/$id': {
+      id: '/u/_layout/solmail/trash/$id'
+      path: '/solmail/trash/$id'
+      fullPath: '/u/solmail/trash/$id'
+      preLoaderRoute: typeof ULayoutSolmailTrashIdRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
+    '/u/_layout/solmail/spam/$id': {
+      id: '/u/_layout/solmail/spam/$id'
+      path: '/solmail/spam/$id'
+      fullPath: '/u/solmail/spam/$id'
+      preLoaderRoute: typeof ULayoutSolmailSpamIdRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
+    '/u/_layout/solmail/outbox/$id': {
+      id: '/u/_layout/solmail/outbox/$id'
+      path: '/solmail/outbox/$id'
+      fullPath: '/u/solmail/outbox/$id'
+      preLoaderRoute: typeof ULayoutSolmailOutboxIdRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
     '/u/_layout/solmail/inbox/$id': {
       id: '/u/_layout/solmail/inbox/$id'
       path: '/solmail/inbox/$id'
@@ -107,10 +170,16 @@ declare module '@tanstack/react-router' {
 
 interface ULayoutRouteChildren {
   ULayoutSolmailInboxIdRoute: typeof ULayoutSolmailInboxIdRoute
+  ULayoutSolmailOutboxIdRoute: typeof ULayoutSolmailOutboxIdRoute
+  ULayoutSolmailSpamIdRoute: typeof ULayoutSolmailSpamIdRoute
+  ULayoutSolmailTrashIdRoute: typeof ULayoutSolmailTrashIdRoute
 }
 
 const ULayoutRouteChildren: ULayoutRouteChildren = {
   ULayoutSolmailInboxIdRoute: ULayoutSolmailInboxIdRoute,
+  ULayoutSolmailOutboxIdRoute: ULayoutSolmailOutboxIdRoute,
+  ULayoutSolmailSpamIdRoute: ULayoutSolmailSpamIdRoute,
+  ULayoutSolmailTrashIdRoute: ULayoutSolmailTrashIdRoute,
 }
 
 const ULayoutRouteWithChildren =

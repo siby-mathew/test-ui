@@ -9,9 +9,14 @@ export const shortenPrincipalId = (
   return `${principal.slice(0, front)}...${principal.slice(-back)}`;
 };
 
-export const trim = (str: string, maxLength: number = 10, ellipsis = "...") => {
+export const trim = (
+  str: string,
+  maxLength: number = 10,
+  ellipsis = "...",
+  defaultVal: string = ""
+) => {
   if (!str || !isString(str)) {
-    return "";
+    return defaultVal;
   }
   if (str.length < maxLength) {
     return str;

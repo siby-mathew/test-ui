@@ -13,7 +13,7 @@ import {
 } from "react-icons/md";
 
 import { TbArrowsTransferDown } from "react-icons/tb";
-import type { MenuConfig } from "src/@types";
+import type { MenuConfig } from "src/types";
 
 export const SOLMAIL_MENU: MenuConfig[] = [
   {

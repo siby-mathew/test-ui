@@ -1,0 +1,693 @@
+{
+  "version": "0.1.0",
+  "name": "solmail",
+  "instructions": [
+    {
+      "name": "createmail",
+      "accounts": [
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccountV2",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "from",
+          "type": "publicKey"
+        },
+        {
+          "name": "to",
+          "type": "publicKey"
+        },
+        {
+          "name": "salt",
+          "type": "string"
+        },
+        {
+          "name": "iv",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "parentId",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updatemail",
+      "accounts": [
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updatemailreadstatus",
+      "accounts": [
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updatemaillabel",
+      "accounts": [
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "label",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "registerV2",
+      "accounts": [
+        {
+          "name": "mailAccountV2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nostrKey",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updateAccountV2",
+      "accounts": [
+        {
+          "name": "mailAccountV2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "nostrKey",
+          "type": "string"
+        },
+        {
+          "name": "mailbox",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "sendmail",
+      "accounts": [
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "from",
+          "type": "publicKey"
+        },
+        {
+          "name": "to",
+          "type": "publicKey"
+        },
+        {
+          "name": "salt",
+          "type": "string"
+        },
+        {
+          "name": "iv",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "register",
+      "accounts": [
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nostrKey",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "SolMail",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "publicKey"
+          },
+          {
+            "name": "to",
+            "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parentId",
+            "type": "string"
+          },
+          {
+            "name": "markAsRead",
+            "type": "bool"
+          },
+          {
+            "name": "createdAt",
+            "type": "u32"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nostrKey",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "publicKey"
+          },
+          {
+            "name": "to",
+            "type": "publicKey"
+          },
+          {
+            "name": "markAsRead",
+            "type": "bool"
+          },
+          {
+            "name": "label",
+            "type": {
+              "defined": "MailLabel"
+            }
+          },
+          {
+            "name": "createdAt",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox",
+            "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parentId",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccountV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "mailbox",
+            "type": "publicKey"
+          },
+          {
+            "name": "nostrKey",
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "MailLabel",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Outbox"
+          },
+          {
+            "name": "Inbox"
+          },
+          {
+            "name": "Read"
+          },
+          {
+            "name": "Trash"
+          },
+          {
+            "name": "Spam"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "MailSendEvent",
+      "fields": [
+        {
+          "name": "from",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "to",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailV2SendEvent",
+      "fields": [
+        {
+          "name": "from",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "to",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "mailbox",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailV2UpdateEvent",
+      "fields": [
+        {
+          "name": "from",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "to",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "mailbox",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "parentId",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "markAsRead",
+          "type": "bool",
+          "index": false
+        },
+        {
+          "name": "createdAt",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "iv",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "salt",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailV2ReadEvent",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "owner",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailV2UpdateLabelEvent",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "owner",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailAccountV2RegisterEvent",
+      "fields": [
+        {
+          "name": "owner",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MailAccountV2UpdateEvent",
+      "fields": [
+        {
+          "name": "owner",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidInstruction",
+      "msg": "Invalid instruction"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidBody",
+      "msg": "The body of your email is too long. The max is 512 chars"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidSubject",
+      "msg": "The subject of your email is too long. The max is 40 chars"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidSalt",
+      "msg": "The salt should be exactly 16 chars"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidIv",
+      "msg": "The IV should be exactly 32 chars"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidDiffie",
+      "msg": "The diffie publickey should be exactly 64 chars"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidDestination",
+      "msg": "From and to address should not be same"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidSource",
+      "msg": "Signer and from address should be same"
+    },
+    {
+      "code": 6008,
+      "name": "Unauthorized",
+      "msg": "Unauthorized access"
+    },
+    {
+      "code": 6009,
+      "name": "UnauthorizedSigner",
+      "msg": "Unauthorized signer"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidLabel",
+      "msg": "Invalid label"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidMailAccount",
+      "msg": "Invalid mailaccount"
+    }
+  ]
+}

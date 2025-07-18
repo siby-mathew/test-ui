@@ -1,10 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import path from "path";
 export default defineConfig({
   plugins: [
+    tsconfigPaths(),
     tanstackRouter(),
     react(),
     nodePolyfills({
@@ -23,6 +25,9 @@ export default defineConfig({
   define: {
     global: "window",
   },
+  optimizeDeps: {
+    include: ["@graphql-typed-document-node/core"],
+  },
   resolve: {
     alias: {
       "@components": path.resolve(__dirname, "src/components"),
@@ -34,6 +39,7 @@ export default defineConfig({
       "@state": path.resolve(__dirname, "src/state"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@theme": path.resolve(__dirname, "src/theme/"),
+      "@integrations": path.resolve(__dirname, "src/integrations/"),
     },
   },
 });

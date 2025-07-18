@@ -1,6 +1,8 @@
 import { Flex } from "@chakra-ui/react";
+import { Composer } from "@components/Composer";
 import { Navbar } from "@components/Navbar";
 import { Sidebar } from "@components/Sidebar";
+
 import { useSigner } from "@hooks/useSigner";
 import { Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -13,9 +15,8 @@ export const UserLayout: React.FC = () => {
     }
   }, [isAuthenticated, isAuthenticating, requestSignIn]);
 
-  console.log(isAuthenticating, isAuthenticated);
   return (
-    <Flex w="100%" h="100vh" direction={"row"}>
+    <Flex w="100%" direction={"row"}>
       <Flex as={"aside"} w="300px" maxW={"300px"}>
         <Sidebar />
       </Flex>
@@ -34,7 +35,12 @@ export const UserLayout: React.FC = () => {
           <Navbar />
         </Flex>
         <Flex data-body flex={"auto"}>
-          <Outlet />
+          {isAuthenticated && (
+            <>
+              <Composer />
+              <Outlet />
+            </>
+          )}
         </Flex>
       </Flex>
     </Flex>

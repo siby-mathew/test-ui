@@ -15,18 +15,25 @@ import {
 } from "@chakra-ui/react";
 import { config } from "@const/config";
 import { SOLMAIL_MENU } from "@const/menu";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { BsArrowUpRightSquareFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
 import { LiaWalletSolid } from "react-icons/lia";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { shortenPrincipalId } from "@utils/index";
-import type { MenuConfig } from "src/@types";
+import type { MenuConfig } from "src/types";
 import PrivyLogo from "@assets/privy.jpg";
 import JupiterLogo from "@assets/jupiter.svg";
 import { TbCopyCheckFilled } from "react-icons/tb";
 
 import { useSolanaWallets } from "@privy-io/react-auth";
+
+const isActive = (id: string, path: string) => {
+  if (id && path && path.indexOf(`/${id}`) > -1) {
+    return !0;
+  }
+  return !1;
+};
 
 const AppSwitch: React.FC = () => {
   return (
@@ -91,8 +98,8 @@ export const Sidebar: React.FC = () => {
           <AppSwitch />
         </Flex>
         <VStack align={"start"} gap={1} my={3} w="100%">
-          {SOLMAIL_MENU.map((menu, index) => {
-            return <SidebarMenu isActive={!index} {...menu} />;
+          {SOLMAIL_MENU.map((menu) => {
+            return <SidebarMenu key={menu.id} {...menu} />;
           })}
         </VStack>
         <Flex
@@ -177,14 +184,16 @@ const WalletList: React.FC = () => {
 };
 
 const SidebarMenu: React.FC<MenuConfig & { isActive: boolean }> = ({
-  isActive,
   name,
   link,
   icon,
+  id,
 }) => {
+  const { pathname } = useLocation();
+  const _isActive = isActive(id, pathname);
   return (
     <LinkBox
-      bg={isActive ? "surface.300" : ""}
+      bg={_isActive ? "surface.300" : ""}
       w="100%"
       borderRadius={10}
       display={"flex"}
@@ -193,11 +202,11 @@ const SidebarMenu: React.FC<MenuConfig & { isActive: boolean }> = ({
       py={"10px"}
       transition={"all ease .5s"}
       _hover={{
-        bg: !isActive ? "surface.200" : "",
+        bg: !_isActive ? "surface.200" : "",
       }}
     >
-      <Icon as={icon} mr={2} color={isActive ? "green.500" : ""} />
-      <Box as="span" color={isActive ? "green.500" : ""}>
+      <Icon as={icon} mr={2} color={_isActive ? "green.500" : ""} />
+      <Box as="span" color={_isActive ? "green.500" : ""}>
         {name}
       </Box>
       <LinkOverlay as={Link} to={link} />

@@ -66,6 +66,7 @@ export const UserProfileCard: React.FC = () => {
         right={0}
         w="300px"
         display={"none"}
+        zIndex={100}
         _groupHover={{
           display: "flex",
         }}
