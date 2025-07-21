@@ -8,14 +8,28 @@ import { useCallback, useState } from "react";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import type { PaymentConfig, StatusType } from "src/types";
 import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+import { usePrivyWallet } from "@hooks/usePrivyWallet";
 const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
+  const { id, context } = useMailBoxContext();
+  const { mail } = useMailBody(id, context);
   const { amount, token } = props;
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const { wallet } = usePrivyWallet();
   const [{ isDone, isChecking: isStatusChecking }, setStatus] =
     useState<StatusType>({
       isDone: !1,
       isChecking: !0,
     });
+
+  const openPayment = () => {
+    if (
+      mail &&
+      mail.from &&
+      mail.from.toString() !== wallet?.address?.toString()
+    ) {
+      onOpen();
+    }
+  };
 
   const onStatusChange = useCallback(
     (s: StatusType) => {
@@ -29,7 +43,7 @@ const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
     <>
       <Button
         size={"sm"}
-        onClick={onOpen}
+        onClick={openPayment}
         rightIcon={isDone ? <IoCheckmarkDoneSharp /> : undefined}
       >
         {isStatusChecking && <Spinner size={"sm"} mr={2} />}

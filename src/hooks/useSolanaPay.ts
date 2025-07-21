@@ -85,6 +85,7 @@ export const useSolanaPay = ({
           });
         }
       } catch (E) {
+        console.log(E);
         if (isFunction(onPaymentStatusUpdate)) {
           onPaymentStatusUpdate({
             isDone: !1,
