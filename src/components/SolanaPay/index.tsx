@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  useDisclosure,
   VStack,
   type ModalProps,
 } from "@chakra-ui/react";
@@ -42,11 +43,18 @@ export const SolanaPay: React.FC<
   const [paymentUrl, setUrl] = useState<URL | null>(null);
   const [reference, setReference] = useState<PublicKey | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
+  const { isOpen: isDone, onOpen } = useDisclosure();
   const { isPending, sendTransaction } = useSolanaPay({
     ref: reference,
     qrUrl: paymentUrl,
     onSuccess: onClose,
-    onPaymentStatusUpdate: onStatusChange,
+    onPaymentStatusUpdate: useCallback(
+      (s: StatusType) => {
+        onOpen();
+        onStatusChange(s);
+      },
+      [onOpen, onStatusChange]
+    ),
   });
   const createQrCode = useCallback(async () => {
     const amountBigint = new BigNumber(amount);
@@ -115,46 +123,50 @@ export const SolanaPay: React.FC<
             <Flex>
               <ClipboardText>{recipient}</ClipboardText>
             </Flex>
-            <Flex>Pay with embedded wallet</Flex>
-            <Flex>
-              <Button variant="green" onClick={sendTransaction}>
-                Pay now {isPending && <Spinner size={"sm"} ml={2} />}
-              </Button>
-            </Flex>
+            {!isDone && (
+              <>
+                <Flex>Pay with embedded wallet</Flex>
+                <Flex>
+                  <Button variant="green" onClick={sendTransaction}>
+                    Pay now {isPending && <Spinner size={"sm"} ml={2} />}
+                  </Button>
+                </Flex>
 
-            <Flex
-              position={"relative"}
-              w="100%"
-              alignItems={"center"}
-              justifyContent={"center"}
-              _after={{
-                content: "''",
-                height: "1px",
-                w: "100%",
-                bg: "surface.800",
-                position: "absolute",
-                right: 0,
-                left: 0,
-                top: 0,
-                bottom: 0,
-                my: "auto",
-                opacity: 0.2,
-              }}
-            >
-              <chakra.span
-                px={4}
-                bg="light.100"
-                position={"relative"}
-                zIndex={1}
-              >
-                Or
-              </chakra.span>
-            </Flex>
-            <Flex>Scan QR code with mobile wallet</Flex>
+                <Flex
+                  position={"relative"}
+                  w="100%"
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  _after={{
+                    content: "''",
+                    height: "1px",
+                    w: "100%",
+                    bg: "surface.800",
+                    position: "absolute",
+                    right: 0,
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    my: "auto",
+                    opacity: 0.2,
+                  }}
+                >
+                  <chakra.span
+                    px={4}
+                    bg="light.100"
+                    position={"relative"}
+                    zIndex={1}
+                  >
+                    Or
+                  </chakra.span>
+                </Flex>
+                <Flex>Scan QR code with mobile wallet</Flex>
 
-            <Flex ref={qrRef}></Flex>
+                <Flex ref={qrRef}></Flex>
+              </>
+            )}
             <Flex>{message}</Flex>
-            <Flex>Solmail</Flex>
+            <Flex fontWeight={"bold"}>Solmail</Flex>
             <Flex w="100%">
               <Button onClick={onClose} w="100%" variant={"danger"}>
                 Close
