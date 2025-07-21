@@ -35,7 +35,6 @@ export const useWebIrys = () => {
           },
           publicKey: provider.wallet.publicKey,
           signMessage: async (message: Uint8Array) => {
-            console.log(message);
             const signature = await signMessage({ message });
             return Buffer.from(signature);
           },

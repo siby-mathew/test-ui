@@ -66,7 +66,6 @@ export const useIrysUploader = () => {
         txMap.set(path, tx.id);
 
         updatedContent += `<span data-file data-id="${tx.id}" data-name="${name}" data-size="${size}" data-type="${type}" />`;
-        console.log(updatedContent);
       }
 
       const contentTags = [{ name: "Content-Type", value: "text/plain" }];
@@ -100,8 +99,7 @@ export const useIrysUploader = () => {
       txs.push(manifestTx);
       await webIrys.uploader.uploadBundle(txs);
       return contentTx.id;
-    } catch (err) {
-      console.log(err);
+    } catch {
       return null;
     }
   };

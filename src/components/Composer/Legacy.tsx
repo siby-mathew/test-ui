@@ -1,4 +1,4 @@
-import { Box, Button, chakra, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, chakra, Flex, Input, VStack } from "@chakra-ui/react";
 import type { ComposerFormInputs } from "src/types";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
@@ -29,6 +29,7 @@ import { useState } from "react";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { EditorToolbar } from "./EditorToolbar";
 import { useComposer } from "@hooks/useComposer";
+import { AttachmentsList } from "./AttachmentsList";
 const initialValues = {
   to: "",
   subject: "",
@@ -67,6 +68,7 @@ export const ComposerLegacy: React.FC = () => {
     updateStatus,
     onClose: close,
     expandComposer,
+    composerCollapsed,
   } = useComposer();
 
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
@@ -185,6 +187,9 @@ export const ComposerLegacy: React.FC = () => {
     methods.setValue("body", value);
   };
 
+  if (composerCollapsed) {
+    return null;
+  }
   return (
     <FormProvider {...methods}>
       {/* <MailSteps
@@ -260,6 +265,9 @@ export const ComposerLegacy: React.FC = () => {
             <CustomScrollbarWrapper>
               <Box w="100%">
                 <QuillEditor key={id} onChange={handleChange} />
+              </Box>
+              <Box w="100%">
+                <AttachmentsList />
               </Box>
             </CustomScrollbarWrapper>
           </Flex>

@@ -58,6 +58,7 @@ export const MailMeta: React.FC = () => {
             target="_blank"
             alignItems={"center"}
             display={"inline-flex"}
+            key={label}
             opacity={0.5}
             _hover={{
               opacity: 1,

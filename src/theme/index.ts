@@ -3,6 +3,7 @@ import { colors, semanticTokens } from "./semanticTokens";
 import { Skeleton } from "./components/Skeleton";
 import { Modal } from "./components/Modal";
 import { Input } from "./components/Input";
+import { Button } from "./components/BUtton";
 
 export const AppTheme = extendTheme({
   config: { initialColorMode: "dark", useSystemColorMode: true },
@@ -24,5 +25,6 @@ export const AppTheme = extendTheme({
     Skeleton,
     Modal,
     Input,
+    Button,
   },
 });

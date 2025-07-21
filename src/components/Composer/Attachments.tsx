@@ -46,12 +46,6 @@ export const Attachments: React.FC = () => {
 
     setValue("files", updatedFiles);
   };
-  const onRemoveHandler = (index: number) => {
-    setValue(
-      "files",
-      files.filter((_, i) => i !== index)
-    );
-  };
 
   const totalSize = useMemo(
     () => files.reduce((sum, file) => sum + file.size, 0),

@@ -1,28 +1,50 @@
-import { Button, Flex, useDisclosure } from "@chakra-ui/react";
-import { TransferFund } from "@components/Transfer";
+import { Button, Flex, Spinner, useDisclosure } from "@chakra-ui/react";
+import { SolanaPay } from "@components/SolanaPay";
+
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
-import type { PaymentConfig } from "src/types";
+import { useCallback, useState } from "react";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import type { PaymentConfig, StatusType } from "src/types";
 
 const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
   const { amount, token } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const [{ isDone, isChecking: isStatusChecking }, setStatus] =
+    useState<StatusType>({
+      isDone: !1,
+      isChecking: !0,
+    });
+
+  const onStatusChange = useCallback(
+    (s: StatusType) => {
+      setStatus(s);
+    },
+    [setStatus]
+  );
   return (
     <>
       <Button
         size={"sm"}
-        bg="green.500"
+        bg="solana"
         onClick={onOpen}
         _hover={{
-          bg: "green.400",
+          bg: "solana",
         }}
-      >{`Pay ${amount} ${token}`}</Button>
-      <TransferFund
-        lockValues={!0}
-        key={isOpen ? "open" : "close"}
+        rightIcon={isDone ? <IoCheckmarkDoneSharp /> : undefined}
+      >
+        {isStatusChecking && <Spinner size={"sm"} mr={2} />}
+        {`Pay ${amount} ${token}`}
+      </Button>
+
+      <SolanaPay
         isOpen={isOpen}
         onClose={onClose}
-        {...props}
+        onStatusChange={onStatusChange}
+        amount={props.amount}
+        message={props.message}
+        recipient={props.recipient}
+        token={props.token}
       />
     </>
   );

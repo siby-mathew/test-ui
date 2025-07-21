@@ -16,32 +16,34 @@ export const useBalance = (tokenMint?: string) => {
 
   const enabled = !!wallet?.address;
 
-  const { data, isFetching, refetch, isRefetching, isFetched } = useQuery({
-    queryKey: [QueryKeys.SOL_BALANCE, wallet?.address, tokenMint],
-    queryFn: async () => {
-      if (!wallet?.address) throw new Error("Wallet not connected");
+  const { data, isFetching, refetch, isRefetching, isFetched, isLoading } =
+    useQuery({
+      queryKey: [QueryKeys.SOL_BALANCE, wallet?.address, tokenMint],
+      queryFn: async () => {
+        if (!wallet?.address) throw new Error("Wallet not connected");
 
-      const owner = new PublicKey(wallet.address);
+        const owner = new PublicKey(wallet.address);
 
-      if (!tokenMint) {
-        return connection.getBalance(owner);
-      }
+        if (!tokenMint) {
+          return connection.getBalance(owner);
+        }
 
-      const mint = new PublicKey(tokenMint);
-      const ata = await getAssociatedTokenAddress(mint, owner);
+        const mint = new PublicKey(tokenMint);
+        const ata = await getAssociatedTokenAddress(mint, owner);
 
-      const tokenAccount = await connection.getTokenAccountBalance(ata);
-      return parseFloat(tokenAccount.value.amount);
-    },
-    enabled,
-    refetchOnWindowFocus: true,
-  });
+        const tokenAccount = await connection.getTokenAccountBalance(ata);
+        return parseFloat(tokenAccount.value.amount);
+      },
+      enabled,
+      refetchOnWindowFocus: true,
+    });
 
   return {
     data,
     isFetching,
     refetch,
     isRefetching,
+    isLoading,
     isFetched,
     // format based on SOL (lamports) or token (raw units); you can improve this logic
     formattedBalance: formatSolBalance(data ?? 0),

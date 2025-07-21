@@ -4,7 +4,7 @@ import { createMultiStyleConfigHelpers } from "@chakra-ui/styled-system";
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(parts.keys);
 
-const baseStyle = definePartsStyle({
+const primary = definePartsStyle({
   overlay: {
     backdropFilter: "blur(2px)",
   },
@@ -14,6 +14,20 @@ const baseStyle = definePartsStyle({
   },
 });
 
+const secondary = definePartsStyle({
+  overlay: {
+    backdropFilter: "blur(2px)",
+  },
+  dialog: {
+    borderRadius: "15px",
+    bg: "light.100",
+    color: "dark.100",
+  },
+});
+
 export const Modal = defineMultiStyleConfig({
-  baseStyle,
+  variants: { primary, secondary },
+  defaultProps: {
+    variant: "primary",
+  },
 });

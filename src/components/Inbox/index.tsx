@@ -39,13 +39,25 @@ export const Inbox = forwardRef<
           </Flex>
         )}
 
-        <VStack w="100%" overflow={"hidden"} h="100%" px={2} gap={2}>
-          {mail &&
-            mail.length > 0 &&
-            mail.map((item) => (
+        {mail && mail.length > 0 && (
+          <VStack w="100%" overflow={"hidden"} h="100%" px={2} gap={2}>
+            {mail.map((item) => (
               <MailCard key={`${context}_${item.id?.toString()}`} {...item} />
             ))}
-        </VStack>
+          </VStack>
+        )}
+
+        {(!isLoading && !mail) ||
+          (!mail.length && (
+            <Flex
+              alignItems={"center"}
+              opacity={0.5}
+              justifyContent={"center"}
+              minH={"38vh"}
+            >
+              Your inbox is empty.
+            </Flex>
+          ))}
       </Box>
     </Box>
   );

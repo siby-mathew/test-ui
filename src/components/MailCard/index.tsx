@@ -87,9 +87,16 @@ const SmartView: React.FC<{ id: string }> = ({ id }) => {
         />
       )}
       {attachments.length > 0 &&
-        attachments.slice(0, MAX_ATTACHMENTS_TO_SHOW).map((attachment) => {
-          return <Attachment name={attachment.name} />;
-        })}
+        attachments
+          .slice(0, MAX_ATTACHMENTS_TO_SHOW)
+          .map((attachment, index) => {
+            return (
+              <Attachment
+                name={attachment.name}
+                key={attachment.name + index}
+              />
+            );
+          })}
 
       {attachments && attachments.length > MAX_ATTACHMENTS_TO_SHOW && (
         <Flex

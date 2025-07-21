@@ -8,9 +8,13 @@ export const MailPreviewAttachments: React.FC = () => {
   const { attachments } = useMailBody(id, context);
   return (
     <Flex direction={"row"} flexWrap={"wrap"} gap={3} mt={5}>
-      {attachments.map((attachment) => {
+      {attachments.map((attachment, index) => {
         return (
-          <DownloadbleAttachment name={attachment.name} path={attachment.src} />
+          <DownloadbleAttachment
+            name={attachment.name}
+            path={attachment.src}
+            key={attachment.name + index}
+          />
         );
       })}
     </Flex>

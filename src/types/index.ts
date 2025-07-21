@@ -20,3 +20,8 @@ export enum QueryKeys {
   "CREATE_CREDENTIALS" = "CREATE_CREDENTIALS",
   "SOL_BALANCE" = "SOL_BALANCE",
 }
+
+export type StatusType = {
+  isChecking: boolean;
+  isDone: boolean;
+};

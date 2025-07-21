@@ -34,8 +34,8 @@ export const Composer: React.FC = () => {
             w="full"
             alignItems={"flex-end"}
           >
-            {!composerCollapsed && <ComposerLegacy />}
-            {composerCollapsed && <FancyBox></FancyBox>}
+            <ComposerLegacy />
+            {composerCollapsed && <FancyBox />}
           </Flex>
         </>
       )}

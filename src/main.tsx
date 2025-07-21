@@ -31,7 +31,7 @@ createRoot(document.getElementById("root")!).render(
               walletList: ["detected_wallets"],
             },
 
-            loginMethods: ["email", "wallet"],
+            loginMethods: ["email", "wallet", "google"],
             legal: {
               termsAndConditionsUrl: "/?t",
               privacyPolicyUrl: "/?p",

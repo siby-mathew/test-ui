@@ -4,13 +4,14 @@ import { usePrivy } from "@privy-io/react-auth";
 import GmailLogo from "@assets/gmail.png";
 
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import { useMemo, useTransition } from "react";
+import { useMemo } from "react";
 import { useGetWalletById } from "@hooks/useGetWalletById";
 import { shortenPrincipalId, trim } from "@utils/string";
 import { ClipboardText } from "@components/ClipboardText";
 
 import { RiShutDownLine } from "react-icons/ri";
-import { useSigner } from "@hooks/useSigner";
+
+import { useSessionHandler } from "@hooks/useSessionHandler";
 export const UserProfileCard: React.FC = () => {
   const { user } = usePrivy();
 
@@ -81,17 +82,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
   name,
   isWallet,
 }) => {
-  const { clearToken } = useSigner();
-  const { logout } = usePrivy();
-  const [isPending, startTransition] = useTransition();
-  const onClickLogout = () => {
-    if (isPending) return;
-    startTransition(async () => {
-      await logout();
-      clearToken();
-      window.location.reload();
-    });
-  };
+  const { onLogout, isPending } = useSessionHandler();
   return (
     <Flex
       mt={2}
@@ -119,7 +110,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
           _hover={{
             bg: "red.600",
           }}
-          onClick={onClickLogout}
+          onClick={onLogout}
           leftIcon={<RiShutDownLine />}
         >
           Disconnect{isPending ? "ing..." : ""}

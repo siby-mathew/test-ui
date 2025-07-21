@@ -176,6 +176,7 @@ const WalletList: React.FC = () => {
               address={wallet.address?.toString()}
               onExport={isSolanaEmbedded ? exportWallet : undefined}
               logo={!isSolanaEmbedded ? (wallet.meta.icon ?? "") : PrivyLogo}
+              key={wallet?.address?.toString()}
             />
           );
         })}
@@ -183,12 +184,7 @@ const WalletList: React.FC = () => {
   );
 };
 
-const SidebarMenu: React.FC<MenuConfig & { isActive: boolean }> = ({
-  name,
-  link,
-  icon,
-  id,
-}) => {
+const SidebarMenu: React.FC<MenuConfig> = ({ name, link, icon, id }) => {
   const { pathname } = useLocation();
   const _isActive = isActive(id, pathname);
   return (
