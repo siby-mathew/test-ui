@@ -89,12 +89,8 @@ export const Solmail: React.FC = () => {
           </Flex>
         </Flex>
       </Flex>
-      <Flex flex={"auto"} position={"relative"}>
-        <Flex position={"absolute"} inset={0}>
-          <CustomScrollbarWrapper>
-            <MailPreview />
-          </CustomScrollbarWrapper>
-        </Flex>
+      <Flex flex={"auto"}>
+        <MailPreview />
       </Flex>
     </Flex>
   );

@@ -15,7 +15,7 @@ import {
   type ModalProps,
 } from "@chakra-ui/react";
 
-import SolanaPayIcon from "@assets/solpay.svg";
+import SolanaPayIcon from "@assets/solanapay-logo.light.svg";
 import { ClipboardText } from "@components/ClipboardText";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -111,7 +111,7 @@ export const SolanaPay: React.FC<
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      variant={"secondary"}
+      // variant={"secondary"}
       isCentered
       size={"md"}
       {...props}
@@ -160,7 +160,7 @@ export const SolanaPay: React.FC<
                 >
                   <chakra.span
                     px={4}
-                    bg="light.100"
+                    bg="surface.400"
                     position={"relative"}
                     zIndex={1}
                   >
@@ -169,15 +169,12 @@ export const SolanaPay: React.FC<
                 </Flex>
                 <Flex>Scan QR code with mobile wallet</Flex>
 
-                <Flex ref={qrRef}></Flex>
+                <Flex ref={qrRef} bg="light.100" borderRadius={"lg"}></Flex>
               </>
             )}
             <Flex>{message}</Flex>
-            <Flex fontWeight={"bold"}>Solmail</Flex>
-            <Flex w="100%">
-              <Button onClick={onClose} w="100%" variant={"danger"}>
-                Close
-              </Button>
+            <Flex fontWeight={"bold"} bg="solana" bgClip={"text"}>
+              Solmail
             </Flex>
           </VStack>
         </ModalBody>
