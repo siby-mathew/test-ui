@@ -28,6 +28,11 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@graphql-typed-document-node/core"],
   },
+  build: {
+    rollupOptions: {
+      treeshake: false,
+    },
+  },
   resolve: {
     alias: {
       "@components": path.resolve(__dirname, "src/components"),
