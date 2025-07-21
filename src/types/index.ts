@@ -25,3 +25,11 @@ export type StatusType = {
   isChecking: boolean;
   isDone: boolean;
 };
+
+export type Token = {
+  id: string;
+  name: string;
+  symbol: string;
+  logo: string;
+  address: string;
+};

@@ -1,12 +1,13 @@
-import { Button, Flex, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Button, Flex, Image, Spinner, useDisclosure } from "@chakra-ui/react";
 import { SolanaPay } from "@components/SolanaPay";
 
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { useToken } from "@hooks/useToken";
 import { useCallback, useState } from "react";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import type { PaymentConfig, StatusType } from "src/types";
-
+import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
 const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
   const { amount, token } = props;
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
@@ -22,19 +23,18 @@ const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
     },
     [setStatus]
   );
+
+  const { symbol } = useToken(token ?? "");
   return (
     <>
       <Button
         size={"sm"}
-        bg="solana"
         onClick={onOpen}
-        _hover={{
-          bg: "solana",
-        }}
         rightIcon={isDone ? <IoCheckmarkDoneSharp /> : undefined}
       >
         {isStatusChecking && <Spinner size={"sm"} mr={2} />}
-        {`Pay ${amount} ${token}`}
+        <Image mr={1} src={SolanaPayLogo} w="50px" />
+        {`${amount} ${symbol}`}
       </Button>
 
       <SolanaPay
