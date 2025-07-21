@@ -1,4 +1,4 @@
-import { Button, Flex, IconButton, Image, Input, Text } from "@chakra-ui/react";
+import { Flex, IconButton, Input, Text } from "@chakra-ui/react";
 import type { ComposerFormInputs } from "src/types";
 import { useId, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
@@ -6,7 +6,7 @@ import { RiAttachment2 } from "react-icons/ri";
 
 import { formatFileSize } from "@utils/index";
 import { useToast } from "@hooks/useToast";
-import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+
 import React from "react";
 import { SolanaPayButton } from "@components/SolanaPayButton";
 

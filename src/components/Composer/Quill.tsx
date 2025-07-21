@@ -14,18 +14,6 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
 
   useEffect(() => {
     if (!quillRef.current && editorRef.current) {
-      const toolbarOptions = [
-        ["bold", "italic", "underline", "strike"],
-        ["blockquote"],
-
-        [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-        [{ size: ["small", false, "large", "huge"] }],
-
-        [{ color: [] }, { background: [] }],
-        [{ font: [] }],
-        [{ align: [] }],
-      ];
-
       quillRef.current = new Quill(editorRef.current, {
         theme: "snow",
         placeholder: "Type your message here...",

@@ -1,4 +1,4 @@
-import { Box, chakra, Flex, Image, Link } from "@chakra-ui/react";
+import { chakra, Flex, Image, Link } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   Link as TanstackLink,
