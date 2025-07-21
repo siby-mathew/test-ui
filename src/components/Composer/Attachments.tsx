@@ -1,13 +1,18 @@
-import { Button, Flex, IconButton, Input, Text } from "@chakra-ui/react";
+import { Button, Flex, IconButton, Image, Input, Text } from "@chakra-ui/react";
 import type { ComposerFormInputs } from "src/types";
 import { useId, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { RiAttachment2 } from "react-icons/ri";
-// import { File } from "@app/components/File";
+
 import { formatFileSize } from "@utils/index";
 import { useToast } from "@hooks/useToast";
+import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+import React from "react";
+import { SolanaPayButton } from "@components/SolanaPayButton";
 
-export const Attachments: React.FC = () => {
+export const Attachments: React.FC<{
+  onOpenSolanaPay: () => void;
+}> = ({ onOpenSolanaPay }) => {
   const id = useId();
   const { getValues, watch, setValue } = useFormContext<ComposerFormInputs>();
   const watchedFiles = getValues().files;
@@ -56,7 +61,9 @@ export const Attachments: React.FC = () => {
     <Flex direction="column" w="full">
       <Flex gap={2} pb={3} alignItems={"center"}>
         <Input id={id} type="file" multiple hidden onChange={onChangeHandler} />
-        <Button bg="solana">Solana Pay</Button>
+
+        <SolanaPayButton onOpenSolanaPay={onOpenSolanaPay} />
+
         <IconButton
           as="label"
           htmlFor={id}
@@ -87,19 +94,6 @@ export const Attachments: React.FC = () => {
           </Flex>
         )}
       </Flex>
-
-      {/* {!!files.length && (
-        <Flex wrap="wrap" gap={2} py={4}>
-          {files.map((file, idx) => (
-            <File
-              key={file.name + idx}
-              file={file}
-              index={idx}
-              onRemove={onRemoveHandler}
-            />
-          ))}
-        </Flex>
-      )} */}
     </Flex>
   );
 };

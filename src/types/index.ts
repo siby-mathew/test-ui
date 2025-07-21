@@ -33,3 +33,11 @@ export type Token = {
   logo: string;
   address: string;
 };
+
+export type SolanaPayPayload = {
+  "data-recipient": string;
+  "data-amount": string;
+  "data-message": string;
+  "data-tokenaddress": string;
+  class: "payment-button";
+};

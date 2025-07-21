@@ -1,5 +1,12 @@
-import { Box, Button, chakra, Flex, Input, VStack } from "@chakra-ui/react";
-import type { ComposerFormInputs } from "src/types";
+import {
+  Box,
+  Button,
+  chakra,
+  Flex,
+  Input,
+  useDisclosure,
+} from "@chakra-ui/react";
+import type { ComposerFormInputs, SolanaPayPayload } from "src/types";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
 import { Subject } from "./Subject";
@@ -30,6 +37,8 @@ import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { EditorToolbar } from "./EditorToolbar";
 import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
+import { RequestSolanaPay } from "@components/RequestSolanaPay";
+import { generateHtmlTag } from "@utils/string/generateHtml";
 const initialValues = {
   to: "",
   subject: "",
@@ -71,6 +80,8 @@ export const ComposerLegacy: React.FC = () => {
     composerCollapsed,
   } = useComposer();
 
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
     updateStatus("Prepairing your mail");
     collpaseComposer();
@@ -98,10 +109,12 @@ export const ComposerLegacy: React.FC = () => {
     } else {
       sleep(1500);
     }
-
+    const payments = values.solanaPay
+      ? generateHtmlTag("button", values.solanaPay)
+      : "";
     const id = await uploadContentWithAttchment(
       {
-        content: values.body,
+        content: `${values.body}${payments}`,
         files: values.files,
       },
       encrypt
@@ -187,19 +200,16 @@ export const ComposerLegacy: React.FC = () => {
     methods.setValue("body", value);
   };
 
+  const addSolanaPay = (payload: SolanaPayPayload) => {
+    methods.setValue("solanaPay", payload);
+    onClose();
+  };
+
   if (composerCollapsed) {
     return null;
   }
   return (
     <FormProvider {...methods}>
-      {/* <MailSteps
-        steps={steps}
-        activeStep={activeStep}
-        isOpen={isOpen}
-        onClose={() => {}}
-        key={activeStep}
-      /> */}
-
       <Flex
         direction={"column"}
         px="5"
@@ -273,9 +283,14 @@ export const ComposerLegacy: React.FC = () => {
           </Flex>
         </Flex>
         <Flex alignItems={"center"}>
-          <Attachments />
+          <Attachments onOpenSolanaPay={onOpen} />
         </Flex>
       </Flex>
+      <RequestSolanaPay
+        onSubmit={addSolanaPay}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </FormProvider>
   );
 };

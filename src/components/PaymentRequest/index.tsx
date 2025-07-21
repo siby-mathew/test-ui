@@ -52,6 +52,7 @@ const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
 export const PaymentRequests: React.FC = () => {
   const { id, context } = useMailBoxContext();
   const { payments } = useMailBody(id, context);
+
   return (
     <Flex direction={"row"} flexWrap={"wrap"} my={2}>
       {payments.map((item, index) => {

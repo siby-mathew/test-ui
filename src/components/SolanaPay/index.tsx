@@ -25,6 +25,7 @@ import { createQR, encodeURL } from "@solana/pay";
 import BigNumber from "bignumber.js";
 import { useSolanaPay } from "@hooks/useSolanaPay";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { useToken } from "@hooks/useToken";
 export const SolanaPay: React.FC<
   Omit<ModalProps, "children"> &
     PaymentConfig & {
@@ -37,8 +38,10 @@ export const SolanaPay: React.FC<
   amount,
   recipient,
   message,
+  token,
   ...props
 }) => {
+  const { symbol, address } = useToken(token ?? "");
   const { id } = useMailBoxContext();
   const [paymentUrl, setUrl] = useState<URL | null>(null);
   const [reference, setReference] = useState<PublicKey | null>(null);
@@ -50,7 +53,10 @@ export const SolanaPay: React.FC<
     onSuccess: onClose,
     onPaymentStatusUpdate: useCallback(
       (s: StatusType) => {
-        onOpen();
+        if (s.isDone) {
+          onOpen();
+        }
+
         onStatusChange(s);
       },
       [onOpen, onStatusChange]
@@ -72,10 +78,11 @@ export const SolanaPay: React.FC<
       reference,
       label: "Solmail",
       message,
+      splToken: symbol !== "SOL" ? new PublicKey(address) : undefined,
     });
     setReference(reference);
     setUrl(url);
-  }, [amount, id, message, recipient]);
+  }, [address, amount, id, message, recipient, symbol]);
 
   useEffect(() => {
     if (!paymentUrl) {
@@ -118,7 +125,7 @@ export const SolanaPay: React.FC<
         <ModalBody pb={5}>
           <VStack w="100%">
             <Flex fontWeight={"bold"} fontSize={20}>
-              {amount} SOL
+              {Number(amount)} {symbol}
             </Flex>
             <Flex>
               <ClipboardText>{recipient}</ClipboardText>

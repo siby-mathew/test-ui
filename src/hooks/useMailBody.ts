@@ -71,6 +71,7 @@ export const useMailBody = (
 
     try {
       const html = decryptData(content, mail?.iv, data);
+
       if (!html) return ["", [], "", []];
 
       const div = document.createElement("div");

@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { type ProgramAccount } from "@project-serum/anchor";
+import type { SolanaPayPayload } from ".";
 export interface SolMailV2 {
   from: PublicKey;
   to: PublicKey;
@@ -94,4 +95,5 @@ export type ComposerFormInputs = {
   subject: string;
   body: string;
   files: File[];
+  solanaPay?: SolanaPayPayload;
 };

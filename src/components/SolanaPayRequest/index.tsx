@@ -21,7 +21,7 @@ export const SolanaPayRequest: React.FC<{ amount: string; token: string }> = ({
       <chakra.span
         position={"relative"}
         top={"1px"}
-      >{`${amount} ${symbol}`}</chakra.span>
+      >{`${Number(amount)} ${symbol}`}</chakra.span>
     </Flex>
   );
 };

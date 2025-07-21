@@ -51,6 +51,7 @@ export const useSolanaPay = ({
     const { recipient, amount, reference, splToken } = parseURL(
       qrUrl
     ) as TransferRequestURL;
+
     if (!amount) return;
     startTransition(async () => {
       try {
@@ -135,6 +136,7 @@ export const useSolanaPay = ({
           },
           { commitment: "confirmed" }
         );
+
         if (isFunction(onPaymentStatusUpdate)) {
           onPaymentStatusUpdate({
             isDone: !0,
@@ -148,7 +150,7 @@ export const useSolanaPay = ({
       } catch (e) {
         if (isFunction(onPaymentStatusUpdate)) {
           onPaymentStatusUpdate({
-            isDone: !0,
+            isDone: !1,
             isChecking: !1,
           });
         }
