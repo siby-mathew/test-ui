@@ -59,11 +59,15 @@ export const ComposerLegacy: React.FC = () => {
   const { wallet } = usePrivyWallet();
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
+  const { thread, ref } = useComposer();
   const methods = useForm<ComposerFormInputs>({
     mode: "all",
     reValidateMode: "onSubmit",
     shouldFocusError: true,
-    defaultValues: initialValues,
+    defaultValues: {
+      ...initialValues,
+      to: thread,
+    },
   });
 
   const { uploadContentWithAttchment } = useIrysUploader();
@@ -106,7 +110,7 @@ export const ComposerLegacy: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
-    updateStatus("Prepairing your mail");
+    updateStatus("Preparing your mail");
     collpaseComposer();
     const to = await resolveEmail(values.to, connection);
     if (!to || !from) {
@@ -168,7 +172,7 @@ export const ComposerLegacy: React.FC = () => {
           "salt!",
           cData.iv,
           StorageVersion.arweave,
-          "0"
+          ref || "0"
         )
         .accounts({
           mail: mailAccount.publicKey,

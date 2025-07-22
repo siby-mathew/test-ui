@@ -18,6 +18,7 @@ import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
 import type { Solmail } from "@integrations/idl/solmail/solmail";
 // import { useMailBoxGraphql } from "@hooks/useMailGraphql";
 import { isOlderThan } from "@utils/time";
+import { usePrivyWallet } from "./usePrivyWallet";
 
 const fetchAllMails = async (
   program: Program<Solmail>,
@@ -57,6 +58,7 @@ const fetchAllMails = async (
 export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
   // useMailBoxGraphql();
   const { program, provider } = useGetMailProgramInstance();
+  const { address } = usePrivyWallet();
   const { data, isLoading, refetch, isRefetching } =
     useQuery<FetchAllMailsResult>({
       queryKey: [QueryKeys.MAILBOX, type],
@@ -163,6 +165,26 @@ export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
       window.removeEventListener("focus", handleFocus);
     };
   }, [isLoading, isRefetching, refetch]);
+
+  useEffect(() => {
+    let listener: number;
+    if (program) {
+      listener = program.addEventListener("MailV2SendEvent", (event) => {
+        if (
+          address &&
+          event.to &&
+          event.to?.toString() === address.toString()
+        ) {
+          refetch();
+        }
+      });
+    }
+    return () => {
+      if (program) {
+        program.removeEventListener(listener);
+      }
+    };
+  }, [program]);
 
   return {
     mail: mail as FormattedMailBox[],

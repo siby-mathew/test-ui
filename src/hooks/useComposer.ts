@@ -1,13 +1,14 @@
-import { appState } from "@state/index";
+import { appState, type AtomType } from "@state/index";
 import { useAtom } from "jotai";
 
 export const useComposer = () => {
   const [{ isComposerOpen, ...other }, update] = useAtom(appState);
-  const onOpen = () => {
+  const onOpen = (config: Partial<AtomType> = {}) => {
     update((prev) => {
       return {
         ...prev,
         isComposerOpen: !0,
+        ...config,
       };
     });
   };
@@ -18,6 +19,7 @@ export const useComposer = () => {
         ...prev,
         isComposerOpen: !1,
         composerCollapsed: !1,
+        thread: "",
       };
     });
   };

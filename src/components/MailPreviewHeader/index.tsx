@@ -1,19 +1,39 @@
-import { chakra, Flex } from "@chakra-ui/react";
+import { chakra, Flex, IconButton, Tooltip } from "@chakra-ui/react";
 import { Avatar } from "@components/Avatar";
+import { ClipboardText } from "@components/ClipboardText";
+import { useComposer } from "@hooks/useComposer";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { useLabelIndexUpdate } from "@hooks/useMailIndexUpdate";
 import { shortenPrincipalId } from "@utils/string";
 import { format } from "@utils/time";
-import { MailBoxLabels } from "src/types";
+
+import { IoIosShareAlt } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import { RiSpam3Fill } from "react-icons/ri";
+import { MailBoxLabels, MailLabelIndex } from "src/types";
 
 export const MailPreviewHeader: React.FC = () => {
   const { context, id } = useMailBoxContext();
+  const { onOpen } = useComposer();
+  const { isPending, mutateAsync } = useLabelIndexUpdate(id ?? "");
   const label = context !== MailBoxLabels.outbox ? "From" : "To";
   const { mail } = useMailBody(id, context);
   const address =
     context !== MailBoxLabels.outbox
       ? mail?.from?.toString()
       : mail?.to?.toString();
+
+  const onStatusUpdate = async (status: MailLabelIndex) => {
+    await mutateAsync({ index: status });
+  };
+
+  const onReplay = () => {
+    onOpen({
+      thread: mail?.from?.toString() ?? "",
+      ref: mail?.id?.toString() ?? "",
+    });
+  };
   return (
     <Flex px={5} py={"7px"} w="full" direction={"row"} gap={3}>
       <Flex boxSize={"40px"}>
@@ -22,11 +42,47 @@ export const MailPreviewHeader: React.FC = () => {
       <Flex direction={"column"} flex={"auto"}>
         <Flex>
           <chakra.span mr={1}>{label}</chakra.span>
-          <chakra.span>{`<${shortenPrincipalId(address, 8, 8)}>`}</chakra.span>
+          {/* <chakra.span></chakra.span> */}
+          <ClipboardText
+            textToCopy={address}
+            trim={!1}
+          >{`<${shortenPrincipalId(address, 8, 8)}>`}</ClipboardText>
         </Flex>
         <Flex opacity={0.6} fontSize={13}>
           {format(Number(mail?.createdAt ?? 0) * 1000)}
         </Flex>
+      </Flex>
+      <Flex gap={1}>
+        <Tooltip label="Replay">
+          <IconButton
+            size={"sm"}
+            aria-label="Replay"
+            icon={<IoIosShareAlt />}
+            onClick={onReplay}
+          />
+        </Tooltip>
+        {context === MailBoxLabels.inbox && (
+          <>
+            <Tooltip label="Delete" isDisabled={isPending}>
+              <IconButton
+                onClick={() => onStatusUpdate(MailLabelIndex.trash)}
+                size={"sm"}
+                aria-label="Delete"
+                icon={<MdDelete />}
+                disabled={isPending}
+              />
+            </Tooltip>
+            <Tooltip label="MArk as spam" isDisabled={isPending}>
+              <IconButton
+                onClick={() => onStatusUpdate(MailLabelIndex.spam)}
+                size={"sm"}
+                aria-label="Spam"
+                icon={<RiSpam3Fill />}
+                disabled={isPending}
+              />
+            </Tooltip>
+          </>
+        )}
       </Flex>
     </Flex>
   );

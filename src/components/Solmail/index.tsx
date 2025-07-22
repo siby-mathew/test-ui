@@ -52,7 +52,11 @@ export const Solmail: React.FC = () => {
                 opacity: 0.5,
               }}
             />
-            <Button bg="green.500 !important" onClick={onOpen} size={"sm"}>
+            <Button
+              bg="green.500 !important"
+              onClick={() => onOpen()}
+              size={"sm"}
+            >
               Compose
             </Button>
           </Flex>

@@ -55,7 +55,7 @@ export const Inbox = forwardRef<
               justifyContent={"center"}
               minH={"38vh"}
             >
-              Your inbox is empty.
+              Mail list is currently empty.
             </Flex>
           ))}
       </Box>

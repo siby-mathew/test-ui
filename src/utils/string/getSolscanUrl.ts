@@ -2,7 +2,7 @@ export const getSolscanUrl = (
   path: string,
   type: "address" | "tx" | "account" = "address"
 ) => {
-  return `${import.meta.env.VITE_SOLMAIL_SOLSCAN_BASE}${type}/${path}?cluster=${import.meta.env.VITE_SOLMAIL_CUSTER}`;
+  return `${import.meta.env.VITE_SOLMAIL_SOLSCAN_BASE}${type}/${path}?cluster=${import.meta.env.VITE_SOLMAIL_CLUSTER}`;
 };
 
 export const getSolscanAddress = (address: string) => {
