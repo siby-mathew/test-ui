@@ -6,7 +6,11 @@ import {
   Input,
   useDisclosure,
 } from "@chakra-ui/react";
-import type { ComposerFormInputs, SolanaPayPayload } from "src/types";
+import {
+  StorageVersion,
+  type ComposerFormInputs,
+  type SolanaPayPayload,
+} from "src/types";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
 import { Subject } from "./Subject";
@@ -24,8 +28,6 @@ import {
 } from "@hooks/index";
 
 import { useSendTransaction } from "@privy-io/react-auth/solana";
-
-export const MAIL_UPLOAD_FEATURE_FLAG = "0.0.4";
 
 import "react-quill/dist/quill.snow.css";
 import QuillEditor from "./Quill";
@@ -144,7 +146,7 @@ export const ComposerLegacy: React.FC = () => {
           to,
           "salt!",
           cData.iv,
-          MAIL_UPLOAD_FEATURE_FLAG,
+          StorageVersion.arweave,
           "0"
         )
         .accounts({
@@ -179,9 +181,6 @@ export const ComposerLegacy: React.FC = () => {
         connection: connection,
       });
 
-      showToast("Mail sent successfully", {
-        type: "success",
-      });
       close();
     } catch {
       expandComposer();

@@ -6,12 +6,21 @@ import { PaymentRequests } from "@components/PaymentRequest";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { useMailStatus } from "@hooks/useMailStatus";
+import { useEffect } from "react";
 import { RiChatSmileFill } from "react-icons/ri";
 
 export const MailPreview: React.FC = () => {
   const { id, context } = useMailBoxContext();
+  const { addItem } = useMailStatus(id as string);
   const { subject, content, textContent, attachments, isLoading, payments } =
     useMailBody(id && id !== "all" ? id : undefined, context);
+
+  useEffect(() => {
+    if (id) {
+      addItem(id);
+    }
+  }, [addItem, id]);
   return (
     <Flex w="full" direction={"column"}>
       {id && !isLoading && (
@@ -20,7 +29,7 @@ export const MailPreview: React.FC = () => {
             data-header
             bg="surface.300"
             borderBottom="solid 1px"
-            borderBottomColor={"surface.400"}
+            borderBottomColor={"#171717"}
           >
             <MailPreviewHeader />
           </Flex>
@@ -28,7 +37,7 @@ export const MailPreview: React.FC = () => {
             <Flex position={"absolute"} inset={0}>
               <CustomScrollbarWrapper>
                 <Fade in key={id}>
-                  <Box w="full">
+                  <Box w="full" mt={4}>
                     <Box maxW="600" w="full" mx="auto">
                       <Box my={2} fontWeight={"medium"} fontSize={18}>
                         {subject}
@@ -57,8 +66,10 @@ export const MailPreview: React.FC = () => {
                           color={"surface.900"}
                         />
                       )}
-                      {payments && <PaymentRequests />}
-                      {attachments && <MailPreviewAttachments />}
+                      {payments && payments.length > 0 && <PaymentRequests />}
+                      {attachments && attachments.length > 0 && (
+                        <MailPreviewAttachments />
+                      )}
                       <MailMeta />
                     </Box>
                   </Box>

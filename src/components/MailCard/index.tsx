@@ -6,6 +6,7 @@ import { SolanaPayRequest } from "@components/SolanaPayRequest";
 import { useEncryptionKey } from "@hooks/useEncryptionKey";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
+import { useMailStatus } from "@hooks/useMailStatus";
 import { Link } from "@tanstack/react-router";
 import { decryptData, shortenPrincipalId, trim } from "@utils/string";
 import { formatTime } from "@utils/time";
@@ -21,6 +22,7 @@ export const MailCard: React.FC<FormattedMailBox> = ({
   id,
   to,
 }) => {
+  const { isRead } = useMailStatus(id, Number(createdAt) * 1000);
   const { data, isLoading } = useEncryptionKey(encKey);
   const decodedSubject = !isLoading ? decryptData(subject, iv, data) : "";
   const { context, id: contextId } = useMailBoxContext();
@@ -39,6 +41,8 @@ export const MailCard: React.FC<FormattedMailBox> = ({
       borderRadius={10}
       fontSize={14}
       as={LinkBox}
+      fontWeight={!isRead ? "bold" : ""}
+      opacity={!isRead ? 1 : 0.5}
       pr={5}
       bg={isActive ? "surface.300" : ""}
       _hover={{
@@ -46,7 +50,7 @@ export const MailCard: React.FC<FormattedMailBox> = ({
       }}
     >
       <Avatar top={2} left={"10px"} name={addres} />
-      <Flex mb={"2px"} justifyContent={"space-between"} opacity={0.5}>
+      <Flex mb={"2px"} justifyContent={"space-between"}>
         <Flex>{shortenPrincipalId(addres)}</Flex>
         <Flex fontSize={12}>{formatTime(Number(createdAt) * 1000)}</Flex>
       </Flex>
@@ -58,7 +62,7 @@ export const MailCard: React.FC<FormattedMailBox> = ({
       >
         <CustomSkeleton isLoading={isLoading}>{decodedSubject}</CustomSkeleton>
       </Box>
-      <Box opacity={0.4} fontSize={12}>
+      <Box fontSize={12}>
         <CustomSkeleton isLoading={isLoading}>
           {trim(textContent, hasSmartView ? 30 : 60, "...", "(No content)")}
         </CustomSkeleton>

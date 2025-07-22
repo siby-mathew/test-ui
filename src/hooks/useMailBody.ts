@@ -6,11 +6,13 @@ import { skipToken, useQuery } from "@tanstack/react-query";
 import {
   MailBoxLabels,
   QueryKeys,
+  StorageVersion,
   type Attachment,
   type FormattedMailBox,
   type PaymentConfig,
 } from "src/types";
 import { decryptData } from "@utils/string";
+
 async function fetchContent(url: string): Promise<string> {
   try {
     const response = await fetch(url);
@@ -44,11 +46,27 @@ export const useMailBody = (
       : null;
 
   const { data } = useEncryptionKey(mail?.encKey ?? "");
-  const getMailContent = async (fileId: string) => {
-    const result = await fetchContent(
-      `${import.meta.env.VITE_SOLMAIL_IRYS_BASE_URL}${fileId}`
-    );
-    return result;
+  const getMailContent = async (body: string, version: StorageVersion) => {
+    if (version === StorageVersion.arweave) {
+      const [fileId] = body.split("manifestId=");
+      const result = await fetchContent(
+        `${import.meta.env.VITE_SOLMAIL_IRYS_BASE_URL}${fileId}`
+      );
+      return result;
+    } else {
+      const result: any = await fetchContent(
+        `${import.meta.env.VITE_SOLMAIL_PINATA_BASE_URL}${body}`
+      );
+      try {
+        const parsed = JSON.parse(result);
+        if (parsed && parsed.content) {
+          return parsed.content;
+        }
+      } catch {
+        return "";
+      }
+    }
+    return "";
   };
 
   const {
@@ -57,7 +75,10 @@ export const useMailBody = (
     isFetched,
   } = useQuery({
     queryKey: [QueryKeys.MAIL_BODY, id],
-    queryFn: mail && mail.body ? () => getMailContent(mail.body) : skipToken,
+    queryFn:
+      mail && mail.body
+        ? () => getMailContent(mail.body, mail.version as StorageVersion)
+        : skipToken,
     enabled: !!(id && mail && mail.body),
   });
 
@@ -102,7 +123,7 @@ export const useMailBody = (
     } catch {
       return ["", [], "", []];
     }
-  }, [content, mail?.iv, data]);
+  }, [content, mail, data]);
 
   const subject = useMemo(() => {
     if (mail && data) {

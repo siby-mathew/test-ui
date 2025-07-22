@@ -97,3 +97,8 @@ export type ComposerFormInputs = {
   files: File[];
   solanaPay?: SolanaPayPayload;
 };
+
+export enum StorageVersion {
+  "pinata" = "0.0.5",
+  "arweave" = "0.0.4",
+}
