@@ -15,7 +15,12 @@ import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
 import { Subject } from "./Subject";
 import { FieldWrapper } from "@components/Field";
-import { encryptData, getSaltIV, resolveEmail } from "@utils/index";
+import {
+  encryptData,
+  getSaltIV,
+  isValidAddress,
+  resolveEmail,
+} from "@utils/index";
 import { web3 } from "@project-serum/anchor";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -48,6 +53,7 @@ const initialValues = {
   files: [],
 };
 
+const solEmailRegex = /^[^\s@]+@[^\s@]+\.sol$/;
 export const ComposerLegacy: React.FC = () => {
   const connection = useSolanaConnection();
   const { wallet } = usePrivyWallet();
@@ -83,6 +89,21 @@ export const ComposerLegacy: React.FC = () => {
   } = useComposer();
 
   const { onOpen, onClose, isOpen } = useDisclosure();
+
+  const validateToAddress = (value: string) => {
+    if (value === wallet?.address?.toString()) {
+      return "To address cannot be same as your wallet address";
+    }
+
+    const isValidSolAddress = isValidAddress(value);
+    const isValidSolEmail = solEmailRegex.test(value);
+
+    if (!isValidSolAddress && !isValidSolEmail) {
+      return "Enter a valid wallet address or .sol email";
+    }
+
+    return true;
+  };
 
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
     updateStatus("Prepairing your mail");
@@ -255,6 +276,7 @@ export const ComposerLegacy: React.FC = () => {
                   placeholder="Wallet address or .sol domain"
                   {...methods.register("to", {
                     required: "To address is required",
+                    validate: validateToAddress,
                   })}
                 />
               </FieldWrapper>
