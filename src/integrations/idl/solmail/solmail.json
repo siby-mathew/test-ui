@@ -1,29 +1,489 @@
 {
-  "version": "0.1.0",
-  "name": "solmail",
+  "address": "2K15sf3PgSjsxHfpa1hc7qJycReXKS2JZSRXWoaB6S8Q",
+  "metadata": {
+    "name": "solmail",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Decentralized email with NFT tokenization"
+  },
   "instructions": [
     {
-      "name": "createmail",
+      "name": "create_solmail_collection",
+      "docs": [
+        "Create Solmail NFT collection (one-time setup)"
+      ],
+      "discriminator": [
+        113,
+        115,
+        208,
+        187,
+        133,
+        207,
+        108,
+        34
+      ],
       "accounts": [
         {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": true
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  101,
+                  110,
+                  116,
+                  114,
+                  97,
+                  108
+                ]
+              }
+            ]
+          }
         },
         {
-          "name": "mailAccountV2",
-          "isMut": false,
-          "isSigner": false
+          "name": "collection_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  111,
+                  108,
+                  108,
+                  101,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "central_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "master_edition",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  100,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_username",
+      "docs": [
+        "Create a new username account (PDA-based)"
+      ],
+      "discriminator": [
+        166,
+        69,
+        156,
+        133,
+        149,
+        194,
+        61,
+        190
+      ],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  46,
+                  109,
+                  97,
+                  105,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "mailbox",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "create_username_mint",
+      "docs": [
+        "Create NFT mint for a specific username"
+      ],
+      "discriminator": [
+        5,
+        247,
+        123,
+        17,
+        135,
+        32,
+        201,
+        93
+      ],
+      "accounts": [
+        {
+          "name": "central_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  101,
+                  110,
+                  116,
+                  114,
+                  97,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  100,
+                  95,
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_account",
+          "docs": [
+            "The username account that will be wrapped"
+          ]
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createmail",
+      "discriminator": [
+        79,
+        186,
+        79,
+        109,
+        12,
+        168,
+        250,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mail_account_v2"
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -33,11 +493,11 @@
         },
         {
           "name": "from",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "to",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "salt",
@@ -52,28 +512,648 @@
           "type": "string"
         },
         {
-          "name": "parentId",
+          "name": "parent_id",
           "type": "string"
         }
       ]
     },
     {
-      "name": "updatemail",
+      "name": "edit_wrapped_username",
+      "docs": [
+        "Allow NFT holder to modify wrapped username data"
+      ],
+      "discriminator": [
+        142,
+        86,
+        16,
+        71,
+        205,
+        186,
+        149,
+        153
+      ],
       "accounts": [
         {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": false
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  95,
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_account"
+        },
+        {
+          "name": "nft_owner",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_mailbox",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "link_username_to_mailbox",
+      "docs": [
+        "Link username to a new mailbox"
+      ],
+      "discriminator": [
+        231,
+        199,
+        253,
+        145,
+        106,
+        184,
+        225,
+        211
+      ],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_mailbox",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "register",
+      "discriminator": [
+        211,
+        124,
+        67,
+        15,
+        211,
+        194,
+        178,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "mail_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  105,
+                  108,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "register_v2",
+      "discriminator": [
+        225,
+        250,
+        193,
+        26,
+        37,
+        179,
+        205,
+        76
+      ],
+      "accounts": [
+        {
+          "name": "mail_account_v2",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  105,
+                  108,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  118,
+                  50
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "rewrap_username",
+      "docs": [
+        "Re-wrap a username that was previously unwrapped"
+      ],
+      "discriminator": [
+        142,
+        184,
+        154,
+        88,
+        103,
+        179,
+        176,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  95,
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  101,
+                  110,
+                  116,
+                  114,
+                  97,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  100,
+                  95,
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_destination",
+          "writable": true
+        },
+        {
+          "name": "name_owner",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "_uri",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "sendmail",
+      "discriminator": [
+        254,
+        11,
+        16,
+        48,
+        131,
+        123,
+        30,
+        181
+      ],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "from",
+          "type": "pubkey"
+        },
+        {
+          "name": "to",
+          "type": "pubkey"
+        },
+        {
+          "name": "salt",
+          "type": "string"
+        },
+        {
+          "name": "iv",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "transfer_username_authority",
+      "docs": [
+        "Transfer username authority to a new owner"
+      ],
+      "discriminator": [
+        85,
+        160,
+        157,
+        156,
+        215,
+        111,
+        42,
+        167
+      ],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "unwrap_username",
+      "docs": [
+        "Unwrap a username NFT back to a regular username"
+      ],
+      "discriminator": [
+        67,
+        221,
+        210,
+        83,
+        41,
+        47,
+        174,
+        122
+      ],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  95,
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  101,
+                  110,
+                  116,
+                  114,
+                  97,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  100,
+                  95,
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_source",
+          "writable": true
+        },
+        {
+          "name": "nft_owner",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_account_v2",
+      "discriminator": [
+        207,
+        128,
+        25,
+        128,
+        97,
+        131,
+        11,
+        255
+      ],
+      "accounts": [
+        {
+          "name": "mail_account_v2",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        },
+        {
+          "name": "mailbox",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "updatemail",
+      "discriminator": [
+        103,
+        89,
+        239,
+        89,
+        179,
+        196,
+        168,
+        188
+      ],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -84,43 +1164,30 @@
       ]
     },
     {
-      "name": "updatemailreadstatus",
-      "accounts": [
-        {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "updatemaillabel",
+      "discriminator": [
+        127,
+        96,
+        27,
+        207,
+        164,
+        210,
+        203,
+        16
+      ],
       "accounts": [
         {
           "name": "mail",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -131,129 +1198,329 @@
       ]
     },
     {
-      "name": "registerV2",
-      "accounts": [
-        {
-          "name": "mailAccountV2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+      "name": "updatemailreadstatus",
+      "discriminator": [
+        22,
+        58,
+        187,
+        161,
+        225,
+        237,
+        130,
+        155
       ],
-      "args": [
-        {
-          "name": "nostrKey",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "updateAccountV2",
-      "accounts": [
-        {
-          "name": "mailAccountV2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "nostrKey",
-          "type": "string"
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "sendmail",
       "accounts": [
         {
           "name": "mail",
-          "isMut": true,
-          "isSigner": true
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "subject",
-          "type": "string"
-        },
-        {
-          "name": "body",
-          "type": "string"
-        },
-        {
-          "name": "from",
-          "type": "publicKey"
-        },
-        {
-          "name": "to",
-          "type": "publicKey"
-        },
-        {
-          "name": "salt",
-          "type": "string"
-        },
-        {
-          "name": "iv",
-          "type": "string"
-        },
-        {
-          "name": "version",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "register",
+      "name": "wrap_username",
+      "docs": [
+        "Wrap a username as an NFT"
+      ],
+      "discriminator": [
+        59,
+        94,
+        211,
+        65,
+        20,
+        41,
+        98,
+        102
+      ],
       "accounts": [
         {
-          "name": "mailAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "username_account",
+          "writable": true
         },
         {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  95,
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  101,
+                  110,
+                  116,
+                  114,
+                  97,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  114,
+                  97,
+                  112,
+                  112,
+                  101,
+                  100,
+                  95,
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "collection_mint",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  99,
+                  111,
+                  108,
+                  108,
+                  101,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_destination",
+          "writable": true
+        },
+        {
+          "name": "metadata_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "username_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "collection_metadata",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "collection_master_edition",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  100,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "name_owner",
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "nostrKey",
+          "name": "uri",
           "type": "string"
+        },
+        {
+          "name": "mailbox_locked",
+          "type": "bool"
+        },
+        {
+          "name": "transfer_allowed",
+          "type": "bool"
         }
       ]
     }
@@ -261,370 +1528,316 @@
   "accounts": [
     {
       "name": "SolMail",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "from",
-            "type": "publicKey"
-          },
-          {
-            "name": "to",
-            "type": "publicKey"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "name": "parentId",
-            "type": "string"
-          },
-          {
-            "name": "markAsRead",
-            "type": "bool"
-          },
-          {
-            "name": "createdAt",
-            "type": "u32"
-          },
-          {
-            "name": "subject",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "iv",
-            "type": "string"
-          },
-          {
-            "name": "salt",
-            "type": "string"
-          },
-          {
-            "name": "version",
-            "type": "string"
-          }
-        ]
-      }
+      "discriminator": [
+        247,
+        239,
+        251,
+        112,
+        232,
+        125,
+        215,
+        255
+      ]
     },
     {
       "name": "SolMailAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "nostrKey",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "SolMailV2",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "from",
-            "type": "publicKey"
-          },
-          {
-            "name": "to",
-            "type": "publicKey"
-          },
-          {
-            "name": "markAsRead",
-            "type": "bool"
-          },
-          {
-            "name": "label",
-            "type": {
-              "defined": "MailLabel"
-            }
-          },
-          {
-            "name": "createdAt",
-            "type": "u32"
-          },
-          {
-            "name": "mailbox",
-            "type": "publicKey"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "name": "parentId",
-            "type": "string"
-          },
-          {
-            "name": "subject",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "iv",
-            "type": "string"
-          },
-          {
-            "name": "salt",
-            "type": "string"
-          },
-          {
-            "name": "version",
-            "type": "string"
-          }
-        ]
-      }
+      "discriminator": [
+        72,
+        22,
+        32,
+        1,
+        49,
+        244,
+        46,
+        180
+      ]
     },
     {
       "name": "SolMailAccountV2",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "mailbox",
-            "type": "publicKey"
-          },
-          {
-            "name": "nostrKey",
-            "type": "string"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
+      "discriminator": [
+        56,
+        165,
+        134,
+        52,
+        94,
+        16,
+        21,
+        14
+      ]
+    },
     {
-      "name": "MailLabel",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Outbox"
-          },
-          {
-            "name": "Inbox"
-          },
-          {
-            "name": "Read"
-          },
-          {
-            "name": "Trash"
-          },
-          {
-            "name": "Spam"
-          }
-        ]
-      }
+      "name": "SolMailV2",
+      "discriminator": [
+        138,
+        97,
+        203,
+        217,
+        101,
+        227,
+        70,
+        35
+      ]
+    },
+    {
+      "name": "SolmailCentralState",
+      "discriminator": [
+        99,
+        124,
+        165,
+        34,
+        55,
+        150,
+        4,
+        250
+      ]
+    },
+    {
+      "name": "UsernameAccount",
+      "discriminator": [
+        120,
+        2,
+        212,
+        44,
+        208,
+        63,
+        20,
+        122
+      ]
+    },
+    {
+      "name": "UsernameWrapper",
+      "discriminator": [
+        178,
+        242,
+        111,
+        106,
+        198,
+        168,
+        204,
+        135
+      ]
     }
   ],
   "events": [
     {
-      "name": "MailSendEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "MailV2SendEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "MailV2UpdateEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "parentId",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "markAsRead",
-          "type": "bool",
-          "index": false
-        },
-        {
-          "name": "createdAt",
-          "type": "u32",
-          "index": false
-        },
-        {
-          "name": "subject",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "body",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "authority",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "iv",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "salt",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "version",
-          "type": "string",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "MailV2ReadEvent",
-      "fields": [
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "MailV2UpdateLabelEvent",
-      "fields": [
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
-    },
-    {
       "name": "MailAccountV2RegisterEvent",
-      "fields": [
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "account",
-          "type": "publicKey",
-          "index": false
-        }
+      "discriminator": [
+        250,
+        87,
+        69,
+        103,
+        135,
+        185,
+        177,
+        156
       ]
     },
     {
       "name": "MailAccountV2UpdateEvent",
-      "fields": [
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "account",
-          "type": "publicKey",
-          "index": false
-        }
+      "discriminator": [
+        239,
+        63,
+        234,
+        251,
+        172,
+        161,
+        13,
+        162
+      ]
+    },
+    {
+      "name": "MailSendEvent",
+      "discriminator": [
+        246,
+        25,
+        155,
+        65,
+        156,
+        90,
+        174,
+        160
+      ]
+    },
+    {
+      "name": "MailV2ReadEvent",
+      "discriminator": [
+        185,
+        241,
+        60,
+        172,
+        90,
+        110,
+        65,
+        90
+      ]
+    },
+    {
+      "name": "MailV2SendEvent",
+      "discriminator": [
+        57,
+        95,
+        119,
+        238,
+        197,
+        56,
+        38,
+        155
+      ]
+    },
+    {
+      "name": "MailV2UpdateEvent",
+      "discriminator": [
+        224,
+        123,
+        44,
+        76,
+        87,
+        109,
+        105,
+        110
+      ]
+    },
+    {
+      "name": "MailV2UpdateLabelEvent",
+      "discriminator": [
+        25,
+        155,
+        115,
+        145,
+        193,
+        110,
+        174,
+        83
+      ]
+    },
+    {
+      "name": "SolmailCollectionCreatedEvent",
+      "discriminator": [
+        135,
+        188,
+        144,
+        234,
+        67,
+        63,
+        236,
+        246
+      ]
+    },
+    {
+      "name": "UsernameAuthorityTransferredEvent",
+      "discriminator": [
+        169,
+        128,
+        164,
+        236,
+        203,
+        67,
+        147,
+        221
+      ]
+    },
+    {
+      "name": "UsernameCreatedEvent",
+      "discriminator": [
+        186,
+        17,
+        123,
+        213,
+        3,
+        164,
+        96,
+        224
+      ]
+    },
+    {
+      "name": "UsernameLinkedToMailboxEvent",
+      "discriminator": [
+        228,
+        39,
+        100,
+        210,
+        181,
+        131,
+        138,
+        125
+      ]
+    },
+    {
+      "name": "UsernameNftMintCreatedEvent",
+      "discriminator": [
+        57,
+        71,
+        33,
+        4,
+        156,
+        206,
+        5,
+        153
+      ]
+    },
+    {
+      "name": "UsernameRewrappedEvent",
+      "discriminator": [
+        1,
+        248,
+        89,
+        41,
+        168,
+        31,
+        225,
+        86
+      ]
+    },
+    {
+      "name": "UsernameUnwrappedEvent",
+      "discriminator": [
+        161,
+        205,
+        89,
+        209,
+        242,
+        30,
+        250,
+        58
+      ]
+    },
+    {
+      "name": "UsernameWrappedEvent",
+      "discriminator": [
+        200,
+        217,
+        249,
+        41,
+        22,
+        254,
+        111,
+        128
+      ]
+    },
+    {
+      "name": "WrappedUsernameMailboxChangedEvent",
+      "discriminator": [
+        0,
+        207,
+        103,
+        166,
+        125,
+        16,
+        13,
+        185
+      ]
+    },
+    {
+      "name": "WrapperFundsWithdrawnEvent",
+      "discriminator": [
+        193,
+        131,
+        79,
+        12,
+        105,
+        71,
+        36,
+        110
       ]
     }
   ],
@@ -688,6 +1901,894 @@
       "code": 6011,
       "name": "InvalidMailAccount",
       "msg": "Invalid mailaccount"
+    },
+    {
+      "code": 6012,
+      "name": "UsernameAlreadyExists",
+      "msg": "Username already exists"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidUsername",
+      "msg": "Invalid username - must be 3-32 characters, alphanumeric and underscores only"
+    },
+    {
+      "code": 6014,
+      "name": "UsernameNotFound",
+      "msg": "Username not found"
+    },
+    {
+      "code": 6015,
+      "name": "UsernameAlreadyWrapped",
+      "msg": "Username is already wrapped as NFT"
+    },
+    {
+      "code": 6016,
+      "name": "UsernameNotWrapped",
+      "msg": "Username is not wrapped"
+    },
+    {
+      "code": 6017,
+      "name": "CannotModifyWrappedUsername",
+      "msg": "Cannot modify wrapped username - unwrap first"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidNewAuthority",
+      "msg": "Invalid new authority"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidMailbox",
+      "msg": "Invalid mailbox"
+    },
+    {
+      "code": 6020,
+      "name": "WrapperAlreadyExists",
+      "msg": "Wrapper already exists for this username"
+    },
+    {
+      "code": 6021,
+      "name": "WrapperNotFound",
+      "msg": "Wrapper not found"
+    },
+    {
+      "code": 6022,
+      "name": "WrapperNotActive",
+      "msg": "Wrapper is not active"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidWrapperState",
+      "msg": "Invalid wrapper state"
+    },
+    {
+      "code": 6024,
+      "name": "NftMintMismatch",
+      "msg": "NFT mint mismatch"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidNftAmount",
+      "msg": "Invalid NFT amount - must be exactly 1"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidCollectionMint",
+      "msg": "Invalid collection mint"
+    },
+    {
+      "code": 6027,
+      "name": "CollectionNotVerified",
+      "msg": "Collection not verified"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidMetadataAccount",
+      "msg": "Invalid metadata account"
+    },
+    {
+      "code": 6029,
+      "name": "MetadataCreationFailed",
+      "msg": "Metadata creation failed"
+    },
+    {
+      "code": 6030,
+      "name": "UsernameLockedForModifications",
+      "msg": "Username is locked for modifications"
+    },
+    {
+      "code": 6031,
+      "name": "NftTransferNotAllowed",
+      "msg": "NFT transfer not allowed"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidOriginalAuthority",
+      "msg": "Invalid original authority"
+    },
+    {
+      "code": 6033,
+      "name": "CentralStateNotInitialized",
+      "msg": "Central state not initialized"
+    },
+    {
+      "code": 6034,
+      "name": "InvalidCentralState",
+      "msg": "Invalid central state"
+    }
+  ],
+  "types": [
+    {
+      "name": "MailAccountV2RegisterEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailAccountV2UpdateEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailLabel",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Outbox"
+          },
+          {
+            "name": "Inbox"
+          },
+          {
+            "name": "Read"
+          },
+          {
+            "name": "Trash"
+          },
+          {
+            "name": "Spam"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailSendEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2ReadEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2SendEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2UpdateEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2UpdateLabelEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMail",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nostr_key",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccountV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "nostr_key",
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "label",
+            "type": {
+              "defined": {
+                "name": "MailLabel"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolmailCentralState",
+      "docs": [
+        "Central State for managing collection and program authority"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": "u8"
+          },
+          {
+            "name": "collection_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_wrapped",
+            "type": "u64"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolmailCollectionCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "collection_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "central_state",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameAccount",
+      "docs": [
+        "Username Account structure (PDA-based)"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "domain_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_wrapped",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameAuthorityTransferredEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "old_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameLinkedToMailboxEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "old_mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameNftMintCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_payer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameRewrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameUnwrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "redeemer",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameWrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_destination",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameWrapper",
+      "docs": [
+        "Username Wrapper - PDA that holds username authority during tokenization"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": {
+              "defined": {
+                "name": "WrapperTag"
+              }
+            }
+          },
+          {
+            "name": "nonce",
+            "type": "u8"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox_locked",
+            "type": "bool"
+          },
+          {
+            "name": "transfer_allowed",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrappedUsernameMailboxChangedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "nft_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_mailbox",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrapperFundsWithdrawnEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "spl_amount",
+            "type": "u64"
+          },
+          {
+            "name": "sol_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrapperTag",
+      "docs": [
+        "Wrapper state tags for tracking tokenization status"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Uninitialized"
+          },
+          {
+            "name": "ActiveWrapper"
+          },
+          {
+            "name": "InactiveWrapper"
+          }
+        ]
+      }
     }
   ]
 }

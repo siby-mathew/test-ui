@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
-import { AnchorProvider, Program, type Idl } from "@project-serum/anchor";
+import { AnchorProvider, Program, type Idl } from "@coral-xyz/anchor";
 
 import { usePrivy, useSolanaWallets } from "@privy-io/react-auth";
 
@@ -38,7 +38,7 @@ export const useGetProgramInstance = <T extends Idl>(
       programID
     );
 
-    const program = new Program<T>(IDL as T, programID, provider);
+    const program = new Program<T>(IDL as T, provider);
 
     return {
       provider,

@@ -16,7 +16,7 @@ import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 import { Subject } from "./Subject";
 import { FieldWrapper } from "@components/Field";
 import { encryptData, getSaltIV, resolveEmail } from "@utils/index";
-import { web3 } from "@project-serum/anchor";
+import { web3 } from "@coral-xyz/anchor";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import {
   useIrysUploader,

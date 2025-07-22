@@ -4,7 +4,7 @@ import {
   AnchorProvider,
   Program,
   type ProgramAccount,
-} from "@project-serum/anchor";
+} from "@coral-xyz/anchor";
 import {
   type FetchAllMailsResult,
   type FormattedMailBox,
