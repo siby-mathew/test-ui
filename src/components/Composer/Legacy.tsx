@@ -46,12 +46,11 @@ import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
 import { generateHtmlTag } from "@utils/string/generateHtml";
-import { DUMMY_LARGE_CONTENT } from "@const/menu";
 
 const initialValues = {
   to: "",
   subject: "",
-  body: DUMMY_LARGE_CONTENT,
+  body: "",
   files: [],
 };
 

@@ -74,7 +74,7 @@ export const MailPreviewHeader: React.FC = () => {
                 disabled={isPending}
               />
             </Tooltip>
-            <Tooltip label="MArk as spam" isDisabled={isPending}>
+            <Tooltip label="Mark as spam" isDisabled={isPending}>
               <IconButton
                 onClick={() => onStatusUpdate(MailLabelIndex.spam)}
                 size={"sm"}
