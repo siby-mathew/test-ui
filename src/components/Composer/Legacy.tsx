@@ -46,15 +46,17 @@ import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
 import { generateHtmlTag } from "@utils/string/generateHtml";
+import { DUMMY_LARGE_CONTENT } from "@const/menu";
 
 const initialValues = {
   to: "",
   subject: "",
-  body: "",
+  body: DUMMY_LARGE_CONTENT,
   files: [],
 };
 
 const solEmailRegex = /^[^\s@]+@[^\s@]+\.sol$/;
+
 export const ComposerLegacy: React.FC = () => {
   const connection = useSolanaConnection();
   const { wallet } = usePrivyWallet();

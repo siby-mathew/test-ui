@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { Box } from "@chakra-ui/react";
+import { useFormContext } from "react-hook-form";
+import type { ComposerFormInputs } from "src/types";
 
 type QuillEditorProps = {
   value?: string;
@@ -11,12 +13,13 @@ type QuillEditorProps = {
 const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
-
+  const { getValues } = useFormContext<ComposerFormInputs>();
   useEffect(() => {
     if (!quillRef.current && editorRef.current) {
       quillRef.current = new Quill(editorRef.current, {
         theme: "snow",
         placeholder: "Type your message here...",
+
         modules: {
           toolbar: "#toolbar-custom",
         },
@@ -31,11 +34,13 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
         }
       });
 
+      quillRef.current.setContents([{ insert: getValues().body ?? "" }]);
+
       if (value) {
         quillRef.current.root.innerHTML = value;
       }
     }
-  }, [onChange, value]);
+  }, [getValues, onChange, value]);
 
   return (
     <Box

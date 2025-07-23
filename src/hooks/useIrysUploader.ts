@@ -51,11 +51,12 @@ export const useIrysUploader = () => {
 
         const balance = await webIrys.getLoadedBalance();
         const price = await webIrys.getPrice(buffer.length);
+
         if (balance.isLessThan(price)) {
           try {
             await webIrys.fund(Number(price.toString()));
-          } catch (E) {
-            console.log("Here", E);
+          } catch {
+            throw "Failed to fund areweave node";
           }
         }
 
@@ -71,6 +72,18 @@ export const useIrysUploader = () => {
       const contentTags = [{ name: "Content-Type", value: "text/plain" }];
       const encBody = await encrypt(updatedContent);
       const contentBuffer = Buffer.from(encBody);
+
+      const balance = await webIrys.getLoadedBalance();
+      const price = await webIrys.getPrice(contentBuffer.length);
+
+      if (balance.isLessThan(price)) {
+        try {
+          await webIrys.fund(Number(price.toString()));
+        } catch {
+          throw "Failed to fund areweave node";
+        }
+      }
+
       const contentTx = webIrys.arbundles.createData(contentBuffer, signer, {
         tags: contentTags,
       });

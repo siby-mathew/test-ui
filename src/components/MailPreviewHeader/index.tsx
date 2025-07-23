@@ -53,14 +53,16 @@ export const MailPreviewHeader: React.FC = () => {
         </Flex>
       </Flex>
       <Flex gap={1}>
-        <Tooltip label="Replay">
-          <IconButton
-            size={"sm"}
-            aria-label="Replay"
-            icon={<IoIosShareAlt />}
-            onClick={onReplay}
-          />
-        </Tooltip>
+        {context !== MailBoxLabels.outbox && (
+          <Tooltip label="Reply">
+            <IconButton
+              size={"sm"}
+              aria-label="Reply"
+              icon={<IoIosShareAlt />}
+              onClick={onReplay}
+            />
+          </Tooltip>
+        )}
         {context === MailBoxLabels.inbox && (
           <>
             <Tooltip label="Delete" isDisabled={isPending}>

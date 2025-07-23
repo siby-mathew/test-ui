@@ -71,7 +71,7 @@ export const Login: React.FC = () => {
             <Icon as={FaXTwitter} />
           </ChakraLink>
           <ChakraLink
-            href={LINKS.twitter}
+            href={LINKS.telegram}
             target="_blank"
             _hover={{
               opacity: 0.5,

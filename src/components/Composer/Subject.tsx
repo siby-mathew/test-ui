@@ -17,7 +17,7 @@ export const Subject: React.FC = () => {
         placeholder="Subject"
         variant={"secondary"}
         {...register("subject", {
-          required: "Subject canot be empty",
+          required: "Subject cannot be empty",
           maxLength: {
             value: MAXIMUM_LENGTH,
             message: `Maximum length should be ${MAXIMUM_LENGTH}`,
