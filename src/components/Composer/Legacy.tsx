@@ -60,7 +60,7 @@ export const ComposerLegacy: React.FC = () => {
   const { wallet } = usePrivyWallet();
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
-  const { thread, ref, onClose } = useComposer();
+  const { thread, ref, onClose: closeComposer } = useComposer();
   const methods = useForm<ComposerFormInputs>({
     mode: "all",
     reValidateMode: "onSubmit",
@@ -93,7 +93,7 @@ export const ComposerLegacy: React.FC = () => {
     composerCollapsed,
   } = useComposer();
 
-  const { onOpen, isOpen } = useDisclosure();
+  const { onOpen, isOpen, onClose } = useDisclosure();
 
   const validateToAddress = (value: string) => {
     if (value === wallet?.address?.toString()) {
@@ -260,7 +260,7 @@ export const ComposerLegacy: React.FC = () => {
             </Flex>
             <Flex gap={3}>
               <Button
-                onClick={onClose}
+                onClick={closeComposer}
                 size={"sm"}
                 variant={"outlined"}
                 colorScheme="red"
