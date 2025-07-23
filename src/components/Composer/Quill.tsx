@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import Quill from "quill";
+import Quill, { Delta } from "quill";
 import "quill/dist/quill.snow.css";
 import { Box } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
@@ -34,8 +34,20 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
         }
       });
 
-      quillRef.current.clipboard.dangerouslyPasteHTML(getValues().body ?? "");
+      quillRef.current.clipboard.addMatcher(
+        Node.ELEMENT_NODE,
+        (node: Node, delta: Delta): Delta => {
+          if (node instanceof Element) {
+            const tagName = node.tagName.toLowerCase();
 
+            if (["script", "iframe"].includes(tagName)) {
+              return new Delta();
+            }
+          }
+          return delta;
+        }
+      );
+      quillRef.current.clipboard.dangerouslyPasteHTML(getValues().body ?? "");
       if (value) {
         quillRef.current.root.innerHTML = value;
       }
