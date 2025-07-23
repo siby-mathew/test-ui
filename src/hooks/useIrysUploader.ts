@@ -1,6 +1,7 @@
 import { ArweaveSigner } from "arbundles";
 import { DataItem } from "arbundles";
 import useWebIrys from "./useIrys";
+import type WebIrys from "@irys/sdk/web/irys";
 
 type TaggedFile = File & {
   tags?: { name: string; value: string }[];
@@ -19,11 +20,21 @@ export const useIrysUploader = () => {
 
     if (balance.isLessThan(price)) {
       try {
+        console.log("need funding");
         await webIrys.fund(Number(price.toString()));
       } catch {
+        console.log("Failed to fund Arweave node");
         throw "Failed to fund Arweave node";
       }
     }
+  };
+
+  const fileSizeCollector = () => {
+    let size = 0;
+    return (bufferSize: number = 0) => {
+      size += bufferSize;
+      return size;
+    };
   };
 
   const uploadContentWithAttchment = async (
@@ -33,6 +44,8 @@ export const useIrysUploader = () => {
     try {
       const webIrys = await getWebIrys();
       if (!webIrys) return null;
+
+      const sizeToUpload = fileSizeCollector();
       const throwawayKey = await webIrys.arbundles
         .getCryptoDriver()
         .generateJWK();
@@ -61,17 +74,7 @@ export const useIrysUploader = () => {
             ];
 
         const buffer = Buffer.from(await file.arrayBuffer());
-
-        const balance = await webIrys.getLoadedBalance();
-        const price = await webIrys.getPrice(buffer.length);
-
-        if (balance.isLessThan(price)) {
-          try {
-            await webIrys.fund(Number(price.toString()));
-          } catch {
-            throw "Failed to fund areweave node";
-          }
-        }
+        sizeToUpload(buffer.length);
 
         const tx = webIrys.arbundles.createData(buffer, signer, { tags });
         await tx.sign(signer);
@@ -85,17 +88,9 @@ export const useIrysUploader = () => {
       const contentTags = [{ name: "Content-Type", value: "text/plain" }];
       const encBody = await encrypt(updatedContent);
       const contentBuffer = Buffer.from(encBody);
+      sizeToUpload(contentBuffer.length);
 
-      const balance = await webIrys.getLoadedBalance();
-      const price = await webIrys.getPrice(contentBuffer.length);
-
-      if (balance.isLessThan(price)) {
-        try {
-          await webIrys.fund(Number(price.toString()));
-        } catch {
-          throw "Failed to fund areweave node";
-        }
-      }
+      await ensureFundsAvailable(webIrys, sizeToUpload());
 
       const contentTx = webIrys.arbundles.createData(contentBuffer, signer, {
         tags: contentTags,
@@ -123,6 +118,7 @@ export const useIrysUploader = () => {
       );
       await manifestTx.sign(signer);
       txs.push(manifestTx);
+
       await webIrys.uploader.uploadBundle(txs);
       return contentTx.id;
     } catch {

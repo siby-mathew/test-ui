@@ -34,7 +34,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
         }
       });
 
-      quillRef.current.setContents([{ insert: getValues().body ?? "" }]);
+      quillRef.current.clipboard.dangerouslyPasteHTML(getValues().body ?? "");
 
       if (value) {
         quillRef.current.root.innerHTML = value;

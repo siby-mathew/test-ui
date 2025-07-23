@@ -8,6 +8,7 @@ import { useSignMessage } from "@privy-io/react-auth/solana";
 import { useSendTransaction } from "@privy-io/react-auth/solana";
 import { useSolanaConnection } from "./useConnection";
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
+import { awaitTransactionSignatureConfirmation } from "@utils/transaction";
 
 export const useWebIrys = () => {
   const { wallet } = usePrivyWallet();
@@ -28,10 +29,18 @@ export const useWebIrys = () => {
         name: "solmail",
         provider: {
           sendTransaction: async (transaction: Transaction) => {
-            return sendTransaction({
-              transaction: transaction,
-              connection: connection,
+            const { signature } = await sendTransaction({
+              transaction,
+              connection,
             });
+
+            await awaitTransactionSignatureConfirmation(
+              signature,
+              connection,
+              1000 * 60 * 5
+            );
+
+            return signature;
           },
           publicKey: provider.wallet.publicKey,
           signMessage: async (message: Uint8Array) => {
