@@ -235,7 +235,6 @@ export const ComposerLegacy: React.FC = () => {
   }
   return (
     <FormProvider {...methods}>
-      <ReactQuill />
       <Flex
         direction={"column"}
         px="5"
