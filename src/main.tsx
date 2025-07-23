@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { client } from "@integrations/idl/graphql";
 import { ApolloProvider } from "@apollo/client";
 import { ToastContainer } from "react-toastify";
+import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const queryclient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,32 +20,31 @@ createRoot(document.getElementById("root")!).render(
         <PrivyProvider
           appId={import.meta.env.VITE_SOLMAIL_PRIVY_APP_ID}
           config={{
-            solanaClusters: [
-              {
-                name: "devnet",
-                rpcUrl: import.meta.env.VITE_SOLMAIL_RPC_ENDPOINT,
-              },
-            ],
-
+            externalWallets: {
+              solana: { connectors: toSolanaWalletConnectors() },
+            },
             appearance: {
               showWalletLoginFirst: !0,
-              walletList: ["detected_wallets"],
+              walletList: [
+                "detected_wallets",
+                "metamask",
+                "coinbase_wallet",
+                "rainbow",
+                "wallet_connect",
+                "phantom",
+              ],
             },
 
             loginMethods: ["email", "wallet", "google"],
-            legal: {
-              termsAndConditionsUrl: "/?t",
-              privacyPolicyUrl: "/?p",
-            },
-
             embeddedWallets: {
               solana: {
                 createOnLogin: "all-users",
               },
             },
 
-            externalWallets: {
-              solana: {},
+            legal: {
+              termsAndConditionsUrl: "/?t",
+              privacyPolicyUrl: "/?p",
             },
           }}
         >

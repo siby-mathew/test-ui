@@ -9,9 +9,11 @@ import { useEffect } from "react";
 import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
+import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
+  useEmbeddedWallet();
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
   useEffect(() => {

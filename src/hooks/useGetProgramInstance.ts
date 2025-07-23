@@ -1,22 +1,22 @@
 import { PublicKey } from "@solana/web3.js";
 import { AnchorProvider, Program, type Idl } from "@project-serum/anchor";
 
-import { usePrivy, useSolanaWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 
 import { useMemo } from "react";
 
 import { useSolanaConnection } from "./useConnection";
+import { useEmbeddedWallet } from "./useEmbeddedWallet";
 
 export const useGetProgramInstance = <T extends Idl>(
   IDL: T,
   programAddress: string
 ) => {
-  const { wallets } = useSolanaWallets();
+  const wallet = useEmbeddedWallet();
   const { authenticated } = usePrivy();
   const connection = useSolanaConnection();
   return useMemo(() => {
-    const wallet = wallets[0] ?? undefined;
-    if (!authenticated || !wallets.length || !wallet) {
+    if (!authenticated || !wallet) {
       return {
         provider: null,
         program: null,
@@ -45,5 +45,5 @@ export const useGetProgramInstance = <T extends Idl>(
       program,
       mailAccountAddress,
     };
-  }, [IDL, authenticated, connection, programAddress, wallets]);
+  }, [IDL, authenticated, connection, programAddress, wallet]);
 };

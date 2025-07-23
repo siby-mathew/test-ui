@@ -1,8 +1,8 @@
-import { useWallets } from "@privy-io/react-auth";
+import { useSolanaWallets } from "@privy-io/react-auth";
 import { useCallback, useMemo } from "react";
 
 export const useGetWalletById = (id?: string) => {
-  const { wallets } = useWallets();
+  const { wallets } = useSolanaWallets();
   const get = useCallback(
     (id: string) => {
       const _wallet = wallets.find(

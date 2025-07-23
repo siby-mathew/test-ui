@@ -25,8 +25,7 @@ import type { MenuConfig } from "src/types";
 import PrivyLogo from "@assets/privy.jpg";
 import JupiterLogo from "@assets/jupiter.svg";
 import { TbCopyCheckFilled } from "react-icons/tb";
-
-import { useSolanaWallets } from "@privy-io/react-auth";
+import { useSolanaWallets } from "@hooks/useEmbeddedWallet";
 
 const isActive = (id: string, path: string) => {
   if (id && path && path.indexOf(`/${id}`) > -1) {

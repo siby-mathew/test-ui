@@ -1,9 +1,10 @@
 import { usePrivy, useSolanaWallets } from "@privy-io/react-auth";
+import { useEmbeddedWallet } from "./useEmbeddedWallet";
 
 export const usePrivyWallet = () => {
   const { ready, authenticated, login, logout, signMessage, user } = usePrivy();
-  const { wallets, exportWallet } = useSolanaWallets();
-  const wallet = wallets && wallets.length > 0 ? wallets[0] : undefined;
+  const { exportWallet } = useSolanaWallets();
+  const wallet = useEmbeddedWallet();
   return {
     isConnecting: !ready,
     isConnected: authenticated,
