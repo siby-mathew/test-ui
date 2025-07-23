@@ -13,6 +13,19 @@ interface UploadWithFilesParams {
 export const useIrysUploader = () => {
   const { getWebIrys } = useWebIrys();
 
+  const ensureFundsAvailable = async (webIrys: WebIrys, size: number) => {
+    const balance = await webIrys.getLoadedBalance();
+    const price = await webIrys.getPrice(size);
+
+    if (balance.isLessThan(price)) {
+      try {
+        await webIrys.fund(Number(price.toString()));
+      } catch {
+        throw "Failed to fund Arweave node";
+      }
+    }
+  };
+
   const uploadContentWithAttchment = async (
     { content, files }: UploadWithFilesParams,
     encrypt: (content: string) => Promise<string>
