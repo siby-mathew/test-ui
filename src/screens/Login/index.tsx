@@ -1,8 +1,16 @@
-import { Button, Flex, Icon } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Icon,
+  Link as ChakraLink,
+  Image,
+} from "@chakra-ui/react";
+import { LINKS } from "@const/links";
 import { usePrivy } from "@privy-io/react-auth";
+
 import { FaXTwitter } from "react-icons/fa6";
 import { SiTelegram } from "react-icons/si";
-
+import JupiterLogo from "@assets/jupiter.svg";
 export const Login: React.FC = () => {
   const { login } = usePrivy();
 
@@ -39,16 +47,52 @@ export const Login: React.FC = () => {
         justifyContent={"center"}
         opacity={0.5}
       >
-        <Flex>Solmail © 2025</Flex>
-        <Flex>Terms & Conditions</Flex>
-        <Flex>Privacy policy</Flex>
-        <Flex>FAQ</Flex>
-
+        <Flex>Solmail © {new Date().getFullYear()}</Flex>
         <Flex>
-          <Icon as={FaXTwitter} />
+          <ChakraLink href="#">Terms & Conditions</ChakraLink>
         </Flex>
         <Flex>
-          <Icon as={SiTelegram} />
+          <ChakraLink href="#">Privacy policy</ChakraLink>
+        </Flex>
+        <Flex>
+          <ChakraLink href="#">FAQ</ChakraLink>
+        </Flex>
+
+        <Flex alignItems={"center"} justifyContent={"center"} gap={2}>
+          <ChakraLink
+            href={LINKS.twitter}
+            target="_blank"
+            _hover={{
+              opacity: 0.5,
+            }}
+            alignItems={"center"}
+            display={"inline-flex"}
+          >
+            <Icon as={FaXTwitter} />
+          </ChakraLink>
+          <ChakraLink
+            href={LINKS.twitter}
+            target="_blank"
+            _hover={{
+              opacity: 0.5,
+            }}
+            alignItems={"center"}
+            display={"inline-flex"}
+          >
+            <Icon as={SiTelegram} />
+          </ChakraLink>
+
+          <ChakraLink
+            href={LINKS.jupiter}
+            target="_blank"
+            _hover={{
+              opacity: 0.5,
+            }}
+            alignItems={"center"}
+            display={"inline-flex"}
+          >
+            <Image w="15px" src={JupiterLogo} />
+          </ChakraLink>
         </Flex>
       </Flex>
     </Flex>
