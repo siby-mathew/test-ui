@@ -26,6 +26,9 @@ import PrivyLogo from "@assets/privy.jpg";
 import JupiterLogo from "@assets/jupiter.svg";
 import { TbCopyCheckFilled } from "react-icons/tb";
 import { useSolanaWallets } from "@hooks/useEmbeddedWallet";
+import { LINKS } from "@const/links";
+import { ClipboardText } from "@components/ClipboardText";
+import { getSolscanAddress } from "@utils/string/getSolscanUrl";
 
 const isActive = (id: string, path: string) => {
   if (id && path && path.indexOf(`/${id}`) > -1) {
@@ -134,7 +137,7 @@ const SidebarFooter: React.FC = () => {
       <Flex alignItems={"center"} fontSize={13} gap={2}>
         <ChakraLink
           as={Link}
-          to="#"
+          to={getSolscanAddress(config.SOLMAIL_CONTRACT, "mainnet")}
           display={"inline-flex"}
           alignItems={"center"}
           target="_blank"
@@ -143,13 +146,14 @@ const SidebarFooter: React.FC = () => {
           <chakra.span textDecoration={"underline"}>Solmail</chakra.span>
         </ChakraLink>
         <chakra.span>
-          <ChakraLink textDecoration={"underline"} to="./" as={Link}>
-            {shortenPrincipalId(config.SOLMAIL_CONTRACT)}{" "}
-            <Icon fontSize={13} as={FaCopy} ml={2} />
-          </ChakraLink>
+          <ClipboardText>
+            {shortenPrincipalId(config.SOLMAIL_CONTRACT)}
+          </ClipboardText>
         </chakra.span>
         <chakra.span>
-          <Image boxSize={"13px"} borderRadius={"50%"} src={JupiterLogo} />
+          <ChakraLink href={LINKS.jupiter} target="_blank">
+            <Image boxSize={"13px"} borderRadius={"50%"} src={JupiterLogo} />
+          </ChakraLink>
         </chakra.span>
       </Flex>
       <Flex mt={1} opacity={0.7} fontSize={12}>

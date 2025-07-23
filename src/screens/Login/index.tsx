@@ -48,7 +48,7 @@ export const Login: React.FC = () => {
         opacity={0.5}
       >
         <Flex>Solmail © {new Date().getFullYear()}</Flex>
-        <Flex>
+        {/* <Flex>
           <ChakraLink href="#">Terms & Conditions</ChakraLink>
         </Flex>
         <Flex>
@@ -56,7 +56,7 @@ export const Login: React.FC = () => {
         </Flex>
         <Flex>
           <ChakraLink href="#">FAQ</ChakraLink>
-        </Flex>
+        </Flex> */}
 
         <Flex alignItems={"center"} justifyContent={"center"} gap={2}>
           <ChakraLink
