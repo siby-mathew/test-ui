@@ -55,6 +55,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
           color={"red.500"}
           display={"flex"}
           alignItems={"center"}
+          fontSize={13}
         >
           <Icon as={MdOutlineError} mr={1} />
           {error.message}

@@ -12,6 +12,7 @@ import {
   type PaymentConfig,
 } from "src/types";
 import { decryptData } from "@utils/string";
+import { useMailBoxContext } from "./useMailBoxContext";
 
 async function fetchContent(url: string): Promise<string> {
   try {
@@ -81,7 +82,7 @@ export const useMailBody = (
         : skipToken,
     enabled: !!(id && mail && mail.body),
   });
-
+  const { id: sid } = useMailBoxContext();
   const [mailContent, attachments, textContent, payments] = useMemo((): [
     string,
     Attachment[],
@@ -99,8 +100,16 @@ export const useMailBody = (
       div.innerHTML = html;
 
       const images: Attachment[] = [];
+      if (sid && id == sid) {
+        console.log(html);
+      }
 
       div.querySelectorAll("img,[data-file]").forEach((img) => {
+        const attr =
+          img.getAttribute("data-size") && img.getAttribute("data-size");
+        if (!attr) {
+          return;
+        }
         images.push({
           src: img.getAttribute("data-id") || "",
           name: img.getAttribute("data-name") || "",

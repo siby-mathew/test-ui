@@ -46,6 +46,7 @@ import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
 import { generateHtmlTag } from "@utils/string/generateHtml";
+
 const initialValues = {
   to: "",
   subject: "",
@@ -59,7 +60,7 @@ export const ComposerLegacy: React.FC = () => {
   const { wallet } = usePrivyWallet();
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
-  const { thread, ref } = useComposer();
+  const { thread, ref, onClose } = useComposer();
   const methods = useForm<ComposerFormInputs>({
     mode: "all",
     reValidateMode: "onSubmit",
@@ -74,7 +75,7 @@ export const ComposerLegacy: React.FC = () => {
   const { mailAccountAddress, program, provider } = useGetMailProgramInstance();
   const { sendTransaction } = useSendTransaction();
   const { showToast } = useToast();
-  const [id, set] = useState(0);
+  const [id] = useState(0);
 
   const sleep = async (delay: number) => {
     return new Promise((r) => {
@@ -92,7 +93,7 @@ export const ComposerLegacy: React.FC = () => {
     composerCollapsed,
   } = useComposer();
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { onOpen, isOpen } = useDisclosure();
 
   const validateToAddress = (value: string) => {
     if (value === wallet?.address?.toString()) {
@@ -215,10 +216,10 @@ export const ComposerLegacy: React.FC = () => {
     }
   };
 
-  const reset = () => {
-    methods.reset(initialValues);
-    set(new Date().getTime());
-  };
+  // const reset = () => {
+  //   methods.reset(initialValues);
+  //   set(new Date().getTime());
+  // };
 
   const handleChange = (value: string) => {
     methods.setValue("body", value);
@@ -234,6 +235,7 @@ export const ComposerLegacy: React.FC = () => {
   }
   return (
     <FormProvider {...methods}>
+      <ReactQuill />
       <Flex
         direction={"column"}
         px="5"
@@ -247,18 +249,27 @@ export const ComposerLegacy: React.FC = () => {
         h="100%"
       >
         <Flex direction={"column"}>
-          <Flex direction={"row"} justifyContent={"space-between"} py={3}>
+          <Flex
+            borderBottom={"solid 1px"}
+            borderBottomColor={"surface.400"}
+            direction={"row"}
+            justifyContent={"space-between"}
+            py={3}
+          >
             <Flex alignItems={"center"} fontSize={18}>
               <chakra.span fontWeight={"bold"}>Compose new message</chakra.span>
             </Flex>
             <Flex gap={3}>
               <Button
-                onClick={reset}
+                onClick={onClose}
                 size={"sm"}
                 variant={"outlined"}
                 colorScheme="red"
+                _hover={{
+                  opacity: 0.6,
+                }}
               >
-                Discard
+                Close
               </Button>
               <Button
                 rightIcon={<IoSend />}

@@ -6,13 +6,38 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AppTheme } from "@theme/index";
 const router = createRouter({ routeTree });
-import { PrivyProvider } from "@privy-io/react-auth";
+import { PrivyProvider, type WalletListEntry } from "@privy-io/react-auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { client } from "@integrations/idl/graphql";
 import { ApolloProvider } from "@apollo/client";
 import { ToastContainer } from "react-toastify";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const queryclient = new QueryClient();
+
+export const ALL_SUPPORTED_WALLETS: WalletListEntry[] = [
+  "metamask",
+  "coinbase_wallet",
+  "rainbow",
+  "phantom",
+  "zerion",
+  "cryptocom",
+  "uniswap",
+  "okx_wallet",
+  "universal_profile",
+  "detected_wallets",
+  "detected_solana_wallets",
+  "detected_ethereum_wallets",
+  "wallet_connect",
+  "rabby_wallet",
+  "bybit_wallet",
+  "ronin_wallet",
+  "haha_wallet",
+  "safe",
+  "solflare",
+  "backpack",
+  "binance",
+];
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryclient}>
@@ -25,16 +50,8 @@ createRoot(document.getElementById("root")!).render(
             },
             appearance: {
               showWalletLoginFirst: !0,
-              walletList: [
-                "detected_wallets",
-                "metamask",
-                "coinbase_wallet",
-                "rainbow",
-                "wallet_connect",
-                "phantom",
-              ],
+              walletList: ALL_SUPPORTED_WALLETS,
             },
-
             loginMethods: ["email", "wallet", "google"],
             embeddedWallets: {
               solana: {
