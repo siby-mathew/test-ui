@@ -54,7 +54,7 @@ export const MailPreviewHeader: React.FC = () => {
       </Flex>
       <Flex gap={1}>
         {context !== MailBoxLabels.outbox && (
-          <Tooltip label="Reply">
+          <Tooltip label="Reply" placement="auto">
             <IconButton
               size={"sm"}
               aria-label="Reply"
@@ -65,7 +65,7 @@ export const MailPreviewHeader: React.FC = () => {
         )}
         {context === MailBoxLabels.inbox && (
           <>
-            <Tooltip label="Delete" isDisabled={isPending}>
+            <Tooltip placement="auto" label="Delete" isDisabled={isPending}>
               <IconButton
                 onClick={() => onStatusUpdate(MailLabelIndex.trash)}
                 size={"sm"}
@@ -74,7 +74,11 @@ export const MailPreviewHeader: React.FC = () => {
                 disabled={isPending}
               />
             </Tooltip>
-            <Tooltip label="Mark as spam" isDisabled={isPending}>
+            <Tooltip
+              placement="auto"
+              label="Mark as spam"
+              isDisabled={isPending}
+            >
               <IconButton
                 onClick={() => onStatusUpdate(MailLabelIndex.spam)}
                 size={"sm"}

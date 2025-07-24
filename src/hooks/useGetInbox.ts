@@ -16,7 +16,7 @@ import {
 import { useMemo, useCallback, useEffect, useRef } from "react";
 import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
 import type { Solmail } from "@integrations/idl/solmail/solmail";
-// import { useMailBoxGraphql } from "@hooks/useMailGraphql";
+import { useMailBoxGraphql } from "@hooks/useMailGraphql";
 import { isOlderThan } from "@utils/time";
 import { usePrivyWallet } from "./usePrivyWallet";
 
@@ -56,7 +56,7 @@ const fetchAllMails = async (
 };
 
 export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
-  // useMailBoxGraphql();
+  useMailBoxGraphql();
   const { program, provider } = useGetMailProgramInstance();
   const { address } = usePrivyWallet();
   const { data, isLoading, refetch, isRefetching } =

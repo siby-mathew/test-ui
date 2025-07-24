@@ -105,7 +105,7 @@ export const ComposerLegacy: React.FC = () => {
     const isValidSolEmail = solEmailRegex.test(value);
 
     if (!isValidSolAddress && !isValidSolEmail) {
-      return "Enter a valid wallet address or .sol email";
+      return "Enter a valid wallet address or  sol domain";
     }
 
     return true;
@@ -288,7 +288,7 @@ export const ComposerLegacy: React.FC = () => {
                 <Input
                   id="to"
                   variant={"secondary"}
-                  placeholder="Wallet address or .sol domain"
+                  placeholder="Wallet address or sol domain"
                   {...methods.register("to", {
                     required: "To address is required",
                     validate: validateToAddress,

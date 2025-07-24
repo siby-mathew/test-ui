@@ -2,6 +2,7 @@ import {
   Button,
   chakra,
   Flex,
+  Icon,
   Image,
   Modal,
   ModalBody,
@@ -26,6 +27,7 @@ import BigNumber from "bignumber.js";
 import { useSolanaPay } from "@hooks/useSolanaPay";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useToken } from "@hooks/useToken";
+import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 export const SolanaPay: React.FC<
   Omit<ModalProps, "children"> &
     PaymentConfig & {
@@ -171,6 +173,22 @@ export const SolanaPay: React.FC<
 
                 <Flex ref={qrRef} bg="light.100" borderRadius={"lg"}></Flex>
               </>
+            )}
+
+            {isDone && (
+              <Flex
+                py={2}
+                direction={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <Icon
+                  color={"green.500"}
+                  fontSize={30}
+                  as={IoCheckmarkDoneCircleSharp}
+                />
+                <Flex color={"green.500"}>Payment Done</Flex>
+              </Flex>
             )}
             <Flex>{message}</Flex>
             <Flex fontWeight={"bold"} bg="solana" bgClip={"text"}>

@@ -26,7 +26,7 @@ export default defineConfig({
     global: "window",
   },
   optimizeDeps: {
-    include: ["@graphql-typed-document-node/core"],
+    exclude: ["@graphql-typed-document-node/core"],
   },
   build: {
     rollupOptions: {
