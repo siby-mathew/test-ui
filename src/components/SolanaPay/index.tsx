@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   chakra,
   Flex,
@@ -28,6 +30,7 @@ import { useSolanaPay } from "@hooks/useSolanaPay";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useToken } from "@hooks/useToken";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
+import { useBalance } from "@hooks/useBalance";
 export const SolanaPay: React.FC<
   Omit<ModalProps, "children"> &
     PaymentConfig & {
@@ -43,7 +46,11 @@ export const SolanaPay: React.FC<
   token,
   ...props
 }) => {
-  const { symbol, address } = useToken(token ?? "");
+  const { symbol, address, decimals } = useToken(token ?? "");
+  const { formattedBalance, hasEnoughBalance } = useBalance(
+    symbol !== "SOL" ? address : undefined,
+    amount
+  );
   const { id } = useMailBoxContext();
   const [paymentUrl, setUrl] = useState<URL | null>(null);
   const [reference, setReference] = useState<PublicKey | null>(null);
@@ -53,6 +60,7 @@ export const SolanaPay: React.FC<
     ref: reference,
     qrUrl: paymentUrl,
     onSuccess: onClose,
+    decimals,
     onPaymentStatusUpdate: useCallback(
       (s: StatusType) => {
         if (s.isDone) {
@@ -110,14 +118,7 @@ export const SolanaPay: React.FC<
   }, [paymentUrl, isOpen]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      // variant={"secondary"}
-      isCentered
-      size={"md"}
-      {...props}
-    >
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size={"md"} {...props}>
       <ModalOverlay />
       <ModalContent position={"relative"}>
         <ModalCloseButton />
@@ -126,7 +127,7 @@ export const SolanaPay: React.FC<
         </ModalHeader>
         <ModalBody pb={5}>
           <VStack w="100%">
-            <Flex fontWeight={"bold"} fontSize={20}>
+            <Flex color={"green.500"} fontWeight={"bold"} fontSize={20}>
               {Number(amount)} {symbol}
             </Flex>
             <Flex>
@@ -136,11 +137,23 @@ export const SolanaPay: React.FC<
               <>
                 <Flex>Pay with embedded wallet</Flex>
                 <Flex>
-                  <Button variant="green" onClick={sendTransaction}>
+                  <Button
+                    isDisabled={!hasEnoughBalance}
+                    variant="green"
+                    onClick={sendTransaction}
+                  >
                     Pay now {isPending && <Spinner size={"sm"} ml={2} />}
                   </Button>
                 </Flex>
-
+                <Flex>Balance : {formattedBalance}</Flex>
+                {!hasEnoughBalance && (
+                  <Flex>
+                    <Alert status="error" borderRadius={5}>
+                      <AlertIcon />
+                      Insufficient balance
+                    </Alert>
+                  </Flex>
+                )}
                 <Flex
                   position={"relative"}
                   w="100%"

@@ -4,6 +4,8 @@ import { Skeleton } from "./components/Skeleton";
 import { Modal } from "./components/Modal";
 import { Input } from "./components/Input";
 import { Button } from "./components/Button";
+import { Tabs } from "./components/Tab";
+import { Table } from "./components/Table";
 
 export const AppTheme = extendTheme({
   config: { initialColorMode: "dark", useSystemColorMode: true },
@@ -26,5 +28,7 @@ export const AppTheme = extendTheme({
     Modal,
     Input,
     Button,
+    Tabs,
+    Table,
   },
 });

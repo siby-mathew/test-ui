@@ -102,3 +102,7 @@ export enum StorageVersion {
   "pinata" = "0.0.5",
   "arweave" = "0.0.4",
 }
+
+export type FormClaimUsername = {
+  username: string;
+};

@@ -9,6 +9,7 @@ export const tokens: Token[] = [
     symbol: "SOL",
     logo: SolanaTokenLogo,
     address: "SOL",
+    decimals: 9,
   },
   {
     id: import.meta.env.VITE_SOLMAIL_USDC,
@@ -16,6 +17,7 @@ export const tokens: Token[] = [
     symbol: "USDC",
     logo: USDCTokenLogo,
     address: import.meta.env.VITE_SOLMAIL_USDC,
+    decimals: 6,
   },
   {
     id: import.meta.env.VITE_SOLMAIL_PYUSD,
@@ -23,5 +25,6 @@ export const tokens: Token[] = [
     symbol: "PYUSD",
     logo: PayPalUSDTokenLogo,
     address: import.meta.env.VITE_SOLMAIL_PYUSD,
+    decimals: 6,
   },
 ];

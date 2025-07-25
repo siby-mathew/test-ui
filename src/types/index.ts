@@ -32,6 +32,7 @@ export type Token = {
   symbol: string;
   logo: string;
   address: string;
+  decimals: number;
 };
 
 export type SolanaPayPayload = {

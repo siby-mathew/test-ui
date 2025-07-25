@@ -40,6 +40,12 @@ export const SOLMAIL_MENU: MenuConfig[] = [
     link: "/u/solmail/trash/all",
     id: "trash",
   },
+  {
+    icon: FaTrash,
+    name: "Rewards test",
+    link: "/u/rewards",
+    id: "rewards",
+  },
 ];
 
 export const DOCUSIGN_MENU: MenuConfig[] = [

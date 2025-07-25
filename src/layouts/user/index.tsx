@@ -10,6 +10,7 @@ import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
 import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
+// import { ClaimUserName } from "@components/ClaimUsername";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
@@ -27,6 +28,7 @@ export const UserLayout: React.FC = () => {
 
   return (
     <Flex w="100%" direction={"row"}>
+      {/* <ClaimUserName isOpen={true} onClose={() => {}} /> */}
       <Flex as={"aside"} w="300px" maxW={"300px"}>
         <Sidebar />
       </Flex>

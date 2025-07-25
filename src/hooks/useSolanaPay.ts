@@ -11,10 +11,16 @@ import { useGetMailProgramInstance } from "./useMailProgramInstance";
 import { useSolanaConnection } from "./useConnection";
 import { usePrivyWallet } from "./usePrivyWallet";
 import { useToast } from "./useToast";
-import type { PublicKey } from "@solana/web3.js";
+import { PublicKey, Transaction } from "@solana/web3.js";
 import { isFunction } from "lodash";
 
 import type { StatusType } from "src/types";
+import {
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
+import { toRawAmount } from "@utils/formating";
 
 type Options = {
   ref: PublicKey | null;
@@ -22,6 +28,7 @@ type Options = {
   onSuccess?: () => void;
   onError?: (e: Error) => void;
   onPaymentStatusUpdate?: (s: StatusType) => void;
+  decimals: number;
 };
 const _ERROR = "Failed to transfer amount";
 export const useSolanaPay = ({
@@ -30,6 +37,7 @@ export const useSolanaPay = ({
   onSuccess,
   onError,
   onPaymentStatusUpdate,
+  decimals,
 }: Options) => {
   const { provider } = useGetMailProgramInstance();
   const { isConnected: connected, wallet } = usePrivyWallet();
@@ -37,6 +45,7 @@ export const useSolanaPay = ({
 
   const connection = useSolanaConnection();
   const { showToast } = useToast();
+
   const sendTransaction = useCallback(async () => {
     if (
       isPending ||
@@ -48,68 +57,110 @@ export const useSolanaPay = ({
     ) {
       return !0;
     }
+
     const { recipient, amount, reference, splToken } = parseURL(
       qrUrl
     ) as TransferRequestURL;
 
+    console.log(reference?.toString(), ref?.toString());
+
     if (!amount) return;
+
     startTransition(async () => {
       try {
-        const transaction = await createTransfer(
-          connection,
-          provider.publicKey,
-          {
-            recipient,
-            amount,
+        let transaction: Transaction;
+
+        if (splToken) {
+          const fromTokenAccount = await getAssociatedTokenAddress(
             splToken,
-            reference,
-          },
-          { commitment: "confirmed" }
-        );
-        if (!wallet?.sendTransaction) {
-          return;
-        }
-        await wallet.sendTransaction(transaction, connection, {
-          skipPreflight: true,
-        });
-        showToast("Successfully transfered", {
-          type: "success",
-        });
-        if (isFunction(onSuccess)) {
-          onSuccess();
-        }
-        if (isFunction(onPaymentStatusUpdate)) {
-          onPaymentStatusUpdate({
-            isDone: !0,
-            isChecking: !1,
-          });
-        }
-      } catch (E) {
-        console.log(E);
-        if (isFunction(onPaymentStatusUpdate)) {
-          onPaymentStatusUpdate({
-            isDone: !1,
-            isChecking: !1,
-          });
+            provider.publicKey
+          );
+          const toTokenAccount = await getAssociatedTokenAddress(
+            splToken,
+            recipient
+          );
+
+          const tx = new Transaction();
+
+          const ataInfo = await connection.getAccountInfo(toTokenAccount);
+          if (!ataInfo) {
+            const createATAIx = createAssociatedTokenAccountInstruction(
+              provider.publicKey,
+              toTokenAccount,
+              recipient,
+              splToken
+            );
+            tx.add(createATAIx);
+          }
+
+          const transferIx = createTransferInstruction(
+            fromTokenAccount,
+            toTokenAccount,
+            provider.publicKey,
+            Number(toRawAmount(amount.toString(), decimals))
+          );
+
+          if (reference) {
+            if (Array.isArray(reference)) {
+              reference.forEach((ref) =>
+                transferIx.keys.push({
+                  pubkey: ref,
+                  isSigner: false,
+                  isWritable: false,
+                })
+              );
+            } else {
+              transferIx.keys.push({
+                pubkey: reference,
+                isSigner: false,
+                isWritable: false,
+              });
+            }
+          }
+
+          tx.add(transferIx);
+          transaction = tx;
+        } else {
+          transaction = await createTransfer(
+            connection,
+            provider.publicKey,
+            {
+              recipient,
+              amount,
+              reference,
+            },
+            { commitment: "confirmed" }
+          );
         }
 
-        showToast(_ERROR, {
-          type: "error",
+        const { blockhash } = await connection.getLatestBlockhash("confirmed");
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = provider.publicKey;
+        await wallet.sendTransaction(transaction, connection, {
+          skipPreflight: false,
         });
-        if (isFunction(onError)) {
-          onError(E && E instanceof Error ? E : new Error(_ERROR));
-        }
+
+        showToast("Successfully transferred", { type: "success" });
+        onSuccess?.();
+        onPaymentStatusUpdate?.({ isDone: true, isChecking: false });
+      } catch (E) {
+        console.error("Transfer failed:", E);
+        onPaymentStatusUpdate?.({ isDone: false, isChecking: false });
+        showToast(_ERROR, { type: "error" });
+        onError?.(E instanceof Error ? E : new Error(_ERROR));
       }
     });
   }, [
     connected,
     connection,
+    decimals,
     isPending,
     onError,
     onPaymentStatusUpdate,
     onSuccess,
     provider,
     qrUrl,
+    ref,
     showToast,
     wallet,
   ]);
@@ -122,7 +173,7 @@ export const useSolanaPay = ({
           qrUrl
         ) as TransferRequestURL;
         if (!amount || !ref) return;
-
+        console.log(ref.toString());
         const signatureInfo = await findReference(connection, ref, {
           finality: "confirmed",
         });
@@ -149,6 +200,7 @@ export const useSolanaPay = ({
           onSuccess();
         }
       } catch (e) {
+        console.log(e);
         if (isFunction(onPaymentStatusUpdate)) {
           onPaymentStatusUpdate({
             isDone: !1,

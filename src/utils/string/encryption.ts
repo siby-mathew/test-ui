@@ -20,9 +20,17 @@ export const encryptData = (data: string, _i?: string, encKey?: string) => {
 };
 
 export const decryptData = (enStr: string, _i?: string, encKey?: string) => {
-  const iv = CryptoJS.enc.Hex.parse(_i ?? mIv);
-  const options = { mode: CryptoJS.mode.CTR, iv: iv };
-  const decrypted = CryptoJS.AES.decrypt(enStr, encKey ?? g2wBMZxrwz, options);
-  const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
-  return decryptedText as string;
+  try {
+    const iv = CryptoJS.enc.Hex.parse(_i ?? mIv);
+    const options = { mode: CryptoJS.mode.CTR, iv: iv };
+    const decrypted = CryptoJS.AES.decrypt(
+      enStr,
+      encKey ?? g2wBMZxrwz,
+      options
+    );
+    const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+    return decryptedText as string;
+  } catch {
+    return "Failed to decrypt";
+  }
 };

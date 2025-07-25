@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
+import { Route as ULayoutRewardsIndexRouteImport } from './routes/u/_layout/rewards/index'
 import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
 import { Route as ULayoutSolmailSpamIdRouteImport } from './routes/u/_layout/solmail/spam/$id'
 import { Route as ULayoutSolmailOutboxIdRouteImport } from './routes/u/_layout/solmail/outbox/$id'
@@ -33,6 +34,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
 const ULayoutRoute = ULayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => URoute,
+} as any)
+const ULayoutRewardsIndexRoute = ULayoutRewardsIndexRouteImport.update({
+  id: '/rewards/',
+  path: '/rewards/',
+  getParentRoute: () => ULayoutRoute,
 } as any)
 const ULayoutSolmailTrashIdRoute = ULayoutSolmailTrashIdRouteImport.update({
   id: '/solmail/trash/$id',
@@ -58,6 +64,7 @@ const ULayoutSolmailInboxIdRoute = ULayoutSolmailInboxIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/u/rewards': typeof ULayoutRewardsIndexRoute
   '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/u/rewards': typeof ULayoutRewardsIndexRoute
   '/u/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/u': typeof URouteWithChildren
   '/u/_layout': typeof ULayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/u/_layout/rewards/': typeof ULayoutRewardsIndexRoute
   '/u/_layout/solmail/inbox/$id': typeof ULayoutSolmailInboxIdRoute
   '/u/_layout/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/_layout/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/u'
     | '/'
+    | '/u/rewards'
     | '/u/solmail/inbox/$id'
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   to:
     | '/u'
     | '/'
+    | '/u/rewards'
     | '/u/solmail/inbox/$id'
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/u'
     | '/u/_layout'
     | '/_layout/'
+    | '/u/_layout/rewards/'
     | '/u/_layout/solmail/inbox/$id'
     | '/u/_layout/solmail/outbox/$id'
     | '/u/_layout/solmail/spam/$id'
@@ -137,6 +149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ULayoutRouteImport
       parentRoute: typeof URoute
     }
+    '/u/_layout/rewards/': {
+      id: '/u/_layout/rewards/'
+      path: '/rewards'
+      fullPath: '/u/rewards'
+      preLoaderRoute: typeof ULayoutRewardsIndexRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
     '/u/_layout/solmail/trash/$id': {
       id: '/u/_layout/solmail/trash/$id'
       path: '/solmail/trash/$id'
@@ -169,6 +188,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ULayoutRouteChildren {
+  ULayoutRewardsIndexRoute: typeof ULayoutRewardsIndexRoute
   ULayoutSolmailInboxIdRoute: typeof ULayoutSolmailInboxIdRoute
   ULayoutSolmailOutboxIdRoute: typeof ULayoutSolmailOutboxIdRoute
   ULayoutSolmailSpamIdRoute: typeof ULayoutSolmailSpamIdRoute
@@ -176,6 +196,7 @@ interface ULayoutRouteChildren {
 }
 
 const ULayoutRouteChildren: ULayoutRouteChildren = {
+  ULayoutRewardsIndexRoute: ULayoutRewardsIndexRoute,
   ULayoutSolmailInboxIdRoute: ULayoutSolmailInboxIdRoute,
   ULayoutSolmailOutboxIdRoute: ULayoutSolmailOutboxIdRoute,
   ULayoutSolmailSpamIdRoute: ULayoutSolmailSpamIdRoute,

@@ -1,5 +1,8 @@
 export const colors = {
   dark: {
+    50: "#030914",
+    60: "#121720",
+    70: "#242D3C",
     100: "#0f0f0f",
     200: "#0a0a0a",
     300: "#141414",
@@ -9,6 +12,15 @@ export const colors = {
     700: "#404040",
     800: "#4d4d4d",
     900: "#5a5a5a",
+    // 100: "#05070a", // almost black, subtle blue tint
+    // 200: "#080b10",
+    // 300: "#0c1018",
+    // 400: "#101621",
+    // 500: "#151b2a", // midpoint — dark desaturated navy
+    // 600: "#1a2133",
+    // 700: "#20273d",
+    // 800: "#272e47",
+    // 900: "#2e3552", // darkest usable blue-gray
   },
   light: {
     900: "#e4e4e4",
