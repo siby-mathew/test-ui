@@ -16,6 +16,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { FormClaimUsername } from "src/types";
 
 export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
+  onClose,
   ...props
 }) => {
   const methods = useForm<FormClaimUsername>({
@@ -27,7 +28,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
     },
   });
   return (
-    <Modal isCentered size={"xl"} {...props}>
+    <Modal isCentered size={"xl"} {...props} onClose={onClose}>
       <ModalOverlay />
       <ModalContent position={"relative"}>
         <ModalHeader textAlign={"center"}>
@@ -74,7 +75,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
           </FormProvider>
         </ModalBody>
         <ModalFooter gap={3}>
-          <Button>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button variant="green">Make it yours</Button>
         </ModalFooter>
       </ModalContent>

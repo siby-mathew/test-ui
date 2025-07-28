@@ -62,8 +62,6 @@ export const useSolanaPay = ({
       qrUrl
     ) as TransferRequestURL;
 
-    console.log(reference?.toString(), ref?.toString());
-
     if (!amount) return;
 
     startTransition(async () => {
@@ -144,7 +142,6 @@ export const useSolanaPay = ({
         onSuccess?.();
         onPaymentStatusUpdate?.({ isDone: true, isChecking: false });
       } catch (E) {
-        console.error("Transfer failed:", E);
         onPaymentStatusUpdate?.({ isDone: false, isChecking: false });
         showToast(_ERROR, { type: "error" });
         onError?.(E instanceof Error ? E : new Error(_ERROR));
@@ -160,7 +157,6 @@ export const useSolanaPay = ({
     onSuccess,
     provider,
     qrUrl,
-    ref,
     showToast,
     wallet,
   ]);
@@ -173,7 +169,7 @@ export const useSolanaPay = ({
           qrUrl
         ) as TransferRequestURL;
         if (!amount || !ref) return;
-        console.log(ref.toString());
+
         const signatureInfo = await findReference(connection, ref, {
           finality: "confirmed",
         });
@@ -200,7 +196,6 @@ export const useSolanaPay = ({
           onSuccess();
         }
       } catch (e) {
-        console.log(e);
         if (isFunction(onPaymentStatusUpdate)) {
           onPaymentStatusUpdate({
             isDone: !1,
