@@ -114,7 +114,7 @@ export const Sidebar: React.FC = () => {
           {MENU.map((menu) => {
             const active = isActive(menu.id, pathname);
             return (
-              <Flex>
+              <Flex key={menu.id}>
                 <Tooltip
                   label={menu.name}
                   bg={"surface.100"}

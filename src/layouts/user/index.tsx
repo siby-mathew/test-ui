@@ -35,11 +35,15 @@ export const UserLayout: React.FC = () => {
   const onCloseHandler = () => {
     refetchProfile();
   };
+
+  const requestWalletCreation = isFetched && !hasAccount && !isLoading;
   return (
     <Flex w="100%" direction={"row"}>
       <ClaimUserName isOpen={isOpen} onClose={onClose} />
       <ReferalCodeClaim
-        isOpen={!isModalOpen && requestProfileCreation}
+        isOpen={
+          !requestWalletCreation && !isModalOpen && requestProfileCreation
+        }
         onClose={onCloseHandler}
       />
       <Flex as={"aside"}>
@@ -69,7 +73,7 @@ export const UserLayout: React.FC = () => {
                 </>
               )}
 
-              {isFetched && !hasAccount && !isLoading && (
+              {requestWalletCreation && (
                 <RequestAccountCreation
                   isOpen={!0}
                   onClose={noop}

@@ -1,18 +1,24 @@
 import { chakra, Flex } from "@chakra-ui/react";
+import { useProfile } from "@hooks/useProfile";
 import { useEffect, useState } from "react";
 
 export const AnalyticsHeader: React.FC = () => {
-  const [progress, set] = useState<number>(5);
+  const { data } = useProfile();
+  const [progress, set] = useState<number>(0);
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      set(Math.min(100, Math.floor(Math.random() * 100) + 10));
-    }, 3500);
+    const timer = setTimeout(() => {
+      if (data && data.xp && data.xp.amount) {
+        set(Math.min(100, (data.xp.amount / data?.xp.offset) * 100));
+      }
+    }, 1500);
     return () => {
       if (timer) {
-        clearInterval(timer);
+        clearTimeout(timer);
       }
     };
-  }, []);
+  }, [data]);
+
   return (
     <Flex w="100%" bg="dark.50" direction={"column"} px={5}>
       <Flex>
@@ -20,7 +26,7 @@ export const AnalyticsHeader: React.FC = () => {
       </Flex>
       <Flex direction={"row"} justifyContent={"space-between"}>
         <Flex fontWeight={"bold"} fontSize={20}>
-          203XP
+          {data?.xp?.amount}XP
         </Flex>
         <Flex
           color={"green.500"}
@@ -28,7 +34,7 @@ export const AnalyticsHeader: React.FC = () => {
           justifyContent={"flex-end"}
           h="100%"
         >
-          1x Boost 🚀
+          {data?.milestone?.boost_factor}x Boost 🚀
         </Flex>
       </Flex>
       <Flex w="100%" my={2}>

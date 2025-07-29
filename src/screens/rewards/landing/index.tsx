@@ -6,6 +6,7 @@ import { BsPeopleFill } from "react-icons/bs";
 import { AnalyticsHeader } from "@components/AnalyticsHeader";
 import { RewardsProfile } from "@components/RewardsProfile";
 import { AnalyticsList } from "@components/AnalyticsList";
+
 export const ReferralDashboard = () => {
   return (
     <Box bg="#030914" color="white" minH="100vh" p={4} w="100%">
