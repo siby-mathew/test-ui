@@ -1,4 +1,4 @@
-import { Box, Flex, LinkBox, LinkOverlay } from "@chakra-ui/react";
+import { Box, chakra, Flex, LinkBox, LinkOverlay } from "@chakra-ui/react";
 import { Attachment } from "@components/Attachment";
 import { Avatar } from "@components/Avatar";
 import { CustomSkeleton } from "@components/CustomSkeleton";
@@ -60,11 +60,27 @@ export const MailCard: React.FC<FormattedMailBox> = ({
         overflow={"hidden"}
         textOverflow={"ellipsis"}
       >
-        <CustomSkeleton isLoading={isLoading}>{decodedSubject}</CustomSkeleton>
+        <CustomSkeleton isLoading={isLoading}>
+          <chakra.span
+            textOverflow={"ellipsis"}
+            overflow={"hidden"}
+            w={"100%"}
+            whiteSpace={"nowrap"}
+          >
+            {decodedSubject}
+          </chakra.span>
+        </CustomSkeleton>
       </Box>
       <Box fontSize={12}>
         <CustomSkeleton isLoading={isLoading}>
-          {trim(textContent, hasSmartView ? 30 : 60, "...", "(No content)")}
+          <chakra.span
+            textOverflow={"ellipsis"}
+            overflow={"hidden"}
+            w={"100%"}
+            whiteSpace={"nowrap"}
+          >
+            {trim(textContent, hasSmartView ? 30 : 60, "...", "(No content)")}
+          </chakra.span>
         </CustomSkeleton>
       </Box>
       {hasSmartView && <SmartView id={id} />}
