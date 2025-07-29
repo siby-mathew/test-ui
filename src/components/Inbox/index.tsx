@@ -33,7 +33,7 @@ export const Inbox = forwardRef<
   return (
     <Box w="100%">
       <Box pt={2}>
-        {isLoading && (
+        {isLoading && (!mail || !mail.length) && (
           <Flex minH={"50vh"} justifyContent={"center"} alignItems={"center"}>
             <Spinner />
           </Flex>

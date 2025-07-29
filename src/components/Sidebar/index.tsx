@@ -12,9 +12,10 @@ import {
   chakra,
   Link as ChakraLink,
   useClipboard,
+  Tooltip,
 } from "@chakra-ui/react";
 import { config } from "@const/config";
-import { SOLMAIL_MENU } from "@const/menu";
+import { MENU } from "@const/menu";
 import { Link, useLocation } from "@tanstack/react-router";
 import { BsArrowUpRightSquareFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
@@ -29,6 +30,8 @@ import { useSolanaWallets } from "@hooks/useEmbeddedWallet";
 import { LINKS } from "@const/links";
 import { ClipboardText } from "@components/ClipboardText";
 import { getSolscanAddress } from "@utils/string/getSolscanUrl";
+import { useMemo } from "react";
+import { MenuHeader } from "@components/MenuHeader";
 
 const isActive = (id: string, path: string) => {
   if (id && path && path.indexOf(`/${id}`) > -1) {
@@ -37,7 +40,7 @@ const isActive = (id: string, path: string) => {
   return !1;
 };
 
-const AppSwitch: React.FC = () => {
+export const AppSwitch: React.FC = () => {
   return (
     <Box w="100%">
       <Menu>
@@ -92,36 +95,72 @@ const AppSwitch: React.FC = () => {
     </Box>
   );
 };
+
 export const Sidebar: React.FC = () => {
+  const { pathname } = useLocation();
+  const selectedmenu = useMemo(() => {
+    const menu = MENU.find((menu) => pathname.indexOf(menu.id) > -1);
+    return menu || MENU[0];
+  }, [pathname]);
   return (
-    <Flex direction={"column"} w="100%" p={5} pb={3}>
-      <Flex direction={"column"} flex={"auto"}>
-        <Flex>
-          <AppSwitch />
-        </Flex>
-        <VStack align={"start"} gap={1} my={3} w="100%">
-          {SOLMAIL_MENU.map((menu) => {
-            return <SidebarMenu key={menu.id} {...menu} />;
+    <Flex w="300px" maxW={"300px"} direction={"row"}>
+      <Flex w="50px" direction={"column"} bg="surface.200">
+        <VStack align={"center"} px={"8px"} py={"10px"}>
+          <Flex my={"8px"}>
+            <Link to={"/"}>
+              <Image src={config.logo} />
+            </Link>
+          </Flex>
+          {MENU.map((menu) => {
+            const active = isActive(menu.id, pathname);
+            return (
+              <Flex>
+                <Tooltip
+                  label={menu.name}
+                  bg={"surface.100"}
+                  color={"light.100"}
+                >
+                  <ChakraLink
+                    color={active ? "green.500" : ""}
+                    as={Link}
+                    py={2}
+                    to={menu.link}
+                  >
+                    <Icon fontSize={19} as={menu.icon} />
+                  </ChakraLink>
+                </Tooltip>
+              </Flex>
+            );
           })}
         </VStack>
-        <Flex
-          align={"start"}
-          borderTop={"solid 1px"}
-          borderTopColor={"surface.300"}
-          py={3}
-          px={3}
-          direction={"column"}
-        >
-          <Flex fontSize={14} opacity={0.5} alignItems={"center"}>
-            <Icon as={LiaWalletSolid} mr={2} /> Wallet
-          </Flex>
-
-          <VStack py={2} align={"start"} w="full">
-            <WalletList />
-          </VStack>
-        </Flex>
       </Flex>
-      <SidebarFooter />
+      <Flex direction={"column"} p={5} pb={3}>
+        <MenuHeader {...selectedmenu} />
+        <Flex direction={"column"} flex={"auto"}>
+          <VStack align={"start"} gap={1} my={3} mt={0} w="100%">
+            {selectedmenu?.submenu?.map((menu) => {
+              return <SidebarMenu key={menu.id} {...menu} />;
+            })}
+          </VStack>
+          <Flex
+            align={"start"}
+            borderTop={"solid 1px"}
+            borderTopColor={"surface.300"}
+            py={3}
+            px={3}
+            direction={"column"}
+          >
+            <Flex fontSize={14} opacity={0.5} alignItems={"center"}>
+              <Icon as={LiaWalletSolid} mr={2} /> Wallet
+            </Flex>
+
+            <VStack py={2} align={"start"} w="full">
+              <WalletList />
+            </VStack>
+          </Flex>
+        </Flex>
+        <SidebarFooter />
+      </Flex>
     </Flex>
   );
 };

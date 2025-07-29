@@ -14,6 +14,7 @@ import {
 
 import { TbArrowsTransferDown } from "react-icons/tb";
 import type { MenuConfig } from "src/types";
+import { SolmailHeader } from "@components/SolmailHeader";
 
 export const SOLMAIL_MENU: MenuConfig[] = [
   {
@@ -39,12 +40,6 @@ export const SOLMAIL_MENU: MenuConfig[] = [
     name: "Trash",
     link: "/u/solmail/trash/all",
     id: "trash",
-  },
-  {
-    icon: FaTrash,
-    name: "Rewards test",
-    link: "/u/rewards",
-    id: "rewards",
   },
 ];
 
@@ -130,6 +125,7 @@ export const MENU: MenuConfig[] = [
     link: `/u/solmail/inbox/all`,
     id: "solmail",
     submenu: SOLMAIL_MENU,
+    header: () => <SolmailHeader />,
   },
   {
     icon: MdEditDocument,
@@ -148,9 +144,9 @@ export const MENU: MenuConfig[] = [
   },
   {
     icon: FaSmile,
-    name: "Profile",
-    link: `/u/profile`,
-    id: "profile",
+    name: "Rewards",
+    link: `/u/rewards`,
+    id: "rewards",
     submenu: PROFILE_MENU,
   },
 ];

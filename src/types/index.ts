@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import type { IconType } from "react-icons/lib";
 export * from "./mail";
 export type MenuConfig = {
@@ -6,7 +7,7 @@ export type MenuConfig = {
   id: string;
   link: string;
   submenu?: MenuConfig[];
-  header?: React.FC;
+  header?: () => ReactElement;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
 
@@ -19,6 +20,8 @@ export enum QueryKeys {
   "CREATE_MAILBOX" = "CREATE_MAILBOX",
   "CREATE_CREDENTIALS" = "CREATE_CREDENTIALS",
   "SOL_BALANCE" = "SOL_BALANCE",
+  "USER_PROFILE" = "USER_PROFILE",
+  "CREATE_USER_PROFILE" = "CREATE_USER_PROFILE",
 }
 
 export type StatusType = {

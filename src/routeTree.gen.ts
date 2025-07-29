@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
 import { Route as ULayoutRewardsIndexRouteImport } from './routes/u/_layout/rewards/index'
+import { Route as ULayoutDocusignDashboardIndexRouteImport } from './routes/u/_layout/docusign/dashboard/index'
 import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
 import { Route as ULayoutSolmailSpamIdRouteImport } from './routes/u/_layout/solmail/spam/$id'
 import { Route as ULayoutSolmailOutboxIdRouteImport } from './routes/u/_layout/solmail/outbox/$id'
@@ -40,6 +41,12 @@ const ULayoutRewardsIndexRoute = ULayoutRewardsIndexRouteImport.update({
   path: '/rewards/',
   getParentRoute: () => ULayoutRoute,
 } as any)
+const ULayoutDocusignDashboardIndexRoute =
+  ULayoutDocusignDashboardIndexRouteImport.update({
+    id: '/docusign/dashboard/',
+    path: '/docusign/dashboard/',
+    getParentRoute: () => ULayoutRoute,
+  } as any)
 const ULayoutSolmailTrashIdRoute = ULayoutSolmailTrashIdRouteImport.update({
   id: '/solmail/trash/$id',
   path: '/solmail/trash/$id',
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/docusign/dashboard': typeof ULayoutDocusignDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/u': typeof ULayoutRouteWithChildren
@@ -78,6 +86,7 @@ export interface FileRoutesByTo {
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/docusign/dashboard': typeof ULayoutDocusignDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +98,7 @@ export interface FileRoutesById {
   '/u/_layout/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/_layout/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/_layout/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/_layout/docusign/dashboard/': typeof ULayoutDocusignDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
+    | '/u/docusign/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/u'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
+    | '/u/docusign/dashboard'
   id:
     | '__root__'
     | '/u'
@@ -119,6 +131,7 @@ export interface FileRouteTypes {
     | '/u/_layout/solmail/outbox/$id'
     | '/u/_layout/solmail/spam/$id'
     | '/u/_layout/solmail/trash/$id'
+    | '/u/_layout/docusign/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/u/rewards'
       preLoaderRoute: typeof ULayoutRewardsIndexRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
+    '/u/_layout/docusign/dashboard/': {
+      id: '/u/_layout/docusign/dashboard/'
+      path: '/docusign/dashboard'
+      fullPath: '/u/docusign/dashboard'
+      preLoaderRoute: typeof ULayoutDocusignDashboardIndexRouteImport
       parentRoute: typeof ULayoutRoute
     }
     '/u/_layout/solmail/trash/$id': {
@@ -193,6 +213,7 @@ interface ULayoutRouteChildren {
   ULayoutSolmailOutboxIdRoute: typeof ULayoutSolmailOutboxIdRoute
   ULayoutSolmailSpamIdRoute: typeof ULayoutSolmailSpamIdRoute
   ULayoutSolmailTrashIdRoute: typeof ULayoutSolmailTrashIdRoute
+  ULayoutDocusignDashboardIndexRoute: typeof ULayoutDocusignDashboardIndexRoute
 }
 
 const ULayoutRouteChildren: ULayoutRouteChildren = {
@@ -201,6 +222,7 @@ const ULayoutRouteChildren: ULayoutRouteChildren = {
   ULayoutSolmailOutboxIdRoute: ULayoutSolmailOutboxIdRoute,
   ULayoutSolmailSpamIdRoute: ULayoutSolmailSpamIdRoute,
   ULayoutSolmailTrashIdRoute: ULayoutSolmailTrashIdRoute,
+  ULayoutDocusignDashboardIndexRoute: ULayoutDocusignDashboardIndexRoute,
 }
 
 const ULayoutRouteWithChildren =

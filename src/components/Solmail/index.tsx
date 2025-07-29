@@ -1,8 +1,8 @@
-import { Button, Fade, Flex, IconButton, Spinner } from "@chakra-ui/react";
+import { Fade, Flex, IconButton, Spinner } from "@chakra-ui/react";
 import { Inbox, type InboxRef } from "@components/Inbox";
 import { MailPreview } from "@components/MailPreview";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
-import { useComposer } from "@hooks/useComposer";
+
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useRef, useState } from "react";
 import { TbReload } from "react-icons/tb";
@@ -10,7 +10,7 @@ export const Solmail: React.FC = () => {
   const { context } = useMailBoxContext();
   const [isPending, setStatus] = useState<boolean>(!1);
   const inbox = useRef<InboxRef>(null);
-  const { onOpen } = useComposer();
+
   const onRefresh = () => {
     if (!isPending && inbox && inbox.current) {
       inbox.current.refresh();
@@ -52,13 +52,6 @@ export const Solmail: React.FC = () => {
                 opacity: 0.5,
               }}
             />
-            <Button
-              bg="green.500 !important"
-              onClick={() => onOpen()}
-              size={"sm"}
-            >
-              Compose
-            </Button>
           </Flex>
         </Flex>
         <Flex flex={"auto"} position={"relative"}>

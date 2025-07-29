@@ -4,12 +4,17 @@ import apiConfig, { type AxiosResponse } from "@utils/api";
 import { useDisclosure } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import { useSignMessage } from "@privy-io/react-auth/solana";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
+import { useAuthStatus } from "@hooks/useAuthState";
 const STORAGE_NAME = "auth:token";
 
 export const useSigner = () => {
   const { wallet } = usePrivyWallet();
-
+  const {
+    isSignInRequested,
+    update,
+    isAuthenticated: authState,
+  } = useAuthStatus();
   const [isPending, start] = useTransition();
   const { signMessage } = useSignMessage();
   const getToken = (): string | boolean => {
@@ -70,6 +75,7 @@ export const useSigner = () => {
       if (data.authToken) {
         setToken(data.authToken);
         onOpen();
+
         return true;
       }
     } catch {
@@ -87,16 +93,18 @@ export const useSigner = () => {
     return bs58.encode(signature);
   };
   const requestSignIn = async () => {
-    if (isPending) return;
+    if (isPending || isSignInRequested) return;
     start(async () => {
       if (!getToken() && !isAuthenticated) {
+        update({
+          isSignInRequested: !0,
+        });
         const nonce = await getNonce();
         if (!nonce?.nonce) {
           onOpen();
           return;
         }
         const auth = await generateToken(nonce.nonce, nonce.gmtValue);
-
         if (auth) {
           onOpen();
           return;
@@ -108,6 +116,14 @@ export const useSigner = () => {
   const clearToken = () => {
     localStorage.removeItem(STORAGE_NAME);
   };
+
+  useEffect(() => {
+    if (authState !== isAuthenticated) {
+      update({
+        isAuthenticated,
+      });
+    }
+  }, [authState, isAuthenticated, update]);
 
   return {
     getToken,

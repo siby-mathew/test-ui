@@ -10,6 +10,7 @@ type FieldWrapperProps = {
   name: string;
   leftLabel?: string;
   hasPadding?: boolean;
+  id?: string;
 };
 export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   children,
@@ -17,6 +18,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   name,
   leftLabel,
   hasPadding = !0,
+  id,
 }) => {
   const {
     formState: { errors },
@@ -25,7 +27,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   return (
     <Box w="full">
       {label && (
-        <Box w="full" fontWeight={"medium"}>
+        <Box w="full" fontWeight={"medium"} as="label" htmlFor={id}>
           {label}
         </Box>
       )}

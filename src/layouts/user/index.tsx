@@ -11,9 +11,14 @@ import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
 import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
 import { ClaimUserName } from "@components/ClaimUsername";
+import { useProfile } from "@hooks/useProfile";
+import { ReferalCodeClaim } from "@components/ReferalCodeClaim";
+import { usePrivy } from "@privy-io/react-auth";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
+  const { isModalOpen } = usePrivy();
+  const { requestProfileCreation, refetch: refetchProfile } = useProfile();
   useEmbeddedWallet();
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
@@ -26,12 +31,18 @@ export const UserLayout: React.FC = () => {
     refetch();
   };
 
-  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
-
+  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const onCloseHandler = () => {
+    refetchProfile();
+  };
   return (
     <Flex w="100%" direction={"row"}>
       <ClaimUserName isOpen={isOpen} onClose={onClose} />
-      <Flex as={"aside"} w="300px" maxW={"300px"}>
+      <ReferalCodeClaim
+        isOpen={!isModalOpen && requestProfileCreation}
+        onClose={onCloseHandler}
+      />
+      <Flex as={"aside"}>
         <Sidebar />
       </Flex>
       <Flex
