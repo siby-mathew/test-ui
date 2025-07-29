@@ -11,7 +11,6 @@ import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
 import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
 import { ClaimUserName } from "@components/ClaimUsername";
-// import { ClaimUserName } from "@components/ClaimUsername";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();

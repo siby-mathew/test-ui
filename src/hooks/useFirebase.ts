@@ -1,76 +1,65 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getToken, onMessage } from "@firebase/messaging";
-import { messaging } from "@integrations/firebase";
+import { getToken, messaging } from "@integrations/firebase";
+import apiConfig from "@utils/api";
+import { useCallback, useEffect } from "react";
+import { useGetMailProgramInstance } from "./useMailProgramInstance";
 
-type NotificationCallback = (payload: any) => void;
+export const useFirebaseNotification = (isAuthenticated: boolean) => {
+  const { provider } = useGetMailProgramInstance();
+  const requestPermission = useCallback(async () => {
+    if (isAuthenticated && provider) {
+      const permission = await Notification.requestPermission();
 
-export function useFirebaseNotification() {
-  const [token, setToken] = useState<string | null>(null);
-  const handlersRef = useRef<Set<NotificationCallback>>(new Set());
+      if (permission === "granted") {
+        const scriptURL = "/firebase-messaging-sw.js";
 
-  const buildServiceWorkerURL = useCallback(() => {
-    let scriptURL = "firebase-messaging-sw.js";
-    const env = import.meta.env;
+        const token = await getToken(messaging, {
+          vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
+          serviceWorkerRegistration:
+            await navigator.serviceWorker.register(scriptURL),
+        });
 
-    scriptURL += `?apiKey=${env.VITE_APP_API_KEY}`;
-    scriptURL += `&authDomain=${env.VITE_APP_AUTH_DOMAIN}`;
-    scriptURL += `&projectId=${env.VITE_APP_PROJECT_ID}`;
-    scriptURL += `&storageBucket=${env.VITE_APP_STORAGE_BUCKET}`;
-    scriptURL += `&messagingSenderId=${env.VITE_APP_MESSAGING_SENDER_ID}`;
-    scriptURL += `&appId=${env.VITE_APP_APP_ID}`;
-    scriptURL += `&measurementId=${env.VITE_APP_MEASUREMENT_ID}`;
+        localStorage.setItem("notification-token", token);
 
-    return scriptURL;
-  }, []);
+        const publicKey = provider.publicKey.toBase58();
 
-  const getMessagingToken = useCallback(async () => {
-    try {
-      const registration = await navigator.serviceWorker.register(
-        buildServiceWorkerURL()
-      );
-
-      const currentToken = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
-        serviceWorkerRegistration: registration,
-      });
-
-      if (currentToken) {
-        setToken(currentToken);
-        return currentToken;
-      } else {
-        console.warn(
-          "No registration token available. Request permission to generate one."
-        );
-        return null;
+        await apiConfig("register-fcm-notification", "POST", {
+          action: "register",
+          userPubKey: publicKey,
+          fcmId: token,
+        });
+      } else if (permission === "denied") {
+        const token = localStorage.getItem("notification-token");
+        if (token) {
+          await apiConfig("register-fcm-notification", "POST", {
+            action: "unregister",
+            fcmId: token,
+          });
+          localStorage.removeItem("notification-token");
+        }
       }
-    } catch (err) {
-      console.error("An error occurred while retrieving token.", err);
-      return null;
     }
-  }, [buildServiceWorkerURL]);
+  }, [isAuthenticated, provider]);
 
-  const register = useCallback((callback: NotificationCallback) => {
-    handlersRef.current.add(callback);
-  }, []);
+  const revokePermission = useCallback(async () => {
+    const token = localStorage.getItem("notification-token");
 
-  const unregister = useCallback((callback: NotificationCallback) => {
-    handlersRef.current.delete(callback);
+    if (!isAuthenticated && token) {
+      await apiConfig("register-fcm-notification", "POST", {
+        action: "unregister",
+        fcmId: token,
+      });
+      localStorage.removeItem("notification-token");
+
+      console.log("Notifications permission revoked.");
+    }
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onMessage(messaging, (payload) => {
-      handlersRef.current.forEach((cb) => cb(payload));
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  return {
-    getMessagingToken,
-    registerNotificationHandler: register,
-    unregisterNotificationHandler: unregister,
-    token,
-  };
-}
+    // Trigger permission request if user is authorized
+    if (isAuthenticated) {
+      requestPermission();
+    } else {
+      revokePermission();
+    }
+  }, [isAuthenticated, requestPermission, revokePermission]);
+};
