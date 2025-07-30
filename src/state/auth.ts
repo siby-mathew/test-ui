@@ -10,3 +10,5 @@ export const AuthState = atom<AuthType>({
   isSignInRequested: !1,
   isAuthenticated: !!getToken(),
 });
+
+AuthState.debugLabel = "AuthState";

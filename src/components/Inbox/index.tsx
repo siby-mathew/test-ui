@@ -47,17 +47,16 @@ export const Inbox = forwardRef<
           </VStack>
         )}
 
-        {(!isLoading && !mail) ||
-          (!mail.length && (
-            <Flex
-              alignItems={"center"}
-              opacity={0.5}
-              justifyContent={"center"}
-              minH={"38vh"}
-            >
-              Mail list is currently empty.
-            </Flex>
-          ))}
+        {!isLoading && (!mail || !mail.length) && (
+          <Flex
+            alignItems={"center"}
+            opacity={0.5}
+            justifyContent={"center"}
+            minH={"38vh"}
+          >
+            Mail list is currently empty.
+          </Flex>
+        )}
       </Box>
     </Box>
   );

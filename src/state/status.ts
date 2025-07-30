@@ -12,7 +12,7 @@ const getInitialValue = (): string[] => {
 };
 
 export const status = atom<string[]>(getInitialValue());
-
+status.debugLabel = "MailStatus";
 export const mailStatus = atom(
   (get) => get(status),
   (_, set, newValue: string[]) => {

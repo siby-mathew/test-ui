@@ -1,4 +1,4 @@
-import { Fade, Flex, IconButton, Spinner } from "@chakra-ui/react";
+import { Flex, IconButton, Spinner, SlideFade } from "@chakra-ui/react";
 import { Inbox, type InboxRef } from "@components/Inbox";
 import { MailPreview } from "@components/MailPreview";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
@@ -56,29 +56,38 @@ export const Solmail: React.FC = () => {
         </Flex>
         <Flex flex={"auto"} position={"relative"}>
           <Flex position={"absolute"} inset={0}>
-            <Fade in={isPending}>
-              <Flex
-                position={"absolute"}
-                right={0}
-                left={0}
-                top={5}
-                alignItems={"center"}
-              >
-                <Flex
-                  bg="green.500"
-                  zIndex={1}
-                  borderRadius={15}
-                  px={2}
-                  py={"3px"}
-                  alignItems={"center"}
-                  mx="auto"
-                  display={"inline-flex"}
-                >
-                  Updating
-                  <Spinner mx={1} size={"sm"} />
+            <Flex
+              position={"absolute"}
+              right={0}
+              left={0}
+              top={5}
+              alignItems={"center"}
+              sx={{
+                "> div": {
+                  width: "100%",
+                },
+              }}
+            >
+              <SlideFade in={isPending} unmountOnExit offsetY={"-20px"}>
+                <Flex justifyContent={"center"} alignItems={"center"} w="100%">
+                  <Flex
+                    bg="green.500"
+                    zIndex={1}
+                    borderRadius={15}
+                    px={2}
+                    py={"3px"}
+                    alignItems={"center"}
+                    mx="auto"
+                    display={"inline-flex"}
+                    color={"light.100"}
+                    fontSize={14}
+                  >
+                    Updating
+                    <Spinner mx={1} size={"sm"} />
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Fade>
+              </SlideFade>
+            </Flex>
 
             <CustomScrollbarWrapper>
               <Inbox ref={inbox} onStatusChange={setStatus} />

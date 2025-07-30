@@ -13,3 +13,5 @@ export const appState = atom<AtomType>({
   thread: "",
   ref: "",
 });
+
+appState.debugLabel = "AppState";
