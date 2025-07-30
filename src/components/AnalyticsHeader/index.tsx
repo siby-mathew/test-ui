@@ -22,7 +22,7 @@ export const AnalyticsHeader: React.FC = () => {
   }, [data]);
 
   return (
-    <Flex w="100%" bg="dark.50" direction={"column"} px={5}>
+    <Flex w="100%" direction={"column"} px={5}>
       <Flex>
         🔥<chakra.span opacity={0.5}> Points Earned</chakra.span>
       </Flex>

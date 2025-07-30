@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem } from "@chakra-ui/react";
 import { AnalyticCard } from "@components/AnalyticCard";
 
 import SolanaLogo from "@assets/solana.png";
@@ -11,7 +11,7 @@ import { useProfile } from "@hooks/useProfile";
 export const ReferralDashboard = () => {
   const { data } = useProfile();
   return (
-    <Box bg="#030914" color="white" minH="100vh" p={4} w="100%">
+    <Box color="white" p={4} w="100%">
       <Grid
         templateColumns="repeat(4, 1fr)"
         templateRows="repeat(3, auto)"
@@ -24,7 +24,7 @@ export const ReferralDashboard = () => {
           <AnalyticsHeader />
         </GridItem>
         <GridItem colSpan={1} rowSpan={1}>
-          <AnalyticCard icon={SolanaLogo} label="Mail claimed" value="32,900" />
+          <AnalyticCard icon={SolanaLogo} label="Mail claimed" value="0" />
         </GridItem>
         <GridItem colSpan={1} rowSpan={1}>
           <AnalyticCard
@@ -49,17 +49,15 @@ export const ReferralDashboard = () => {
             bg="dark.60"
             borderRadius={15}
             h="100%"
+            alignItems={"center"}
           >
-            <AnalyticCard
-              icon={SolanaLogo}
-              label="Claimable $MAIL"
-              value="6,541"
-            />
-            <AnalyticCard
-              icon={SolanaLogo}
-              label="Claimable $SOL"
-              value="1.05"
-            />
+            <AnalyticCard icon={SolanaLogo} label="Claimable $MAIL" value="0" />
+            <AnalyticCard icon={SolanaLogo} label="Claimable $SOL" value="0" />
+            <Flex>
+              <Button size={"sm"} variant="green" borderRadius={20}>
+                Claim all
+              </Button>
+            </Flex>
           </Flex>
         </GridItem>
         <GridItem colSpan={3}>
