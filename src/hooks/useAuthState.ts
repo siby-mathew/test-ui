@@ -11,6 +11,7 @@ export const useAuthStatus = () => {
       };
     });
   };
+
   return {
     isAuthenticated,
     isSignInRequested,

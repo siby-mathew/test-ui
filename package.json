@@ -53,6 +53,7 @@
     "graphql": "^16.11.0",
     "helia": "^5.4.2",
     "jotai": "^2.12.5",
+    "jotai-devtools": "^0.12.0",
     "lodash": "^4.17.21",
     "mime-types": "^3.0.1",
     "npm": "^11.4.2",

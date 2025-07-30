@@ -83,6 +83,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
   isWallet,
 }) => {
   const { onLogout, isPending } = useSessionHandler();
+  const { user } = usePrivy();
   return (
     <Flex
       mt={2}
@@ -94,6 +95,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
       p={3}
       py={4}
       direction={"column"}
+      data-id={user?.id?.toString()}
     >
       <Flex direction={"column"} alignItems={"center"}>
         <Flex fontWeight={"medium"}>

@@ -22,8 +22,8 @@ export const Login: React.FC = () => {
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <Flex bg="solana" bgClip={"text"} fontSize={23}>
-          Don't email it. SolMail it.
+        <Flex bg="solana" bgClip={"text"} fontSize={23} mb={3}>
+          Inbox. Identity. Influence
         </Flex>
         <Flex my={2}>
           <Button

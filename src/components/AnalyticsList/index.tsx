@@ -9,13 +9,15 @@ import {
   Tabs,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { useProfile } from "@hooks/useProfile";
 
+import { formatTime } from "@utils/time";
 export const AnalyticsList: React.FC = () => {
+  const { data } = useProfile();
   return (
     <Flex bg="dark.60" borderRadius={15} p={5}>
       <Tabs w="100%">
@@ -30,40 +32,54 @@ export const AnalyticsList: React.FC = () => {
               <Table size="sm">
                 <Thead bg="#D9D9D91A">
                   <Tr>
-                    <Th>To convert</Th>
-                    <Th>into</Th>
-                    <Th isNumeric>multiply by</Th>
+                    <Th>Address</Th>
+                    <Th>Date Joined</Th>
+                    <Th>Points Earned</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                  </Tr>
+                  {data?.referrals &&
+                    data?.referrals?.count > 0 &&
+                    data?.referrals?.users.map((item) => {
+                      return (
+                        <Tr>
+                          <Td>{item.target_user}</Td>
+
+                          <Td>{formatTime(item.timestamp)}</Td>
+                          <Td>{item.reward_amount}</Td>
+                        </Tr>
+                      );
+                    })}
                 </Tbody>
-                <Tfoot>
-                  <Tr>
-                    <Th>To convert</Th>
-                    <Th>into</Th>
-                    <Th isNumeric>multiply by</Th>
-                  </Tr>
-                </Tfoot>
               </Table>
             </TableContainer>
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <TableContainer>
+              <Table size="sm">
+                <Thead bg="#D9D9D91A">
+                  <Tr>
+                    <Th>Amount</Th>
+
+                    <Th>Date Joined</Th>
+                    <Th>Activity</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {data?.xp &&
+                    data?.xp?.transactions?.length > 0 &&
+                    data?.xp?.transactions.map((item) => {
+                      return (
+                        <Tr>
+                          <Td>{item.amount}</Td>
+                          <Td>{formatTime(item.timestamp)}</Td>
+                          <Td>{item.event_type}</Td>
+                        </Tr>
+                      );
+                    })}
+                </Tbody>
+              </Table>
+            </TableContainer>
           </TabPanel>
         </TabPanels>
       </Tabs>

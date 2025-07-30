@@ -22,6 +22,7 @@ export enum QueryKeys {
   "SOL_BALANCE" = "SOL_BALANCE",
   "USER_PROFILE" = "USER_PROFILE",
   "CREATE_USER_PROFILE" = "CREATE_USER_PROFILE",
+  "REWARDS_LIST" = "REWARDS_LIST",
 }
 
 export type StatusType = {

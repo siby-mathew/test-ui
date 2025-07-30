@@ -10,11 +10,14 @@ import { useEffect, useState } from "react";
 import GooglePlay from "@assets/playstore.png";
 import { config } from "@const/config";
 import { PulseLoader } from "@components/PulseLoader";
+import { useExistingQueries } from "@hooks/useExistingQueries";
 export const AppMainLayout: React.FC = () => {
   const { ready, authenticated } = usePrivy();
   const navigate = useNavigate();
   const [status, setStatus] = useState<boolean>(!1);
   const location = useLocation();
+
+  const { query } = useExistingQueries();
   useEffect(() => {
     const timer = setTimeout(() => {
       setStatus(!0);
@@ -34,11 +37,11 @@ export const AppMainLayout: React.FC = () => {
   }
 
   if (ready && status && authenticated && location.pathname === "/") {
-    navigate({ to: `/u/solmail/inbox/all` });
+    navigate({ to: `/u/solmail/inbox/all${query ? `?${query}` : ""}` });
   }
 
   if (ready && !authenticated && location.pathname !== "/") {
-    navigate({ to: "/" });
+    navigate({ to: `/${query ? `?${query}` : ``}` });
   }
   return (
     <Flex minH={"100vh"} w="full" direction={"column"}>

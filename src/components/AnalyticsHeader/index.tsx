@@ -9,7 +9,9 @@ export const AnalyticsHeader: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (data && data.xp && data.xp.amount) {
-        set(Math.min(100, (data.xp.amount / data?.xp.offset) * 100));
+        set(
+          Math.min(100, (data.xp.amount / (data?.milestone.maximum + 1)) * 100)
+        );
       }
     }, 1500);
     return () => {

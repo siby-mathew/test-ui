@@ -1,3 +1,4 @@
+import { getToken } from "@utils/string/token";
 import { atom } from "jotai";
 
 export type AuthType = {
@@ -7,5 +8,5 @@ export type AuthType = {
 
 export const AuthState = atom<AuthType>({
   isSignInRequested: !1,
-  isAuthenticated: !1,
+  isAuthenticated: !!getToken(),
 });

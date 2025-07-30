@@ -9,9 +9,14 @@ export const useSessionHandler = () => {
   const onLogout = () => {
     if (isPending) return;
     startTransition(async () => {
-      await logout();
-      clearToken();
-      window.location.reload();
+      try {
+        await logout();
+        clearToken();
+        window.location.reload();
+      } catch {
+        localStorage.clear();
+        window.location.reload();
+      }
     });
   };
 

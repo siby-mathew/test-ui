@@ -11,9 +11,10 @@ type Profile = {
   milestone: {
     title: string;
     boost_factor: number;
+    maximum: number;
+    icon: string;
   };
   xp: {
-    offset: number;
     amount: number;
     transactions: {
       amount: number;
@@ -21,8 +22,17 @@ type Profile = {
       timestamp: string;
     }[];
   };
+  referrals: {
+    count: number;
+    users: {
+      target_user: string;
+      reward_amount: number;
+      timestamp: string;
+    }[];
+  };
   timestamp: string;
 };
+
 export const useProfile = () => {
   const { isAuthenticated } = useAuthStatus();
   const { fetch } = useHttp();
@@ -30,6 +40,7 @@ export const useProfile = () => {
     queryKey: [QueryKeys.USER_PROFILE],
     queryFn: () => fetch<Profile | undefined>("/profile", "GET"),
     enabled: !!isAuthenticated,
+    staleTime: 60 * 1000 * 2,
   });
 
   return {

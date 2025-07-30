@@ -4,23 +4,16 @@ import apiConfig, { type AxiosResponse } from "@utils/api";
 import { useDisclosure } from "@chakra-ui/react";
 import { PublicKey } from "@solana/web3.js";
 import { useSignMessage } from "@privy-io/react-auth/solana";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { useAuthStatus } from "@hooks/useAuthState";
-const STORAGE_NAME = "auth:token";
+import { getToken, STORAGE_NAME } from "@utils/string/token";
 
 export const useSigner = () => {
   const { wallet } = usePrivyWallet();
-  const {
-    isSignInRequested,
-    update,
-    isAuthenticated: authState,
-  } = useAuthStatus();
+  const { isSignInRequested, update } = useAuthStatus();
   const [isPending, start] = useTransition();
   const { signMessage } = useSignMessage();
-  const getToken = (): string | boolean => {
-    const val = localStorage.getItem(STORAGE_NAME);
-    return val && val.trim() ? val.trim() : !1;
-  };
+
   const { isOpen: isAuthenticated, onOpen } = useDisclosure({
     defaultIsOpen: !!getToken(),
   });
@@ -74,6 +67,9 @@ export const useSigner = () => {
       );
       if (data.authToken) {
         setToken(data.authToken);
+        update({
+          isAuthenticated: !0,
+        });
         onOpen();
 
         return true;
@@ -94,6 +90,7 @@ export const useSigner = () => {
   };
   const requestSignIn = async () => {
     if (isPending || isSignInRequested) return;
+
     start(async () => {
       if (!getToken() && !isAuthenticated) {
         update({
@@ -101,11 +98,17 @@ export const useSigner = () => {
         });
         const nonce = await getNonce();
         if (!nonce?.nonce) {
+          update({
+            isAuthenticated: !0,
+          });
           onOpen();
           return;
         }
         const auth = await generateToken(nonce.nonce, nonce.gmtValue);
         if (auth) {
+          update({
+            isAuthenticated: !0,
+          });
           onOpen();
           return;
         }
@@ -116,14 +119,6 @@ export const useSigner = () => {
   const clearToken = () => {
     localStorage.removeItem(STORAGE_NAME);
   };
-
-  useEffect(() => {
-    if (authState !== isAuthenticated) {
-      update({
-        isAuthenticated,
-      });
-    }
-  }, [authState, isAuthenticated, update]);
 
   return {
     getToken,

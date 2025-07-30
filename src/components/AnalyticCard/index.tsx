@@ -3,7 +3,7 @@ import { IconType } from "react-icons";
 
 type AnalyticCardProps = {
   label: string;
-  value: string;
+  value: string | number;
   formater?: (value: string) => string;
   icon: string | IconType;
 };

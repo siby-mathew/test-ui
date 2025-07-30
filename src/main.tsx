@@ -13,7 +13,8 @@ import { ApolloProvider } from "@apollo/client";
 import { ToastContainer } from "react-toastify";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
 const queryclient = new QueryClient();
-
+import { DevTools } from "jotai-devtools";
+import "jotai-devtools/styles.css";
 export const ALL_SUPPORTED_WALLETS: WalletListEntry[] = [
   "metamask",
   "coinbase_wallet",
@@ -40,6 +41,7 @@ export const ALL_SUPPORTED_WALLETS: WalletListEntry[] = [
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <DevTools />
     <QueryClientProvider client={queryclient}>
       <ApolloProvider client={client}>
         <PrivyProvider

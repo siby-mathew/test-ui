@@ -6,8 +6,10 @@ import { BsPeopleFill } from "react-icons/bs";
 import { AnalyticsHeader } from "@components/AnalyticsHeader";
 import { RewardsProfile } from "@components/RewardsProfile";
 import { AnalyticsList } from "@components/AnalyticsList";
+import { useProfile } from "@hooks/useProfile";
 
 export const ReferralDashboard = () => {
+  const { data } = useProfile();
   return (
     <Box bg="#030914" color="white" minH="100vh" p={4} w="100%">
       <Grid
@@ -28,7 +30,7 @@ export const ReferralDashboard = () => {
           <AnalyticCard
             icon={BsPeopleFill}
             label="Friends Referred"
-            value="13"
+            value={data?.referrals.count ?? ""}
           />
         </GridItem>
         <GridItem

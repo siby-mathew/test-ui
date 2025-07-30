@@ -25,7 +25,7 @@ export const RewardsProfile: React.FC = () => {
     >
       <Avatar src={AvatarImage} size="xl" mb={4} />
       <Text fontSize="2xl" fontWeight="bold">
-        {data?.milestone.title}
+        {data?.milestone.title} {data?.milestone.icon}
       </Text>
       <Badge mt={2} colorScheme="green" px="8px" py="2px" borderRadius={15}>
         Boost 🚀 x{data?.milestone?.boost_factor}

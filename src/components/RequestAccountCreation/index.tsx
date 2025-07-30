@@ -56,6 +56,7 @@ export const RequestAccountCreation: React.FC<
       return;
     }
   };
+
   return (
     <Modal isCentered size={"md"} {...props}>
       <ModalOverlay />

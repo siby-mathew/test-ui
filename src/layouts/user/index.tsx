@@ -5,7 +5,7 @@ import { Sidebar } from "@components/Sidebar";
 
 import { useSigner } from "@hooks/useSigner";
 import { Outlet } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
@@ -14,22 +14,38 @@ import { ClaimUserName } from "@components/ClaimUsername";
 import { useProfile } from "@hooks/useProfile";
 import { ReferalCodeClaim } from "@components/ReferalCodeClaim";
 import { usePrivy } from "@privy-io/react-auth";
+import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
-  const { isModalOpen } = usePrivy();
+  const { isModalOpen, authenticated } = usePrivy();
   const { requestProfileCreation, refetch: refetchProfile } = useProfile();
+  const { provider } = useGetMailProgramInstance();
   useEmbeddedWallet();
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
+
+  console.log(authenticated, provider, isAuthenticated, isAuthenticating);
   useEffect(() => {
-    if (!isAuthenticated && !isAuthenticating) {
+    if (
+      authenticated &&
+      provider &&
+      provider.publicKey &&
+      !isAuthenticated &&
+      !isAuthenticating
+    ) {
       requestSignIn();
     }
-  }, [isAuthenticated, isAuthenticating, requestSignIn]);
-  const onSuccess = () => {
+  }, [
+    authenticated,
+    isAuthenticated,
+    isAuthenticating,
+    provider,
+    requestSignIn,
+  ]);
+  const onSuccess = useCallback(() => {
     refetch();
-  };
+  }, [refetch]);
 
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
   const onCloseHandler = () => {
@@ -37,12 +53,17 @@ export const UserLayout: React.FC = () => {
   };
 
   const requestWalletCreation = isFetched && !hasAccount && !isLoading;
+
+  console.log("Here...");
   return (
     <Flex w="100%" direction={"row"}>
       <ClaimUserName isOpen={isOpen} onClose={onClose} />
       <ReferalCodeClaim
         isOpen={
-          !requestWalletCreation && !isModalOpen && requestProfileCreation
+          isAuthenticated &&
+          !requestWalletCreation &&
+          !isModalOpen &&
+          requestProfileCreation
         }
         onClose={onCloseHandler}
       />
@@ -73,9 +94,9 @@ export const UserLayout: React.FC = () => {
                 </>
               )}
 
-              {requestWalletCreation && (
+              {isAuthenticated && requestWalletCreation && (
                 <RequestAccountCreation
-                  isOpen={!0}
+                  isOpen={true}
                   onClose={noop}
                   onSuccess={onSuccess}
                   isRefetching={isRefetching}

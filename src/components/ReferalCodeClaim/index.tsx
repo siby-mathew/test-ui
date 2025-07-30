@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FieldWrapper } from "@components/Field";
 import { useCreateProfile } from "@hooks/useCreateProfile";
+import { useExistingQueries } from "@hooks/useExistingQueries";
 
 import { useId } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -25,6 +26,7 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
   onClose,
   ...props
 }) => {
+  const { params } = useExistingQueries();
   const { isPending, mutateAsync } = useCreateProfile();
   const id = useId();
   const methods = useForm<Form>({
@@ -32,7 +34,7 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
     reValidateMode: "onSubmit",
     shouldFocusError: true,
     defaultValues: {
-      code: "",
+      code: params?.r,
     },
   });
 
