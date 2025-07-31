@@ -6,8 +6,6 @@ import axios, {
 } from "axios";
 import { useCallback } from "react";
 
-const SOMETHING_WENT_WRONG = "Something went wrong";
-
 export const useHttp = () => {
   const { getAccessToken } = usePrivy();
 
@@ -55,16 +53,7 @@ export const useHttp = () => {
           return res;
         },
         (error) => {
-          let errorMessage = "";
-          if (error.response) {
-            errorMessage = `${error.response.data?.message || error.response.data?.errorMessage}`;
-          } else if (error.request) {
-            errorMessage += SOMETHING_WENT_WRONG;
-          } else {
-            errorMessage += SOMETHING_WENT_WRONG;
-          }
-
-          return Promise.reject(errorMessage);
+          return Promise.reject(error.response?.data ?? {});
         }
       );
 

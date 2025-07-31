@@ -1,4 +1,4 @@
-import { chakra, Flex, Image, Link, Tooltip } from "@chakra-ui/react";
+import { Flex, Image, Link, Tooltip } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   Link as TanstackLink,
@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import GooglePlay from "@assets/playstore.png";
-import { config } from "@const/config";
+
 import { PulseLoader } from "@components/PulseLoader";
 import { useExistingQueries } from "@hooks/useExistingQueries";
 import LogoFull from "@assets/logo-full.png";

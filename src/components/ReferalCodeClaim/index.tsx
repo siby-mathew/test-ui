@@ -15,6 +15,7 @@ import {
 import { FieldWrapper } from "@components/Field";
 import { useCreateProfile } from "@hooks/useCreateProfile";
 import { useExistingQueries } from "@hooks/useExistingQueries";
+import { validateCode } from "@utils/string/code";
 
 import { useId } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -37,16 +38,6 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
       code: params?.r,
     },
   });
-
-  const validate = (value: string) => {
-    if (!value || !value.trim()) {
-      return !0;
-    }
-    if (value.length !== 8) {
-      return `Enter a valid referal code`;
-    }
-    return !0;
-  };
 
   const createProfile = async (code: string = "") => {
     try {
@@ -119,7 +110,7 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
                     placeholder="Enter referral code"
                     id="code"
                     {...methods.register("code", {
-                      validate,
+                      validate: validateCode,
                       required: "Please enter a valid referral code",
                     })}
                   />

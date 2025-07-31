@@ -14,6 +14,11 @@ import { ShareReferralCode } from "@components/ShareReferralCode";
 export const RewardsProfile: React.FC = () => {
   const { data } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isEditMode,
+    onOpen: enableEditMode,
+    onClose: disableEditMode,
+  } = useDisclosure();
   return (
     <Flex
       direction="column"
@@ -23,14 +28,23 @@ export const RewardsProfile: React.FC = () => {
       borderRadius={15}
       py={16}
     >
-      <Avatar src={AvatarImage} size="xl" mb={4} />
+      <Avatar src={AvatarImage} boxSize={"100px"} mb={4} />
       <Text fontSize="2xl" fontWeight="bold">
         {data?.milestone.title} {data?.milestone.icon}
       </Text>
       <Badge mt={2} colorScheme="green" px="8px" py="2px" borderRadius={15}>
         Boost 🚀 x{data?.milestone?.boost_factor}
       </Badge>
-      <Button borderRadius={20} mt={4} variant="ghost" w="full">
+      <Button
+        onClick={() => {
+          enableEditMode();
+          onOpen();
+        }}
+        borderRadius={20}
+        mt={4}
+        variant="ghost"
+        w="full"
+      >
         Edit Referral
       </Button>
       <Button
@@ -39,10 +53,17 @@ export const RewardsProfile: React.FC = () => {
         borderRadius={20}
         variant={"green"}
         w="full"
-        onClick={onOpen}
+        onClick={() => {
+          disableEditMode();
+          onOpen();
+        }}
       >
         Share Referral
-        <ShareReferralCode isOpen={isOpen} onClose={onClose} />
+        <ShareReferralCode
+          isEditMode={isEditMode}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
       </Button>
     </Flex>
   );

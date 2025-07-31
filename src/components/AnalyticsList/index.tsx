@@ -1,5 +1,7 @@
 import {
   Flex,
+  Icon,
+  Link,
   Tab,
   Table,
   TableContainer,
@@ -14,8 +16,10 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useProfile } from "@hooks/useProfile";
-
+import { shortenPrincipalId } from "@utils/string";
+import { HiExternalLink } from "react-icons/hi";
 import { formatTime } from "@utils/time";
+import { getSolScanAccountUrl } from "@utils/string/getSolscanUrl";
 export const AnalyticsList: React.FC = () => {
   const { data } = useProfile();
   return (
@@ -43,8 +47,18 @@ export const AnalyticsList: React.FC = () => {
                     data?.referrals?.users.map((item) => {
                       return (
                         <Tr>
-                          <Td>{item.target_user}</Td>
-
+                          <Td>
+                            <Link
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              display={"inline-flex"}
+                              target="_blank"
+                              href={getSolScanAccountUrl(item.target_user)}
+                            >
+                              {shortenPrincipalId(item.target_user)}
+                              <Icon ml={1} as={HiExternalLink} />
+                            </Link>
+                          </Td>
                           <Td>{formatTime(item.timestamp)}</Td>
                           <Td>{item.reward_amount}</Td>
                         </Tr>

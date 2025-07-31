@@ -23,6 +23,7 @@ export enum QueryKeys {
   "USER_PROFILE" = "USER_PROFILE",
   "CREATE_USER_PROFILE" = "CREATE_USER_PROFILE",
   "REWARDS_LIST" = "REWARDS_LIST",
+  "UPDATE_REFERAL_CODE" = "UPDATE_REFERAL_CODE",
 }
 
 export type StatusType = {

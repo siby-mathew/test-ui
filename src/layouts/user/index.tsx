@@ -25,7 +25,6 @@ export const UserLayout: React.FC = () => {
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
 
-  console.log(authenticated, provider, isAuthenticated, isAuthenticating);
   useEffect(() => {
     if (
       authenticated &&
@@ -54,7 +53,6 @@ export const UserLayout: React.FC = () => {
 
   const requestWalletCreation = isFetched && !hasAccount && !isLoading;
 
-  console.log("Here...");
   return (
     <Flex w="100%" direction={"row"}>
       <ClaimUserName isOpen={isOpen} onClose={onClose} />
