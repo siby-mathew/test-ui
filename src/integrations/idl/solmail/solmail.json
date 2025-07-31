@@ -1,29 +1,662 @@
 {
-  "version": "0.1.0",
-  "name": "solmail",
+  "address": "FmrTN4C8NauWrDqz67F6qD3S71Jgvmp94CUy6hXNcjPk",
+  "metadata": {
+    "name": "solmail",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Decentralized email with NFT tokenization"
+  },
   "instructions": [
     {
-      "name": "createmail",
+      "name": "cancel_bid",
+      "docs": [
+        "Cancel a bid and get refund",
+        "ENHANCED: Security validation for cancellation"
+      ],
+      "discriminator": [40, 243, 190, 217, 208, 253, 86, 206],
       "accounts": [
         {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": true
+          "name": "bid_account",
+          "writable": true
         },
         {
-          "name": "mailAccountV2",
-          "isMut": false,
-          "isSigner": false
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_username_from_bid",
+      "docs": [
+        "Claim username after winning a bid",
+        "ENHANCED: Comprehensive validation for claiming"
+      ],
+      "discriminator": [195, 245, 38, 219, 13, 241, 156, 96],
+      "accounts": [
+        {
+          "name": "bid_account",
+          "writable": true
+        },
+        {
+          "name": "username_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [117, 115, 101, 114, 110, 97, 109, 101]
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.username",
+                "account": "BidAccount"
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.domain",
+                "account": "BidAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rate_limit",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 97, 116, 101, 95, 108, 105, 109, 105, 116]
+              },
+              {
+                "kind": "account",
+                "path": "winner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "winner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_bid",
+      "docs": [
+        "Create a new bid for a username",
+        "ENHANCED: Comprehensive validation and security checks"
+      ],
+      "discriminator": [234, 10, 213, 160, 52, 26, 91, 142],
+      "accounts": [
+        {
+          "name": "bid_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [98, 105, 100]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [115, 111, 108, 46, 109, 97, 105, 108]
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplace_settings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 114, 107, 101, 116, 112, 108, 97, 99, 101, 95, 115,
+                  101, 116, 116, 105, 110, 103, 115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_account_check"
+        },
+        {
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "bid_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "create_collection_master_edition",
+      "docs": ["Create collection master edition - SEPARATE INSTRUCTION"],
+      "discriminator": [154, 111, 109, 77, 5, 124, 194, 238],
+      "accounts": [
+        {
+          "name": "central_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collection_mint",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 53, 54, 54, 53, 53, 54,
+                  95, 118, 51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 101, 116, 97, 100, 97, 116, 97]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "master_edition",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 101, 116, 97, 100, 97, 116, 97]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              },
+              {
+                "kind": "const",
+                "value": [101, 100, 105, 116, 105, 111, 110]
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_collection_metadata",
+      "docs": ["Create collection metadata - SEPARATE INSTRUCTION"],
+      "discriminator": [246, 165, 159, 126, 15, 178, 235, 83],
+      "accounts": [
+        {
+          "name": "central_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collection_mint",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 53, 54, 54, 53, 53, 54,
+                  95, 118, 51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 101, 116, 97, 100, 97, 116, 97]
+              },
+              {
+                "kind": "account",
+                "path": "metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "metadata_program"
+            }
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_marketplace_settings",
+      "docs": [
+        "Create or initialize marketplace settings (admin only)",
+        "CRITICAL: Admin-only instruction with enhanced security"
+      ],
+      "discriminator": [174, 138, 103, 248, 14, 225, 33, 204],
+      "accounts": [
+        {
+          "name": "marketplace_settings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 114, 107, 101, 116, 112, 108, 97, 99, 101, 95, 115,
+                  101, 116, 116, 105, 110, 103, 115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "payment_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "min_bid_lamports",
+          "type": "u64"
+        },
+        {
+          "name": "bid_duration_secs",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "create_solmail_collection",
+      "docs": [
+        "Create Solmail NFT collection (one-time setup) - ENHANCED",
+        "ADMIN ONLY - Additional security guard"
+      ],
+      "discriminator": [113, 115, 208, 187, 133, 207, 108, 34],
+      "accounts": [
+        {
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "collection_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 53, 54, 54, 53, 53, 54,
+                  95, 118, 51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "central_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206,
+                  235, 121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140,
+                  245, 133, 126, 255, 0, 169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142,
+                13, 131, 11, 90, 19, 153, 218, 255, 16, 132, 4, 142, 123, 216,
+                219, 233, 248, 89
+              ]
+            }
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_username",
+      "docs": [
+        "Create a new username account without mailbox assignment",
+        "ENHANCED: Now includes payment gating and comprehensive validation"
+      ],
+      "discriminator": [166, 69, 156, 133, 149, 194, 61, 190],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [117, 115, 101, 114, 110, 97, 109, 101]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [115, 111, 108, 46, 109, 97, 105, 108]
+              }
+            ]
+          }
+        },
+        {
+          "name": "rate_limit",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 97, 116, 101, 95, 108, 105, 109, 105, 116]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplace_settings",
+          "optional": true
+        },
+        {
+          "name": "bid_account_check",
+          "docs": [
+            "The seeds constraint ensures this is the correct PDA if it exists"
+          ],
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [98, 105, 100]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [115, 111, 108, 46, 109, 97, 105, 108]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "create_username_mint",
+      "docs": ["Create NFT mint for a specific username"],
+      "discriminator": [5, 247, 123, 17, 135, 32, 201, 93],
+      "accounts": [
+        {
+          "name": "central_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119, 114, 97, 112, 112, 101, 100, 95, 117, 115, 101, 114, 110,
+                  97, 109, 101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_account",
+          "docs": ["The username account that will be wrapped"]
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createmail",
+      "docs": ["Create mail V2"],
+      "discriminator": [79, 186, 79, 109, 12, 168, 250, 107],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mail_account_v2"
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -33,11 +666,11 @@
         },
         {
           "name": "from",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "to",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "salt",
@@ -52,28 +685,576 @@
           "type": "string"
         },
         {
-          "name": "parentId",
+          "name": "parent_id",
           "type": "string"
         }
       ]
     },
     {
-      "name": "updatemail",
+      "name": "edit_wrapped_username",
+      "docs": ["Allow NFT holder to modify wrapped username data"],
+      "discriminator": [142, 86, 16, 71, 205, 186, 149, 153],
       "accounts": [
         {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": false
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117, 115, 101, 114, 110, 97, 109, 101, 95, 119, 114, 97, 112,
+                  112, 101, 114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_account"
+        },
+        {
+          "name": "nft_owner",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_mailbox",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "emergency_pause_marketplace",
+      "docs": [
+        "Emergency pause for marketplace (admin only)",
+        "CRITICAL: Emergency stop functionality"
+      ],
+      "discriminator": [39, 202, 192, 66, 29, 240, 182, 228],
+      "accounts": [
+        {
+          "name": "marketplace_settings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 114, 107, 101, 116, 112, 108, 97, 99, 101, 95, 115,
+                  101, 116, 116, 105, 110, 103, 115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "link_mailbox_to_username",
+      "docs": [
+        "Link a mailbox to an existing username",
+        "ENHANCED: Additional security validation"
+      ],
+      "discriminator": [233, 178, 23, 214, 77, 169, 52, 35],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "mail_account_v2"
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "mailbox",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "register",
+      "docs": ["Register mail account V1 (legacy)"],
+      "discriminator": [211, 124, 67, 15, 211, 194, 178, 240],
+      "accounts": [
+        {
+          "name": "mail_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [109, 97, 105, 108, 45, 97, 99, 99, 111, 117, 110, 116]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "register_v2",
+      "docs": ["Register mail account V2"],
+      "discriminator": [225, 250, 193, 26, 37, 179, 205, 76],
+      "accounts": [
+        {
+          "name": "mail_account_v2",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 105, 108, 45, 97, 99, 99, 111, 117, 110, 116, 118, 50
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "rewrap_username",
+      "docs": ["Re-wrap a username that was previously unwrapped"],
+      "discriminator": [142, 184, 154, 88, 103, 179, 176, 223],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117, 115, 101, 114, 110, 97, 109, 101, 95, 119, 114, 97, 112,
+                  112, 101, 114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119, 114, 97, 112, 112, 101, 100, 95, 117, 115, 101, 114, 110,
+                  97, 109, 101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_destination",
+          "writable": true
+        },
+        {
+          "name": "name_owner",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "uri",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "sendmail",
+      "docs": ["Send mail V1 (legacy)"],
+      "discriminator": [254, 11, 16, 48, 131, 123, 30, 181],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "from",
+          "type": "pubkey"
+        },
+        {
+          "name": "to",
+          "type": "pubkey"
+        },
+        {
+          "name": "salt",
+          "type": "string"
+        },
+        {
+          "name": "iv",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "transfer_username_authority",
+      "docs": [
+        "Transfer username authority to a new owner",
+        "ENHANCED: Additional security validation"
+      ],
+      "discriminator": [85, 160, 157, 156, 215, 111, 42, 167],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "unlink_mailbox_from_username",
+      "docs": ["Unlink mailbox from username"],
+      "discriminator": [168, 98, 155, 71, 126, 158, 126, 154],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unwrap_username",
+      "docs": ["Unwrap a username NFT back to a regular username"],
+      "discriminator": [67, 221, 210, 83, 41, 47, 174, 122],
+      "accounts": [
+        {
+          "name": "username_account",
+          "writable": true
+        },
+        {
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117, 115, 101, 114, 110, 97, 109, 101, 95, 119, 114, 97, 112,
+                  112, 101, 114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119, 114, 97, 112, 112, 101, 100, 95, 117, 115, 101, 114, 110,
+                  97, 109, 101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_source",
+          "writable": true
+        },
+        {
+          "name": "nft_owner",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_account_v2",
+      "docs": ["Update mail account V2"],
+      "discriminator": [207, 128, 25, 128, 97, 131, 11, 255],
+      "accounts": [
+        {
+          "name": "mail_account_v2",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "nostr_key",
+          "type": "string"
+        },
+        {
+          "name": "mailbox",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "update_bid",
+      "docs": [
+        "Update an existing bid with a higher amount (outbid)",
+        "ENHANCED: Race condition protection and validation"
+      ],
+      "discriminator": [30, 24, 210, 187, 71, 101, 78, 46],
+      "accounts": [
+        {
+          "name": "bid_account",
+          "writable": true
+        },
+        {
+          "name": "marketplace_settings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 114, 107, 101, 116, 112, 108, 97, 99, 101, 95, 115,
+                  101, 116, 116, 105, 110, 103, 115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "previous_bidder",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_bid_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_marketplace_settings",
+      "docs": [
+        "Update existing marketplace settings (admin only)",
+        "CRITICAL: Admin-only instruction with change tracking"
+      ],
+      "discriminator": [121, 115, 116, 71, 200, 23, 66, 209],
+      "accounts": [
+        {
+          "name": "marketplace_settings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109, 97, 114, 107, 101, 116, 112, 108, 97, 99, 101, 95, 115,
+                  101, 116, 116, 105, 110, 103, 115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "payment_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "min_bid_lamports",
+          "type": "u64"
+        },
+        {
+          "name": "bid_duration_secs",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "updatemail",
+      "docs": ["Update mail V2"],
+      "discriminator": [103, 89, 239, 89, 179, 196, 168, 188],
+      "accounts": [
+        {
+          "name": "mail",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -84,43 +1265,22 @@
       ]
     },
     {
-      "name": "updatemailreadstatus",
-      "accounts": [
-        {
-          "name": "mail",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "updatemaillabel",
+      "docs": ["Update mail label"],
+      "discriminator": [127, 96, 27, 207, 164, 210, 203, 16],
       "accounts": [
         {
           "name": "mail",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -131,501 +1291,323 @@
       ]
     },
     {
-      "name": "registerV2",
-      "accounts": [
-        {
-          "name": "mailAccountV2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "nostrKey",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "updateAccountV2",
-      "accounts": [
-        {
-          "name": "mailAccountV2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "nostrKey",
-          "type": "string"
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "sendmail",
+      "name": "updatemailreadstatus",
+      "docs": ["Update mail read status"],
+      "discriminator": [22, 58, 187, 161, 225, 237, 130, 155],
       "accounts": [
         {
           "name": "mail",
-          "isMut": true,
-          "isSigner": true
+          "writable": true
         },
         {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "subject",
-          "type": "string"
-        },
-        {
-          "name": "body",
-          "type": "string"
-        },
-        {
-          "name": "from",
-          "type": "publicKey"
-        },
-        {
-          "name": "to",
-          "type": "publicKey"
-        },
-        {
-          "name": "salt",
-          "type": "string"
-        },
-        {
-          "name": "iv",
-          "type": "string"
-        },
-        {
-          "name": "version",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "register",
+      "name": "wrap_username",
+      "docs": [
+        "Wrap a username as an NFT",
+        "ENHANCED: Additional validation for NFT operations"
+      ],
+      "discriminator": [59, 94, 211, 65, 20, 41, 98, 102],
       "accounts": [
         {
-          "name": "mailAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "username_account",
+          "writable": true
         },
         {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
+          "name": "username_wrapper",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117, 115, 101, 114, 110, 97, 109, 101, 95, 119, 114, 97, 112,
+                  112, 101, 114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "central_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115, 111, 108, 109, 97, 105, 108, 95, 99, 101, 110, 116, 114,
+                  97, 108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "username_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119, 114, 97, 112, 112, 101, 100, 95, 117, 115, 101, 114, 110,
+                  97, 109, 101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "username_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_destination",
+          "writable": true
+        },
+        {
+          "name": "name_owner",
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "nostrKey",
+          "name": "uri",
           "type": "string"
+        },
+        {
+          "name": "mailbox_locked",
+          "type": "bool"
+        },
+        {
+          "name": "transfer_allowed",
+          "type": "bool"
         }
       ]
     }
   ],
   "accounts": [
     {
+      "name": "BidAccount",
+      "discriminator": [27, 161, 15, 114, 230, 126, 56, 104]
+    },
+    {
+      "name": "MarketplaceSettings",
+      "discriminator": [159, 177, 179, 196, 220, 75, 86, 16]
+    },
+    {
       "name": "SolMail",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "from",
-            "type": "publicKey"
-          },
-          {
-            "name": "to",
-            "type": "publicKey"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "name": "parentId",
-            "type": "string"
-          },
-          {
-            "name": "markAsRead",
-            "type": "bool"
-          },
-          {
-            "name": "createdAt",
-            "type": "u32"
-          },
-          {
-            "name": "subject",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "iv",
-            "type": "string"
-          },
-          {
-            "name": "salt",
-            "type": "string"
-          },
-          {
-            "name": "version",
-            "type": "string"
-          }
-        ]
-      }
+      "discriminator": [247, 239, 251, 112, 232, 125, 215, 255]
     },
     {
       "name": "SolMailAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "nostrKey",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "SolMailV2",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "from",
-            "type": "publicKey"
-          },
-          {
-            "name": "to",
-            "type": "publicKey"
-          },
-          {
-            "name": "markAsRead",
-            "type": "bool"
-          },
-          {
-            "name": "label",
-            "type": {
-              "defined": "MailLabel"
-            }
-          },
-          {
-            "name": "createdAt",
-            "type": "u32"
-          },
-          {
-            "name": "mailbox",
-            "type": "publicKey"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "name": "parentId",
-            "type": "string"
-          },
-          {
-            "name": "subject",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "type": "string"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "iv",
-            "type": "string"
-          },
-          {
-            "name": "salt",
-            "type": "string"
-          },
-          {
-            "name": "version",
-            "type": "string"
-          }
-        ]
-      }
+      "discriminator": [72, 22, 32, 1, 49, 244, 46, 180]
     },
     {
       "name": "SolMailAccountV2",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
-          {
-            "name": "mailbox",
-            "type": "publicKey"
-          },
-          {
-            "name": "nostrKey",
-            "type": "string"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
+      "discriminator": [56, 165, 134, 52, 94, 16, 21, 14]
+    },
     {
-      "name": "MailLabel",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Outbox"
-          },
-          {
-            "name": "Inbox"
-          },
-          {
-            "name": "Read"
-          },
-          {
-            "name": "Trash"
-          },
-          {
-            "name": "Spam"
-          }
-        ]
-      }
+      "name": "SolMailV2",
+      "discriminator": [138, 97, 203, 217, 101, 227, 70, 35]
+    },
+    {
+      "name": "SolmailCentralState",
+      "discriminator": [99, 124, 165, 34, 55, 150, 4, 250]
+    },
+    {
+      "name": "UserRateLimit",
+      "discriminator": [156, 245, 156, 195, 8, 43, 139, 184]
+    },
+    {
+      "name": "UsernameAccount",
+      "discriminator": [120, 2, 212, 44, 208, 63, 20, 122]
+    },
+    {
+      "name": "UsernameWrapper",
+      "discriminator": [178, 242, 111, 106, 198, 168, 204, 135]
     }
   ],
   "events": [
     {
-      "name": "MailSendEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        }
-      ]
+      "name": "AccountValidationFailureEvent",
+      "discriminator": [188, 44, 79, 214, 125, 10, 106, 208]
     },
     {
-      "name": "MailV2SendEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
+      "name": "AdminActionEvent",
+      "discriminator": [220, 224, 207, 200, 52, 226, 42, 155]
     },
     {
-      "name": "MailV2UpdateEvent",
-      "fields": [
-        {
-          "name": "from",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "to",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "mailbox",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "parentId",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "markAsRead",
-          "type": "bool",
-          "index": false
-        },
-        {
-          "name": "createdAt",
-          "type": "u32",
-          "index": false
-        },
-        {
-          "name": "subject",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "body",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "authority",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "iv",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "salt",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "version",
-          "type": "string",
-          "index": false
-        }
-      ]
+      "name": "BidCancelledEvent",
+      "discriminator": [149, 225, 90, 15, 245, 141, 102, 145]
     },
     {
-      "name": "MailV2ReadEvent",
-      "fields": [
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
+      "name": "BidCreatedEvent",
+      "discriminator": [119, 134, 95, 199, 242, 88, 176, 254]
     },
     {
-      "name": "MailV2UpdateLabelEvent",
-      "fields": [
-        {
-          "name": "id",
-          "type": "string",
-          "index": false
-        },
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
+      "name": "BidRefundEvent",
+      "discriminator": [2, 119, 161, 92, 202, 2, 244, 28]
+    },
+    {
+      "name": "BidUpdatedEvent",
+      "discriminator": [234, 172, 58, 147, 27, 189, 244, 211]
+    },
+    {
+      "name": "BulkOperationEvent",
+      "discriminator": [40, 21, 147, 124, 13, 126, 189, 43]
+    },
+    {
+      "name": "ComplianceAuditEvent",
+      "discriminator": [228, 245, 144, 42, 94, 251, 201, 147]
+    },
+    {
+      "name": "FinancialTransactionEvent",
+      "discriminator": [53, 189, 58, 212, 96, 94, 55, 149]
     },
     {
       "name": "MailAccountV2RegisterEvent",
-      "fields": [
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "account",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
+      "discriminator": [250, 87, 69, 103, 135, 185, 177, 156]
     },
     {
       "name": "MailAccountV2UpdateEvent",
-      "fields": [
-        {
-          "name": "owner",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "account",
-          "type": "publicKey",
-          "index": false
-        }
-      ]
+      "discriminator": [239, 63, 234, 251, 172, 161, 13, 162]
+    },
+    {
+      "name": "MailSendEvent",
+      "discriminator": [246, 25, 155, 65, 156, 90, 174, 160]
+    },
+    {
+      "name": "MailV2ReadEvent",
+      "discriminator": [185, 241, 60, 172, 90, 110, 65, 90]
+    },
+    {
+      "name": "MailV2SendEvent",
+      "discriminator": [57, 95, 119, 238, 197, 56, 38, 155]
+    },
+    {
+      "name": "MailV2UpdateEvent",
+      "discriminator": [224, 123, 44, 76, 87, 109, 105, 110]
+    },
+    {
+      "name": "MailV2UpdateLabelEvent",
+      "discriminator": [25, 155, 115, 145, 193, 110, 174, 83]
+    },
+    {
+      "name": "MarketplaceSettingsCreatedEvent",
+      "discriminator": [152, 36, 221, 52, 61, 136, 113, 253]
+    },
+    {
+      "name": "MarketplaceSettingsUpdatedEvent",
+      "discriminator": [234, 193, 102, 113, 14, 142, 204, 191]
+    },
+    {
+      "name": "PaymentGatingStatusChangeEvent",
+      "discriminator": [221, 72, 20, 126, 189, 50, 45, 215]
+    },
+    {
+      "name": "PerformanceMetricEvent",
+      "discriminator": [82, 84, 133, 45, 159, 49, 192, 79]
+    },
+    {
+      "name": "RateLimitResetEvent",
+      "discriminator": [176, 64, 170, 212, 240, 46, 185, 63]
+    },
+    {
+      "name": "RateLimitUpdatedEvent",
+      "discriminator": [117, 73, 176, 253, 21, 69, 103, 117]
+    },
+    {
+      "name": "RateLimitViolationEvent",
+      "discriminator": [199, 192, 66, 0, 33, 53, 176, 250]
+    },
+    {
+      "name": "SecurityViolationEvent",
+      "discriminator": [29, 75, 145, 217, 70, 44, 39, 128]
+    },
+    {
+      "name": "SolmailCollectionCreatedEvent",
+      "discriminator": [135, 188, 144, 234, 67, 63, 236, 246]
+    },
+    {
+      "name": "SystemStateChangeEvent",
+      "discriminator": [191, 208, 175, 241, 211, 36, 249, 116]
+    },
+    {
+      "name": "UsernameAuthorityTransferredEvent",
+      "discriminator": [169, 128, 164, 236, 203, 67, 147, 221]
+    },
+    {
+      "name": "UsernameClaimedFromBidEvent",
+      "discriminator": [232, 32, 52, 189, 10, 218, 82, 161]
+    },
+    {
+      "name": "UsernameCreatedEvent",
+      "discriminator": [186, 17, 123, 213, 3, 164, 96, 224]
+    },
+    {
+      "name": "UsernameMailboxLinkedEvent",
+      "discriminator": [103, 167, 212, 13, 44, 26, 130, 58]
+    },
+    {
+      "name": "UsernameMailboxUnlinkedEvent",
+      "discriminator": [239, 51, 123, 120, 149, 77, 191, 251]
+    },
+    {
+      "name": "UsernameNftMintCreatedEvent",
+      "discriminator": [57, 71, 33, 4, 156, 206, 5, 153]
+    },
+    {
+      "name": "UsernameReservationEvent",
+      "discriminator": [14, 173, 124, 121, 169, 116, 193, 18]
+    },
+    {
+      "name": "UsernameRewrappedEvent",
+      "discriminator": [1, 248, 89, 41, 168, 31, 225, 86]
+    },
+    {
+      "name": "UsernameUnwrappedEvent",
+      "discriminator": [161, 205, 89, 209, 242, 30, 250, 58]
+    },
+    {
+      "name": "UsernameWrappedEvent",
+      "discriminator": [200, 217, 249, 41, 22, 254, 111, 128]
+    },
+    {
+      "name": "WrappedUsernameMailboxChangedEvent",
+      "discriminator": [0, 207, 103, 166, 125, 16, 13, 185]
+    },
+    {
+      "name": "WrapperFundsWithdrawnEvent",
+      "discriminator": [193, 131, 79, 12, 105, 71, 36, 110]
     }
   ],
   "errors": [
@@ -688,6 +1670,2125 @@
       "code": 6011,
       "name": "InvalidMailAccount",
       "msg": "Invalid mailaccount"
+    },
+    {
+      "code": 6012,
+      "name": "UsernameAlreadyExists",
+      "msg": "Username already exists"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidUsername",
+      "msg": "Invalid username - must be 3-32 characters, alphanumeric and underscores only"
+    },
+    {
+      "code": 6014,
+      "name": "UsernameNotFound",
+      "msg": "Username not found"
+    },
+    {
+      "code": 6015,
+      "name": "UsernameAlreadyWrapped",
+      "msg": "Username is already wrapped as NFT"
+    },
+    {
+      "code": 6016,
+      "name": "UsernameNotWrapped",
+      "msg": "Username is not wrapped"
+    },
+    {
+      "code": 6017,
+      "name": "CannotModifyWrappedUsername",
+      "msg": "Cannot modify wrapped username - unwrap first"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidNewAuthority",
+      "msg": "Invalid new authority"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidMailbox",
+      "msg": "Invalid mailbox"
+    },
+    {
+      "code": 6020,
+      "name": "WrapperAlreadyExists",
+      "msg": "Wrapper already exists for this username"
+    },
+    {
+      "code": 6021,
+      "name": "WrapperNotFound",
+      "msg": "Wrapper not found"
+    },
+    {
+      "code": 6022,
+      "name": "WrapperNotActive",
+      "msg": "Wrapper is not active"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidWrapperState",
+      "msg": "Invalid wrapper state"
+    },
+    {
+      "code": 6024,
+      "name": "NftMintMismatch",
+      "msg": "NFT mint mismatch"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidNftAmount",
+      "msg": "Invalid NFT amount - must be exactly 1"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidCollectionMint",
+      "msg": "Invalid collection mint"
+    },
+    {
+      "code": 6027,
+      "name": "CollectionNotVerified",
+      "msg": "Collection not verified"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidMetadataAccount",
+      "msg": "Invalid metadata account"
+    },
+    {
+      "code": 6029,
+      "name": "MetadataCreationFailed",
+      "msg": "Metadata creation failed"
+    },
+    {
+      "code": 6030,
+      "name": "UsernameLockedForModifications",
+      "msg": "Username is locked for modifications"
+    },
+    {
+      "code": 6031,
+      "name": "NftTransferNotAllowed",
+      "msg": "NFT transfer not allowed"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidOriginalAuthority",
+      "msg": "Invalid original authority"
+    },
+    {
+      "code": 6033,
+      "name": "CentralStateNotInitialized",
+      "msg": "Central state not initialized"
+    },
+    {
+      "code": 6034,
+      "name": "InvalidCentralState",
+      "msg": "Invalid central state"
+    },
+    {
+      "code": 6035,
+      "name": "UsernameAlreadyHasMailbox",
+      "msg": "Username already has a linked mailbox"
+    },
+    {
+      "code": 6036,
+      "name": "UsernameNoMailbox",
+      "msg": "Username does not have a linked mailbox"
+    },
+    {
+      "code": 6037,
+      "name": "InvalidMailboxAccount",
+      "msg": "Mailbox account does not exist or is invalid"
+    },
+    {
+      "code": 6038,
+      "name": "CannotLinkMailboxToWrappedUsername",
+      "msg": "Cannot link mailbox to wrapped username"
+    },
+    {
+      "code": 6039,
+      "name": "CannotUnlinkMailboxFromWrappedUsername",
+      "msg": "Cannot unlink mailbox from wrapped username"
+    },
+    {
+      "code": 6040,
+      "name": "UsernameMustHaveNoMailboxBeforeWrapping",
+      "msg": "Username must have no mailbox before wrapping"
+    },
+    {
+      "code": 6041,
+      "name": "MailboxOperationsLocked",
+      "msg": "Mailbox operations are locked for this wrapped username"
+    },
+    {
+      "code": 6042,
+      "name": "RateLimitExceeded",
+      "msg": "Rate limit exceeded: too many usernames created in time window"
+    },
+    {
+      "code": 6043,
+      "name": "RateLimitTooFrequent",
+      "msg": "Rate limit exceeded: creation too frequent, please wait"
+    },
+    {
+      "code": 6044,
+      "name": "InvalidRateLimit",
+      "msg": "Invalid rate limit account"
+    },
+    {
+      "code": 6045,
+      "name": "AccountNotInitialized",
+      "msg": "Account not initialized or has invalid discriminator"
+    },
+    {
+      "code": 6046,
+      "name": "UsernameInBiddingPeriod",
+      "msg": "Username is currently in bidding period"
+    },
+    {
+      "code": 6047,
+      "name": "PaymentGatingEnabled",
+      "msg": "Payment gating is enabled - must use bidding system"
+    },
+    {
+      "code": 6048,
+      "name": "BidTooLow",
+      "msg": "Bid amount is below minimum required"
+    },
+    {
+      "code": 6049,
+      "name": "BidNotHigherThanCurrent",
+      "msg": "Bid amount must be higher than current highest bid"
+    },
+    {
+      "code": 6050,
+      "name": "BidNotExpired",
+      "msg": "Bid has not expired yet - cannot claim username"
+    },
+    {
+      "code": 6051,
+      "name": "NotHighestBidder",
+      "msg": "You are not the highest bidder"
+    },
+    {
+      "code": 6052,
+      "name": "MarketplaceNotInitialized",
+      "msg": "Marketplace settings not initialized"
+    },
+    {
+      "code": 6053,
+      "name": "InvalidMarketplaceSettings",
+      "msg": "Invalid marketplace settings"
+    },
+    {
+      "code": 6054,
+      "name": "BidAccountNotFound",
+      "msg": "Bid account not found"
+    },
+    {
+      "code": 6055,
+      "name": "BidAccountNotActive",
+      "msg": "Bid account is not active"
+    },
+    {
+      "code": 6056,
+      "name": "CannotBidOnOwnBid",
+      "msg": "Cannot bid on your own bid"
+    },
+    {
+      "code": 6057,
+      "name": "BidAlreadyExpired",
+      "msg": "Bid has already expired"
+    },
+    {
+      "code": 6058,
+      "name": "UsernameAlreadyHasBid",
+      "msg": "Username already has an active bid"
+    },
+    {
+      "code": 6059,
+      "name": "CannotCancelBid",
+      "msg": "Cannot cancel bid - you are not the bidder"
+    },
+    {
+      "code": 6060,
+      "name": "InsufficientFundsForBid",
+      "msg": "Insufficient funds for bid"
+    },
+    {
+      "code": 6061,
+      "name": "InvalidBidDuration",
+      "msg": "Invalid bid duration"
+    },
+    {
+      "code": 6062,
+      "name": "MarketplaceAuthorityMismatch",
+      "msg": "Marketplace authority mismatch"
+    },
+    {
+      "code": 6063,
+      "name": "UsernameHasActiveBid",
+      "msg": "Username has active bid - cannot create directly"
+    },
+    {
+      "code": 6064,
+      "name": "PaymentRequired",
+      "msg": "Payment required - marketplace has payment gating enabled"
+    },
+    {
+      "code": 6065,
+      "name": "InvalidPreviousBidder",
+      "msg": "Invalid previous bidder"
+    },
+    {
+      "code": 6066,
+      "name": "ArithmeticOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6067,
+      "name": "InvalidBidAccountState",
+      "msg": "Invalid bid account state"
+    },
+    {
+      "code": 6068,
+      "name": "InsufficientAccountBalance",
+      "msg": "Insufficient account balance"
+    },
+    {
+      "code": 6069,
+      "name": "BidAmountTooHigh",
+      "msg": "Bid amount exceeds maximum allowed"
+    },
+    {
+      "code": 6070,
+      "name": "InvalidDomainAccount",
+      "msg": "Invalid domain account"
+    },
+    {
+      "code": 6071,
+      "name": "InvalidUsernameCharacters",
+      "msg": "Username contains invalid characters"
+    },
+    {
+      "code": 6072,
+      "name": "UsernameReserved",
+      "msg": "Username is reserved and cannot be used"
+    },
+    {
+      "code": 6073,
+      "name": "AccountSpaceError",
+      "msg": "Account space calculation error"
+    },
+    {
+      "code": 6074,
+      "name": "InvalidBumpSeed",
+      "msg": "Invalid account bump seed"
+    },
+    {
+      "code": 6075,
+      "name": "AccountDeserializationFailed",
+      "msg": "Account deserialization failed"
+    },
+    {
+      "code": 6076,
+      "name": "InvalidAccountDiscriminator",
+      "msg": "Invalid account discriminator"
+    },
+    {
+      "code": 6077,
+      "name": "InvalidTimestamp",
+      "msg": "Clock drift detected - invalid timestamp"
+    },
+    {
+      "code": 6078,
+      "name": "RentCalculationFailed",
+      "msg": "Rent calculation failed"
+    },
+    {
+      "code": 6079,
+      "name": "InvalidInstructionData",
+      "msg": "Invalid instruction data"
+    },
+    {
+      "code": 6080,
+      "name": "SecurityViolation",
+      "msg": "Security violation detected"
+    },
+    {
+      "code": 6081,
+      "name": "InvalidAccountOwner",
+      "msg": "Invalid account owner"
+    },
+    {
+      "code": 6082,
+      "name": "AccountClosureNotPermitted",
+      "msg": "Account closure not permitted"
+    },
+    {
+      "code": 6083,
+      "name": "InvalidAccountState",
+      "msg": "Invalid account state or data"
+    }
+  ],
+  "types": [
+    {
+      "name": "AccountValidationFailureEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "account",
+            "type": "pubkey"
+          },
+          {
+            "name": "validation_type",
+            "type": "string"
+          },
+          {
+            "name": "failure_reason",
+            "type": "string"
+          },
+          {
+            "name": "detected_at",
+            "type": "u32"
+          },
+          {
+            "name": "user_involved",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminActionEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "action_type",
+            "type": "string"
+          },
+          {
+            "name": "target_account",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "target_user",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "action_data",
+            "type": "string"
+          },
+          {
+            "name": "executed_at",
+            "type": "u32"
+          },
+          {
+            "name": "reason",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidAccount",
+      "docs": [
+        "Bid Account - Holds active bid information for a specific username"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "current_highest_bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "bid_amount",
+            "type": "u64"
+          },
+          {
+            "name": "bid_expiration",
+            "type": "u32"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidCancelledEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "refund_amount",
+            "type": "u64"
+          },
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "cancelled_at",
+            "type": "u32"
+          },
+          {
+            "name": "time_remaining",
+            "type": "u32"
+          },
+          {
+            "name": "cancellation_reason",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "bid_amount",
+            "type": "u64"
+          },
+          {
+            "name": "bid_expiration",
+            "type": "u32"
+          },
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "marketplace_settings",
+            "type": "pubkey"
+          },
+          {
+            "name": "min_bid_at_creation",
+            "type": "u64"
+          },
+          {
+            "name": "bidder_balance_before",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidRefundEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "refunded_bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "refund_amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_highest_bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "refunded_at",
+            "type": "u32"
+          },
+          {
+            "name": "refund_transaction_fee",
+            "type": "u64"
+          },
+          {
+            "name": "refund_success",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidUpdatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "previous_bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_amount",
+            "type": "u64"
+          },
+          {
+            "name": "bid_expiration",
+            "type": "u32"
+          },
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "updated_at",
+            "type": "u32"
+          },
+          {
+            "name": "amount_increase",
+            "type": "u64"
+          },
+          {
+            "name": "new_bidder_balance_before",
+            "type": "u64"
+          },
+          {
+            "name": "time_remaining_before_update",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BulkOperationEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "operation_type",
+            "type": "string"
+          },
+          {
+            "name": "initiated_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "started_at",
+            "type": "u32"
+          },
+          {
+            "name": "completed_at",
+            "type": "u32"
+          },
+          {
+            "name": "total_operations",
+            "type": "u32"
+          },
+          {
+            "name": "successful_operations",
+            "type": "u32"
+          },
+          {
+            "name": "failed_operations",
+            "type": "u32"
+          },
+          {
+            "name": "total_amount_processed",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ComplianceAuditEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "audit_type",
+            "type": "string"
+          },
+          {
+            "name": "audit_result",
+            "type": "string"
+          },
+          {
+            "name": "audited_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "audited_by",
+            "type": "string"
+          },
+          {
+            "name": "audited_at",
+            "type": "u32"
+          },
+          {
+            "name": "findings",
+            "type": "string"
+          },
+          {
+            "name": "remediation_required",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FinancialTransactionEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transaction_type",
+            "type": "string"
+          },
+          {
+            "name": "from_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "to_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "success",
+            "type": "bool"
+          },
+          {
+            "name": "executed_at",
+            "type": "u32"
+          },
+          {
+            "name": "related_username",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "transaction_fee",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailAccountV2RegisterEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailAccountV2UpdateEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailLabel",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Outbox"
+          },
+          {
+            "name": "Inbox"
+          },
+          {
+            "name": "Read"
+          },
+          {
+            "name": "Trash"
+          },
+          {
+            "name": "Spam"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailSendEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2ReadEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2SendEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2UpdateEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MailV2UpdateLabelEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketplaceSettings",
+      "docs": [
+        "Marketplace Settings - Global configuration for bidding system"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "payment_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "min_bid_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "bid_duration_secs",
+            "type": "u32"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketplaceSettingsCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "marketplace_settings",
+            "type": "pubkey"
+          },
+          {
+            "name": "payment_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "min_bid_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "bid_duration_secs",
+            "type": "u32"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "created_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketplaceSettingsUpdatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "marketplace_settings",
+            "type": "pubkey"
+          },
+          {
+            "name": "payment_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "min_bid_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "bid_duration_secs",
+            "type": "u32"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "updated_at",
+            "type": "u32"
+          },
+          {
+            "name": "updated_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_payment_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "previous_min_bid_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "previous_bid_duration_secs",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaymentGatingStatusChangeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "previous_status",
+            "type": "bool"
+          },
+          {
+            "name": "new_status",
+            "type": "bool"
+          },
+          {
+            "name": "changed_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "changed_at",
+            "type": "u32"
+          },
+          {
+            "name": "affected_pending_bids",
+            "type": "u32"
+          },
+          {
+            "name": "new_min_bid",
+            "type": "u64"
+          },
+          {
+            "name": "new_duration",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PerformanceMetricEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "metric_type",
+            "type": "string"
+          },
+          {
+            "name": "metric_value",
+            "type": "u64"
+          },
+          {
+            "name": "measured_at",
+            "type": "u32"
+          },
+          {
+            "name": "context",
+            "type": "string"
+          },
+          {
+            "name": "threshold_exceeded",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RateLimitResetEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_count",
+            "type": "u16"
+          },
+          {
+            "name": "new_window_start",
+            "type": "u32"
+          },
+          {
+            "name": "reset_at",
+            "type": "u32"
+          },
+          {
+            "name": "reset_reason",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RateLimitUpdatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "creation_count",
+            "type": "u16"
+          },
+          {
+            "name": "window_start",
+            "type": "u32"
+          },
+          {
+            "name": "last_creation_time",
+            "type": "u32"
+          },
+          {
+            "name": "updated_at",
+            "type": "u32"
+          },
+          {
+            "name": "trigger_reason",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RateLimitViolationEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "violation_type",
+            "type": "string"
+          },
+          {
+            "name": "current_count",
+            "type": "u16"
+          },
+          {
+            "name": "time_until_next_allowed",
+            "type": "u32"
+          },
+          {
+            "name": "attempted_at",
+            "type": "u32"
+          },
+          {
+            "name": "attempted_username",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SecurityViolationEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "violator",
+            "type": "pubkey"
+          },
+          {
+            "name": "violation_type",
+            "type": "string"
+          },
+          {
+            "name": "severity",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "detected_at",
+            "type": "u32"
+          },
+          {
+            "name": "account_involved",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "instruction_involved",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMail",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "nostr_key",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailAccountV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "nostr_key",
+            "type": "string"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolMailV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "from",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "mark_as_read",
+            "type": "bool"
+          },
+          {
+            "name": "label",
+            "type": {
+              "defined": {
+                "name": "MailLabel"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "parent_id",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "iv",
+            "type": "string"
+          },
+          {
+            "name": "salt",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolmailCentralState",
+      "docs": ["Central State for managing collection and program authority"],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": "u8"
+          },
+          {
+            "name": "collection_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_wrapped",
+            "type": "u64"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SolmailCollectionCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "collection_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "central_state",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SystemStateChangeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "change_type",
+            "type": "string"
+          },
+          {
+            "name": "previous_state",
+            "type": "string"
+          },
+          {
+            "name": "new_state",
+            "type": "string"
+          },
+          {
+            "name": "changed_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "changed_at",
+            "type": "u32"
+          },
+          {
+            "name": "affected_users_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserRateLimit",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_creation_time",
+            "type": "u32"
+          },
+          {
+            "name": "creation_count",
+            "type": "u16"
+          },
+          {
+            "name": "window_start",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameAccount",
+      "docs": [
+        "Username Account structure (PDA-based) - FIXED space calculation"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "domain_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_wrapped",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameAuthorityTransferredEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "old_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "transferred_at",
+            "type": "u32"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameClaimedFromBidEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "winner",
+            "type": "pubkey"
+          },
+          {
+            "name": "winning_bid",
+            "type": "u64"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "claimed_at",
+            "type": "u32"
+          },
+          {
+            "name": "bid_duration_actual",
+            "type": "u32"
+          },
+          {
+            "name": "total_bid_count",
+            "type": "u16"
+          },
+          {
+            "name": "final_bidder_count",
+            "type": "u16"
+          },
+          {
+            "name": "marketplace_revenue",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "creation_method",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameMailboxLinkedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "linked_at",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameMailboxUnlinkedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_mailbox",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "unlinked_at",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameNftMintCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameReservationEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "reservation_type",
+            "type": "string"
+          },
+          {
+            "name": "reserved_by",
+            "type": "pubkey"
+          },
+          {
+            "name": "reserved_at",
+            "type": "u32"
+          },
+          {
+            "name": "expiration",
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "associated_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameRewrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "rewrapped_at",
+            "type": "u32"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameUnwrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "redeemer",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "unwrapped_at",
+            "type": "u32"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameWrappedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_destination",
+            "type": "pubkey"
+          },
+          {
+            "name": "previous_mailbox",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "wrapped_at",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox_locked",
+            "type": "bool"
+          },
+          {
+            "name": "transfer_allowed",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UsernameWrapper",
+      "docs": [
+        "Username Wrapper - PDA that holds username authority during tokenization"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": {
+              "defined": {
+                "name": "WrapperTag"
+              }
+            }
+          },
+          {
+            "name": "nonce",
+            "type": "u8"
+          },
+          {
+            "name": "username_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "mailbox_locked",
+            "type": "bool"
+          },
+          {
+            "name": "transfer_allowed",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrappedUsernameMailboxChangedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "nft_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_mailbox",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "new_mailbox",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "changed_at",
+            "type": "u32"
+          },
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrapperFundsWithdrawnEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wrapper_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "spl_amount",
+            "type": "u64"
+          },
+          {
+            "name": "sol_amount",
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn_at",
+            "type": "u32"
+          },
+          {
+            "name": "withdrawn_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrapperTag",
+      "docs": ["Wrapper state tags for tracking tokenization status"],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Uninitialized"
+          },
+          {
+            "name": "ActiveWrapper"
+          },
+          {
+            "name": "InactiveWrapper"
+          }
+        ]
+      }
     }
   ]
 }
