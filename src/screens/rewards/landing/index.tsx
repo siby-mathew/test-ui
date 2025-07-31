@@ -53,7 +53,7 @@ export const ReferralDashboard = () => {
           >
             <AnalyticCard icon={SolanaLogo} label="Claimable $MAIL" value="0" />
             <AnalyticCard icon={SolanaLogo} label="Claimable $SOL" value="0" />
-            <Flex>
+            <Flex px={5}>
               <Button size={"sm"} variant="green" borderRadius={20}>
                 Claim all
               </Button>

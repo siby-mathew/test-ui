@@ -20,6 +20,7 @@ export const AnalyticCard: React.FC<AnalyticCardProps> = ({
       h="100%"
       transition={"all ease .2s"}
       cursor={"pointer"}
+      flex={"auto"}
       _hover={{
         opacity: 0.8,
       }}

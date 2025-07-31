@@ -11,6 +11,7 @@ import GooglePlay from "@assets/playstore.png";
 import { config } from "@const/config";
 import { PulseLoader } from "@components/PulseLoader";
 import { useExistingQueries } from "@hooks/useExistingQueries";
+import LogoFull from "@assets/logo-full.png";
 export const AppMainLayout: React.FC = () => {
   const { ready, authenticated } = usePrivy();
   const navigate = useNavigate();
@@ -60,8 +61,8 @@ export const AppMainLayout: React.FC = () => {
               to={"/"}
               alignItems={"center"}
             >
-              <Image boxSize={"35px"} src={config.logo} alt="solmail" />
-              <chakra.span
+              <Image w={140} src={LogoFull} alt="solmail" />
+              {/* <chakra.span
                 ml={2}
                 fontSize={20}
                 bg="solana"
@@ -69,11 +70,11 @@ export const AppMainLayout: React.FC = () => {
                 fontWeight={"bold"}
               >
                 Solmail
-              </chakra.span>
+              </chakra.span> */}
             </Link>
           </Flex>
           <Flex gap={3} fontWeight={"medium"} alignItems={"center"}>
-            Get the app{" "}
+            Get the app
             <Tooltip label="Coming soon">
               <Flex
                 display={"inline-flex"}

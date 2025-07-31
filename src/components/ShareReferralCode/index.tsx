@@ -1,4 +1,5 @@
 import {
+  chakra,
   Flex,
   Icon,
   Input,
@@ -37,6 +38,10 @@ const ShareButton: React.FC<{
       as={Link}
       href={link}
       target="_blank"
+      transition={"all ease .2s"}
+      _hover={{
+        opacity: 0.5,
+      }}
       onClick={(e) => {
         if (!link) {
           e.preventDefault();
@@ -81,7 +86,19 @@ Let’s grow together `;
           <ModalCloseButton />
         </ModalHeader>
         <ModalBody pt={0}>
-          <Flex position={"relative"} data-group>
+          <Flex textAlign={"center"} mb={4} opacity={0.5}>
+            Start referring today and turn your network into rewards!
+          </Flex>
+          <Flex
+            position={"relative"}
+            data-group
+            borderRadius={5}
+            transition={"all ease .2s"}
+            _hover={{
+              background: "surface.200",
+              color: "green.500",
+            }}
+          >
             <Input
               fontSize={18}
               borderRadius={5}
@@ -115,9 +132,17 @@ Let’s grow together `;
               Share
             </Flex>
             <Flex alignItems={"center"} justifyContent={"center"}>
-              <ClipboardText trim={!1} textToCopy={URL}>
-                {URL}
-              </ClipboardText>
+              <chakra.span
+                bg="surface.200"
+                p={"3px"}
+                px={4}
+                borderRadius={20}
+                fontSize={12}
+              >
+                <ClipboardText trim={!1} textToCopy={URL}>
+                  {URL}
+                </ClipboardText>
+              </chakra.span>
             </Flex>
             <Flex>
               <Flex w="100%" justifyContent={"center"} alignItems={"center"}>
