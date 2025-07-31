@@ -1,5 +1,5 @@
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
-import { Program } from "@project-serum/anchor";
+import { Program } from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
 import type { Solmail } from "@integrations/idl/solmail/solmail";
@@ -38,7 +38,7 @@ export const useMailAccount = () => {
 
 export const useCreateMailbox = () => {
   const { showToast } = useToast();
-  const { program, mailAccountAddress, provider } = useGetMailProgramInstance();
+  const { program, provider } = useGetMailProgramInstance();
   return useMutation({
     mutationKey: [QueryKeys.CREATE_MAILBOX],
     mutationFn: async () => {
@@ -49,7 +49,6 @@ export const useCreateMailbox = () => {
         const res = await program.methods
           .registerV2(provider.publicKey?.toString() ?? "")
           .accounts({
-            mailAccountV2: mailAccountAddress,
             authority: provider.publicKey,
           })
           .rpc();

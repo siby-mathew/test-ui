@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
-import { type ProgramAccount } from "@project-serum/anchor";
+import { type ProgramAccount } from "@coral-xyz/anchor";
 import type { SolanaPayPayload } from ".";
 export interface SolMailV2 {
   from: PublicKey;
