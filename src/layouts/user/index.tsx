@@ -46,7 +46,7 @@ export const UserLayout: React.FC = () => {
     refetch();
   }, [refetch]);
 
-  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !0 });
   const onCloseHandler = () => {
     refetchProfile();
   };

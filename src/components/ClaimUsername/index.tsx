@@ -12,7 +12,10 @@ import {
   ModalProps,
 } from "@chakra-ui/react";
 import { SolmailSuffixInput } from "@components/SolmailSuffixInput";
-import { FormProvider, useForm } from "react-hook-form";
+import { useClaimUserName } from "@hooks/useUsername";
+
+import { useId } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FormClaimUsername } from "src/types";
 
 export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
@@ -27,6 +30,15 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
       username: "",
     },
   });
+  const { mutateAsync } = useClaimUserName();
+  const onSubmitHandler: SubmitHandler<FormClaimUsername> = async ({
+    username,
+  }) => {
+    await mutateAsync({ username });
+  };
+
+  const id = useId();
+
   return (
     <Modal isCentered size={"xl"} {...props} onClose={onClose}>
       <ModalOverlay />
@@ -47,7 +59,12 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         </ModalHeader>
         <ModalBody pt={0}>
           <FormProvider {...methods}>
-            <Flex as="form" direction={"column"}>
+            <Flex
+              id={id}
+              as="form"
+              direction={"column"}
+              onSubmit={methods.handleSubmit(onSubmitHandler)}
+            >
               <Flex>
                 <Flex opacity={0.5} fontSize={13}>
                   You choose a name that represents you. It will be visible to
@@ -76,7 +93,9 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         </ModalBody>
         <ModalFooter gap={3}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="green">Make it yours</Button>
+          <Button variant="green" type="submit" form={id}>
+            Make it yours
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -32,6 +32,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { getSolscanAddress } from "@utils/string/getSolscanUrl";
 import { useMemo } from "react";
 import { MenuHeader } from "@components/MenuHeader";
+import { noop } from "lodash";
 
 const isActive = (id: string, path: string) => {
   if (id && path && path.indexOf(`/${id}`) > -1) {
@@ -226,7 +227,13 @@ const WalletList: React.FC = () => {
   );
 };
 
-const SidebarMenu: React.FC<MenuConfig> = ({ name, link, icon, id }) => {
+const SidebarMenu: React.FC<MenuConfig> = ({
+  name,
+  link,
+  icon,
+  id,
+  onClick,
+}) => {
   const { pathname } = useLocation();
   const _isActive = isActive(id, pathname);
   return (
@@ -239,6 +246,7 @@ const SidebarMenu: React.FC<MenuConfig> = ({ name, link, icon, id }) => {
       px={3}
       py={"10px"}
       transition={"all ease .5s"}
+      onClick={onClick || noop}
       _hover={{
         bg: !_isActive ? "surface.200" : "",
       }}

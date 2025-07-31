@@ -47,77 +47,77 @@ export const DOCUSIGN_MENU: MenuConfig[] = [
   {
     icon: GoHomeFill,
     name: "Home",
-    link: "/u/docusign/dashboard",
+    link: "",
     id: "dashboard",
   },
   {
     icon: RiInbox2Fill,
     name: "Inbox",
-    link: "/u/docusign/inbox",
+    link: "",
     id: "inbox",
   },
   {
     icon: MdOutlineForwardToInbox,
     name: "Sent",
-    link: "/u/docusign/inbox",
+    link: "",
     id: "sent",
   },
   {
     icon: FaCheckToSlot,
     name: "Completed",
-    link: "/u/docusign/complete",
+    link: "",
     id: "complete",
   },
   {
     icon: GrAction,
     name: "Action Required",
-    link: "/u/docusign/action-required",
+    link: "",
     id: "action-required",
   },
   {
     icon: MdDrafts,
     name: "Drafts",
-    link: "/u/docusign/drafts",
+    link: "",
     id: "drafts",
   },
   {
     icon: FaWalking,
     name: "Waiting for others",
-    link: "/u/docusign/waiting-for-others",
+    link: "",
     id: "waiting-for-others",
   },
   {
     icon: MdSmsFailed,
     name: "Authentication Failed",
-    link: "/u/docusign/authentication-failed",
+    link: "",
     id: "authentication-failed",
   },
   {
     icon: FaMailBulk,
     name: "Bulk Send",
-    link: "/u/docusign/bulk-send",
+    link: "",
     id: "bulk-send",
   },
 ];
 
-const PROFILE_MENU: MenuConfig[] = [
-  {
-    icon: IoSettingsSharp,
-    name: "Settings",
-    id: "settings",
-    link: "",
-  },
-  {
-    icon: RiShutDownLine,
-    name: "Signout",
-    id: "signout",
-    link: "",
-    onClick: () => {
-      localStorage.clear();
-      window.location.reload();
-    },
-  },
-];
+// const PROFILE_MENU: MenuConfig[] = [
+//   {
+//     icon: IoSettingsSharp,
+//     name: "Settings",
+//     id: "settings",
+//     link: "",
+//   },
+//   {
+//     icon: RiShutDownLine,
+//     name: "Signout",
+//     id: "signout",
+//     link: "",
+//     onClick: () => {
+//       localStorage.clear();
+//       window.location.reload();
+//     },
+//   },
+// ];
 export const MENU: MenuConfig[] = [
   {
     icon: IoMail,
@@ -147,6 +147,6 @@ export const MENU: MenuConfig[] = [
     name: "Rewards",
     link: `/u/rewards`,
     id: "rewards",
-    submenu: PROFILE_MENU,
+    submenu: [],
   },
 ];
