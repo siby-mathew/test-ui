@@ -9,6 +9,7 @@ import { useToast } from "./useToast";
 const fetchAccount = async (program: Program<Solmail>, address: PublicKey) => {
   try {
     const account = await program.account.solMailAccountV2.fetch(address);
+
     if (account) {
       return !0;
     }
@@ -26,6 +27,7 @@ export const useMailAccount = () => {
         ? () => fetchAccount(program, mailAccountAddress)
         : skipToken,
     enabled: !!(provider && provider.publicKey),
+    staleTime: Infinity,
   });
   return {
     hasAccount: data,
