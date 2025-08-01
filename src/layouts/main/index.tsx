@@ -62,15 +62,6 @@ export const AppMainLayout: React.FC = () => {
               alignItems={"center"}
             >
               <Image w={140} src={LogoFull} alt="solmail" />
-              {/* <chakra.span
-                ml={2}
-                fontSize={20}
-                bg="solana"
-                bgClip={"text"}
-                fontWeight={"bold"}
-              >
-                Solmail
-              </chakra.span> */}
             </Link>
           </Flex>
           <Flex gap={3} fontWeight={"medium"} alignItems={"center"}>

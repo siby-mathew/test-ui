@@ -13,11 +13,12 @@ import {
   Link as ChakraLink,
   useClipboard,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { config } from "@const/config";
 import { MENU } from "@const/menu";
 import { Link, useLocation } from "@tanstack/react-router";
-import { BsArrowUpRightSquareFill } from "react-icons/bs";
+import { BsArrowUpRightSquareFill, BsPlusCircleFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
 import { LiaWalletSolid } from "react-icons/lia";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -33,6 +34,8 @@ import { getSolscanAddress } from "@utils/string/getSolscanUrl";
 import { useMemo } from "react";
 import { MenuHeader } from "@components/MenuHeader";
 import { noop } from "lodash";
+import { ClaimUserName } from "@components/ClaimUsername";
+import { DOMAINS } from "@const/domain";
 
 const isActive = (id: string, path: string) => {
   if (id && path && path.indexOf(`/${id}`) > -1) {
@@ -98,6 +101,7 @@ export const AppSwitch: React.FC = () => {
 };
 
 export const Sidebar: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
   const selectedmenu = useMemo(() => {
     const menu = MENU.find((menu) => pathname.indexOf(menu.id) > -1);
@@ -151,6 +155,28 @@ export const Sidebar: React.FC = () => {
             px={3}
             direction={"column"}
           >
+            <Flex direction={"column"}>
+              <Flex fontSize={14} opacity={0.5}>
+                Create username
+              </Flex>
+              <Flex
+                cursor={"pointer"}
+                alignItems={"center"}
+                mb={5}
+                transition={"all ease .2s"}
+                _hover={{
+                  opacity: 0.5,
+                }}
+                onClick={onOpen}
+                fontWeight={"bold"}
+                color={"solana.middle"}
+              >
+                <ClaimUserName isOpen={isOpen} onClose={onClose} />@
+                {DOMAINS.DEFAULT}
+                <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
+              </Flex>
+            </Flex>
+
             <Flex fontSize={14} opacity={0.5} alignItems={"center"}>
               <Icon as={LiaWalletSolid} mr={2} /> Wallet
             </Flex>

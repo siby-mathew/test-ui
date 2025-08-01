@@ -1,4 +1,5 @@
-import { Box, chakra, Flex, Input } from "@chakra-ui/react";
+import { Box, chakra, Flex, Input, Spinner } from "@chakra-ui/react";
+import { DOMAINS } from "@const/domain";
 import { useUsernameStatus } from "@hooks/useUsername";
 import { validateUsername } from "@utils/string/username";
 import { useRef } from "react";
@@ -41,7 +42,7 @@ export const SolmailSuffixInput: React.FC = () => {
 
   const { mutateAsync, isPending } = useUsernameStatus();
 
-  const debouncedMutateRef = useRef(debounceAsync(mutateAsync, 600));
+  const debouncedMutateRef = useRef(debounceAsync(mutateAsync, 350));
 
   const checkUserName = async (value: string) => {
     const commonValidation = validateUsername(value);
@@ -74,6 +75,18 @@ export const SolmailSuffixInput: React.FC = () => {
           borderRadius="50px"
           overflow="hidden"
         >
+          {isPending && (
+            <Flex
+              alignItems={"center"}
+              justifyContent={"center"}
+              position={"absolute"}
+              right={5}
+              top={0}
+              bottom={0}
+            >
+              <Spinner size={"sm"} />
+            </Flex>
+          )}
           <Input
             position="relative"
             zIndex={2}
@@ -102,7 +115,7 @@ export const SolmailSuffixInput: React.FC = () => {
             opacity={disablePlaceholder ? 0 : 1}
           >
             <chakra.span opacity={0}>{value || PLACEHOLDER}</chakra.span>
-            <chakra.span color="solana.middle">@sol.mail</chakra.span>
+            <chakra.span color="solana.middle">@{DOMAINS.DEFAULT}</chakra.span>
           </Input>
 
           <Input
@@ -121,7 +134,7 @@ export const SolmailSuffixInput: React.FC = () => {
             opacity={disablePlaceholder ? 1 : 0}
           >
             <chakra.span bg="surface.30" color="solana.middle">
-              @sol.mail
+              @{DOMAINS.DEFAULT}
             </chakra.span>
           </Input>
         </Box>

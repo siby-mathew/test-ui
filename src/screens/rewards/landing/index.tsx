@@ -8,6 +8,7 @@ import { RewardsProfile } from "@components/RewardsProfile";
 import { AnalyticsList } from "@components/AnalyticsList";
 import { useProfile } from "@hooks/useProfile";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
+import { config } from "@const/config";
 
 export const ReferralDashboard = () => {
   const { data } = useProfile();
@@ -26,7 +27,7 @@ export const ReferralDashboard = () => {
             <AnalyticsHeader />
           </GridItem>
           <GridItem colSpan={1} rowSpan={1}>
-            <AnalyticCard icon={SolanaLogo} label="Mail claimed" value="0" />
+            <AnalyticCard icon={config.logo} label="Mail claimed" value="0" />
           </GridItem>
           <GridItem colSpan={1} rowSpan={1}>
             <AnalyticCard
@@ -54,7 +55,7 @@ export const ReferralDashboard = () => {
               alignItems={"center"}
             >
               <AnalyticCard
-                icon={SolanaLogo}
+                icon={config.logo}
                 label="Claimable $MAIL"
                 value="0"
               />

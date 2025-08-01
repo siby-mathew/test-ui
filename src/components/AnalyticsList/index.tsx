@@ -20,6 +20,23 @@ import { shortenPrincipalId } from "@utils/string";
 import { HiExternalLink } from "react-icons/hi";
 import { formatTime } from "@utils/time";
 import { getSolScanAccountUrl } from "@utils/string/getSolscanUrl";
+
+const NodataTable: React.FC<{ colspan?: number }> = ({ colspan = 3 }) => {
+  return (
+    <Tr>
+      <Td colSpan={colspan}>
+        <Flex
+          p={3}
+          alignItems={"center"}
+          justifyContent={"center"}
+          opacity={0.5}
+        >
+          No data available
+        </Flex>
+      </Td>
+    </Tr>
+  );
+};
 export const AnalyticsList: React.FC = () => {
   const { data } = useProfile();
   return (
@@ -64,6 +81,10 @@ export const AnalyticsList: React.FC = () => {
                         </Tr>
                       );
                     })}
+
+                  {(!data?.referrals || !data?.referrals?.count) && (
+                    <NodataTable />
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>
@@ -91,6 +112,10 @@ export const AnalyticsList: React.FC = () => {
                         </Tr>
                       );
                     })}
+
+                  {(!data?.xp || !data?.xp?.transactions?.length) && (
+                    <NodataTable />
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>

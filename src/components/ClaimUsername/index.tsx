@@ -15,7 +15,7 @@ import {
 import { SolmailSuffixInput } from "@components/SolmailSuffixInput";
 import { useClaimUserName } from "@hooks/useUsername";
 
-import { useId } from "react";
+import { useId, useTransition } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FormClaimUsername } from "src/types";
 
@@ -32,13 +32,21 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
     },
   });
   const { mutateAsync, isPending } = useClaimUserName();
-  const onSubmitHandler: SubmitHandler<FormClaimUsername> = async ({
-    username,
-  }) => {
+  const [isPendingStatus, startTransition] = useTransition();
+  const onSubmitHandler: SubmitHandler<FormClaimUsername> = ({ username }) => {
     if (isPending) {
       return;
     }
-    await mutateAsync({ username });
+    startTransition(async () => {
+      try {
+        const res = await mutateAsync({ username });
+        if (res) {
+          onClose();
+        }
+      } catch {
+        console.log();
+      }
+    });
   };
 
   const id = useId();
@@ -98,7 +106,11 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         <ModalFooter gap={3}>
           <Button onClick={onClose}>Cancel</Button>
           <Button variant="green" type="submit" form={id}>
-            {isPending ? <Spinner size={"sm"} /> : "Make it yours"}
+            {isPending || isPendingStatus ? (
+              <Spinner size={"sm"} />
+            ) : (
+              "Make it yours"
+            )}
           </Button>
         </ModalFooter>
       </ModalContent>

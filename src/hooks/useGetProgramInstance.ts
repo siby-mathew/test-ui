@@ -29,6 +29,7 @@ export const useGetProgramInstance = <T extends Idl>(IDL: T) => {
       },
       { commitment: "processed" }
     );
+
     const programID = new PublicKey(IDL.address);
     const [mailAccountAddress] = PublicKey.findProgramAddressSync(
       [Buffer.from("mail-accountv2"), new PublicKey(wallet.address).toBuffer()],

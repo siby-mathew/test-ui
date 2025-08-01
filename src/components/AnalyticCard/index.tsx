@@ -29,15 +29,15 @@ export const AnalyticCard: React.FC<AnalyticCardProps> = ({
         <Flex
           alignItems={"center"}
           justifyContent={"center"}
-          boxSize="55px"
+          boxSize="50px"
           bg="dark.70"
           borderRadius={"50%"}
-          minW={"55px"}
+          minW={"50px"}
         >
           {icon && (
             <>
               {typeof icon === "string" && (
-                <Image borderRadius={"50%"} src={icon} />
+                <Image borderRadius={"50%"} src={icon} w="100%" h="100%" />
               )}
               {typeof icon !== "string" && <Icon fontSize={20} as={icon} />}
             </>
