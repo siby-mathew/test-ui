@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Spinner,
 } from "@chakra-ui/react";
 import { SolmailSuffixInput } from "@components/SolmailSuffixInput";
 import { useClaimUserName } from "@hooks/useUsername";
@@ -30,10 +31,13 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
       username: "",
     },
   });
-  const { mutateAsync } = useClaimUserName();
+  const { mutateAsync, isPending } = useClaimUserName();
   const onSubmitHandler: SubmitHandler<FormClaimUsername> = async ({
     username,
   }) => {
+    if (isPending) {
+      return;
+    }
     await mutateAsync({ username });
   };
 
@@ -94,7 +98,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         <ModalFooter gap={3}>
           <Button onClick={onClose}>Cancel</Button>
           <Button variant="green" type="submit" form={id}>
-            Make it yours
+            {isPending ? <Spinner size={"sm"} /> : "Make it yours"}
           </Button>
         </ModalFooter>
       </ModalContent>

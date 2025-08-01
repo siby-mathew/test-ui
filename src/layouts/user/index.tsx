@@ -1,4 +1,4 @@
-import { Flex, useDisclosure } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Composer } from "@components/Composer";
 import { Navbar } from "@components/Navbar";
 import { Sidebar } from "@components/Sidebar";
@@ -10,7 +10,7 @@ import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
 import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
-import { ClaimUserName } from "@components/ClaimUsername";
+// import { ClaimUserName } from "@components/ClaimUsername";
 import { useProfile } from "@hooks/useProfile";
 import { ReferalCodeClaim } from "@components/ReferalCodeClaim";
 import { usePrivy } from "@privy-io/react-auth";
@@ -46,7 +46,7 @@ export const UserLayout: React.FC = () => {
     refetch();
   }, [refetch]);
 
-  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !0 });
+  // const { isOpen, onClose } = useDisclosure({ defaultIsOpen: !0 });
   const onCloseHandler = () => {
     refetchProfile();
   };
@@ -55,7 +55,7 @@ export const UserLayout: React.FC = () => {
 
   return (
     <Flex w="100%" direction={"row"}>
-      <ClaimUserName isOpen={isOpen} onClose={onClose} />
+      {/* <ClaimUserName isOpen={isOpen} onClose={onClose} /> */}
       <ReferalCodeClaim
         isOpen={
           isAuthenticated &&

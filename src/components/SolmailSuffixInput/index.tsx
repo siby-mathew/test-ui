@@ -53,7 +53,6 @@ export const SolmailSuffixInput: React.FC = () => {
     if (account && account.username) {
       return "Username not available";
     }
-
     return true;
   };
 

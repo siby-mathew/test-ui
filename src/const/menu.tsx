@@ -1,9 +1,9 @@
-import { IoMail, IoSend, IoSettingsSharp } from "react-icons/io5";
+import { IoMail, IoSend } from "react-icons/io5";
 import { FaCheckToSlot, FaTrash, FaWallet } from "react-icons/fa6";
 import { GrAction } from "react-icons/gr";
 import { FaMailBulk, FaSmile, FaWalking } from "react-icons/fa";
 
-import { RiInbox2Fill, RiShutDownLine, RiSpam3Fill } from "react-icons/ri";
+import { RiInbox2Fill, RiSpam3Fill } from "react-icons/ri";
 import { GoHomeFill } from "react-icons/go";
 import {
   MdDrafts,

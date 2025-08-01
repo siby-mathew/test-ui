@@ -8,10 +8,7 @@ import { useMemo } from "react";
 import { useSolanaConnection } from "./useConnection";
 import { useEmbeddedWallet } from "./useEmbeddedWallet";
 
-export const useGetProgramInstance = <T extends Idl>(
-  IDL: T,
-  programAddress: string
-) => {
+export const useGetProgramInstance = <T extends Idl>(IDL: T) => {
   const wallet = useEmbeddedWallet();
   const { authenticated } = usePrivy();
   const connection = useSolanaConnection();
@@ -32,7 +29,7 @@ export const useGetProgramInstance = <T extends Idl>(
       },
       { commitment: "processed" }
     );
-    const programID = new PublicKey(programAddress);
+    const programID = new PublicKey(IDL.address);
     const [mailAccountAddress] = PublicKey.findProgramAddressSync(
       [Buffer.from("mail-accountv2"), new PublicKey(wallet.address).toBuffer()],
       programID
@@ -45,5 +42,5 @@ export const useGetProgramInstance = <T extends Idl>(
       program,
       mailAccountAddress,
     };
-  }, [IDL, authenticated, connection, programAddress, wallet]);
+  }, [IDL, authenticated, connection, wallet]);
 };

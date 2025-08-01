@@ -49,35 +49,58 @@ export const useClaimUserName = () => {
           program.programId
         );
 
+        // console.log(usernameAccountPDA, usernameAccountPDA.toString());
+
         try {
-          const account =
-            await program.account.usernameAccount.fetch(usernameAccountPDA);
-          if (account && account.username) {
-            throw "Already exists";
-          }
-        } catch {}
+          await program.account.usernameAccount.fetch(usernameAccountPDA);
+          return !1;
+        } catch {
+          const [rateLimitPDA] = PublicKey.findProgramAddressSync(
+            [Buffer.from("rate_limit"), provider.publicKey.toBuffer()],
+            program.programId
+          );
+          console.log("Here");
+          await program.methods
+            .createUsername(username)
+            .accounts({
+              usernameAccount: usernameAccountPDA,
+              rateLimit: rateLimitPDA,
+              marketplaceSettings: null,
+              bidAccountCheck: null,
+              authority: provider.publicKey,
+              systemProgram: SystemProgram.programId,
+            } as any)
 
-        const [rateLimitPDA] = PublicKey.findProgramAddressSync(
-          [Buffer.from("rate_limit"), provider.publicKey.toBuffer()],
-          program.programId
-        );
+            .rpc();
 
-        const res = await program.methods
-          .createUsername(username)
-          .accounts({
-            usernameAccount: usernameAccountPDA,
-            rateLimit: rateLimitPDA,
-            marketplaceSettings: null,
-            bidAccountCheck: null,
-            authority: provider.publicKey,
-            systemProgram: SystemProgram.programId,
-          } as any)
+          // const usernameAccountPDA = new PublicKey(
+          //   "TLDHkysf5pCnKsVA4gXpNvmy7psXLPEu4LAdDJthT9S"
+          // );
 
-          .rpc();
-        console.log(res, "Created");
-        showToast("Username created", {
-          type: "success",
-        });
+          const [mailAccountPDA] = PublicKey.findProgramAddressSync(
+            [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
+            program.programId
+          );
+          console.log(mailAccountPDA.toString());
+
+          const mailAccount =
+            await program.account.solMailAccountV2.fetch(mailAccountPDA);
+          const mailboxToLink = mailAccount.mailbox;
+
+          await program.methods
+            .linkMailboxToUsername(mailboxToLink)
+            .accounts({
+              usernameAccount: usernameAccountPDA,
+              mailAccountV2: mailAccountPDA,
+              authority: provider.publicKey,
+            })
+
+            .rpc();
+          console.log("Here", 3);
+          showToast("Username created", {
+            type: "success",
+          });
+        }
       } catch (E) {
         console.log(E);
         showToast("Failed to create username", {

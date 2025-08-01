@@ -169,7 +169,7 @@ export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
   useEffect(() => {
     let listener: number;
     if (program) {
-      listener = program.addEventListener("MailV2SendEvent", (event) => {
+      listener = program.addEventListener("mailV2SendEvent", (event) => {
         if (
           address &&
           event.to &&
@@ -184,7 +184,7 @@ export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
         program.removeEventListener(listener);
       }
     };
-  }, [program]);
+  }, [address, program, refetch]);
 
   return {
     mail: mail as FormattedMailBox[],
