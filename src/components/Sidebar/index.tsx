@@ -107,9 +107,27 @@ export const Sidebar: React.FC = () => {
     const menu = MENU.find((menu) => pathname.indexOf(menu.id) > -1);
     return menu || MENU[0];
   }, [pathname]);
+
   return (
-    <Flex w="300px" maxW={"300px"} direction={"row"}>
-      <Flex w="50px" direction={"column"} bg="surface.200">
+    <Flex
+      w={{
+        base: "50px",
+        md: "300px",
+      }}
+      maxW={{
+        base: "50px",
+        md: "300px",
+      }}
+      direction={"row"}
+      data-group
+    >
+      <Flex
+        w={{
+          base: "50px",
+        }}
+        direction={"column"}
+        bg="surface.200"
+      >
         <VStack align={"center"} px={"8px"} py={"10px"}>
           <Flex my={"8px"}>
             <Link to={"/"}>
@@ -139,7 +157,15 @@ export const Sidebar: React.FC = () => {
           })}
         </VStack>
       </Flex>
-      <Flex direction={"column"} p={5} pb={3}>
+      <Flex
+        direction={"column"}
+        p={5}
+        pb={3}
+        display={{
+          base: "none",
+          md: "flex",
+        }}
+      >
         <MenuHeader {...selectedmenu} />
         <Flex direction={"column"} flex={"auto"}>
           <VStack align={"start"} gap={1} my={3} mt={0} w="100%">

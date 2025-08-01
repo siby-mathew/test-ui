@@ -37,7 +37,7 @@ export const MailPreview: React.FC = () => {
             <Flex position={"absolute"} inset={0}>
               <CustomScrollbarWrapper>
                 <Fade in key={id}>
-                  <Box w="full" mt={4}>
+                  <Box w="full" mt={4} px={5}>
                     <Box maxW="600" w="full" mx="auto">
                       <Box my={2} fontWeight={"medium"} fontSize={18}>
                         {subject}

@@ -42,7 +42,7 @@ export const MailPreviewHeader: React.FC = () => {
       <Flex direction={"column"} flex={"auto"}>
         <Flex>
           <chakra.span mr={1}>{label}</chakra.span>
-          {/* <chakra.span></chakra.span> */}
+
           <ClipboardText
             textToCopy={address}
             trim={!1}
@@ -52,7 +52,7 @@ export const MailPreviewHeader: React.FC = () => {
           {format(Number(mail?.createdAt ?? 0) * 1000)}
         </Flex>
       </Flex>
-      <Flex gap={1}>
+      <Flex gap={1} display={{ base: "none", md: "flex" }}>
         {context !== MailBoxLabels.outbox && (
           <Tooltip label="Reply" placement="auto">
             <IconButton

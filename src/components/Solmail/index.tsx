@@ -7,7 +7,7 @@ import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useRef, useState } from "react";
 import { TbReload } from "react-icons/tb";
 export const Solmail: React.FC = () => {
-  const { context } = useMailBoxContext();
+  const { context, id } = useMailBoxContext();
   const [isPending, setStatus] = useState<boolean>(!1);
   const inbox = useRef<InboxRef>(null);
 
@@ -20,11 +20,14 @@ export const Solmail: React.FC = () => {
     <Flex w="100%" direction={"row"}>
       <Flex
         direction={"column"}
-        width={"350px"}
+        width={{ base: "100%", md: "350px" }}
         bg="surface.400"
         borderRight={"solid 1px"}
         borderRightColor={"surface.400"}
         borderBottomLeftRadius={21}
+        display={{
+          base: id ? "none" : "flex",
+        }}
       >
         <Flex
           borderBottom={"solid 1px"}
@@ -95,7 +98,13 @@ export const Solmail: React.FC = () => {
           </Flex>
         </Flex>
       </Flex>
-      <Flex flex={"auto"}>
+      <Flex
+        flex={"auto"}
+        display={{
+          base: id ? "flex" : "none",
+          md: "flex",
+        }}
+      >
         <MailPreview />
       </Flex>
     </Flex>
