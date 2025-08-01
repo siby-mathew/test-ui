@@ -171,7 +171,7 @@ export const Sidebar: React.FC = () => {
                 fontWeight={"bold"}
                 color={"solana.middle"}
               >
-                <ClaimUserName isOpen={isOpen} onClose={onClose} />@
+                <ClaimUserName isOpen={isOpen} onClose={onClose} />
                 {DOMAINS.DEFAULT}
                 <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
               </Flex>

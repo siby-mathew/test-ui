@@ -115,7 +115,7 @@ export const SolmailSuffixInput: React.FC = () => {
             opacity={disablePlaceholder ? 0 : 1}
           >
             <chakra.span opacity={0}>{value || PLACEHOLDER}</chakra.span>
-            <chakra.span color="solana.middle">@{DOMAINS.DEFAULT}</chakra.span>
+            <chakra.span color="solana.middle">{DOMAINS.DEFAULT}</chakra.span>
           </Input>
 
           <Input
@@ -134,7 +134,7 @@ export const SolmailSuffixInput: React.FC = () => {
             opacity={disablePlaceholder ? 1 : 0}
           >
             <chakra.span bg="surface.30" color="solana.middle">
-              @{DOMAINS.DEFAULT}
+              {DOMAINS.DEFAULT}
             </chakra.span>
           </Input>
         </Box>

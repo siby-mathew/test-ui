@@ -10,7 +10,7 @@ const getUsernamePDA = (username: string, programId: PublicKey) =>
     [
       Buffer.from("username"),
       Buffer.from(username.toLowerCase()),
-      Buffer.from(DOMAINS.DEFAULT),
+      Buffer.from(DOMAINS.DEFAULT.slice(1)),
     ],
     programId
   );

@@ -1,3 +1,3 @@
 export const DOMAINS = {
-  DEFAULT: "sol.mail",
+  DEFAULT: "@sol.mail",
 };
