@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   Flex,
   IconButton,
@@ -129,9 +131,13 @@ export const RequestAccountCreation: React.FC<
               mt={3}
               fontSize={13}
               opacity={0.6}
+              mb={3}
             >
-              Please add funds to your embedded wallet before creating a
-              mailbox.
+              <Alert status="warning" borderRadius={15} color={"light.100"}>
+                <AlertIcon />
+                Please add funds to your embedded wallet before creating a
+                mailbox.
+              </Alert>
             </Flex>
           </Flex>
         </ModalBody>

@@ -90,7 +90,7 @@ export const UserLayout: React.FC = () => {
                 </>
               )}
 
-              {isAuthenticated && requestWalletCreation && (
+              {(true || (isAuthenticated && requestWalletCreation)) && (
                 <RequestAccountCreation
                   isOpen={true}
                   onClose={noop}
