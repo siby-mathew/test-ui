@@ -7,3 +7,4 @@ export * from "./resolveEmail";
 export * from "./getFileName";
 export * from "./isPublicKey";
 export * from "./share";
+export * from "./isActiveRoute";

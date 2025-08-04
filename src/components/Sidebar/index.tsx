@@ -22,7 +22,7 @@ import { BsArrowUpRightSquareFill, BsPlusCircleFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
 import { LiaWalletSolid } from "react-icons/lia";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { shortenPrincipalId } from "@utils/index";
+import { isActive, shortenPrincipalId } from "@utils/index";
 import type { MenuConfig } from "src/types";
 import PrivyLogo from "@assets/privy.jpg";
 import JupiterLogo from "@assets/jupiter.svg";
@@ -36,13 +36,6 @@ import { MenuHeader } from "@components/MenuHeader";
 import { noop } from "lodash";
 import { ClaimUserName } from "@components/ClaimUsername";
 import { DOMAINS } from "@const/domain";
-
-const isActive = (id: string, path: string) => {
-  if (id && path && path.indexOf(`/${id}`) > -1) {
-    return !0;
-  }
-  return !1;
-};
 
 export const AppSwitch: React.FC = () => {
   return (

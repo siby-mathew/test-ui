@@ -108,6 +108,7 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
                   <Input
                     textAlign={"center"}
                     placeholder="Enter referral code"
+                    fontWeight={"bold"}
                     id="code"
                     {...methods.register("code", {
                       validate: validateCode,
