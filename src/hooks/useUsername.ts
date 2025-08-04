@@ -58,17 +58,21 @@ export const useClaimUserName = () => {
             [Buffer.from("rate_limit"), provider.publicKey.toBuffer()],
             program.programId
           );
+          const [marketplaceSettingsPDA] = PublicKey.findProgramAddressSync(
+            [Buffer.from("marketplace_settings")],
+            program.programId
+          );
 
           await program.methods
             .createUsername(username)
             .accounts({
               usernameAccount: usernameAccountPDA,
               rateLimit: rateLimitPDA,
-              marketplaceSettings: null,
-              bidAccountCheck: null,
+              marketplaceSettings: marketplaceSettingsPDA,
               authority: provider.publicKey,
               systemProgram: SystemProgram.programId,
             } as any)
+
             .rpc();
 
           const [mailAccountPDA] = PublicKey.findProgramAddressSync(
