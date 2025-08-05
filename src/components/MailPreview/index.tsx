@@ -29,7 +29,7 @@ export const MailPreview: React.FC = () => {
             data-header
             bg="surface.300"
             borderBottom="solid 1px"
-            borderBottomColor={"#171717"}
+            borderBottomColor={"surface.600"}
           >
             <MailPreviewHeader />
           </Flex>

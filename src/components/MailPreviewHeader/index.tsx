@@ -37,7 +37,11 @@ export const MailPreviewHeader: React.FC = () => {
   return (
     <Flex px={5} py={"7px"} w="full" direction={"row"} gap={3}>
       <Flex boxSize={"40px"}>
-        <Avatar boxSize={"40px"} name="jk" position={"initial"} />
+        <Avatar
+          boxSize={"40px"}
+          name={address?.toString() ?? ""}
+          position={"initial"}
+        />
       </Flex>
       <Flex direction={"column"} flex={"auto"}>
         <Flex>

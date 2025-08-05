@@ -42,14 +42,14 @@ export const ReferralDashboard = () => {
             colSpan={1}
             rowSpan={2}
             borderRadius={15}
-            bg="dark.60"
+            bg="surface.600"
           ></GridItem>
 
           <GridItem colSpan={2}>
             <Flex
               direction={"row"}
               w="100%"
-              bg="dark.60"
+              bg="surface.600"
               borderRadius={15}
               h="100%"
               alignItems={"center"}
@@ -75,7 +75,7 @@ export const ReferralDashboard = () => {
             <AnalyticsList />
           </GridItem>
           <GridItem>
-            <Flex h="100%" bg="dark.60" borderRadius={15}></Flex>
+            <Flex h="100%" bg="surface.600" borderRadius={15}></Flex>
           </GridItem>
         </Grid>
       </CustomScrollbarWrapper>

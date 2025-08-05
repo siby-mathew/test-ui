@@ -15,7 +15,7 @@ export const AnalyticCard: React.FC<AnalyticCardProps> = ({
   return (
     <Flex
       p={4}
-      bg="dark.60"
+      bg="surface.600"
       borderRadius={15}
       h="100%"
       transition={"all ease .2s"}

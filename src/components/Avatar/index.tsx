@@ -20,7 +20,7 @@ export const Avatar: React.FC<{ name: string } & BoxProps> = ({
       alignItems={"center"}
       justifyContent={"center"}
     >
-      <chakra.span opacity={0.4}>{name[0].toUpperCase()}</chakra.span>
+      <chakra.span opacity={0.8}>{name[0].toUpperCase()}</chakra.span>
     </Flex>
   );
 };

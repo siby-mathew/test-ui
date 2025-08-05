@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import type { IconType } from "react-icons/lib";
 export * from "./mail";
+export * from "./referrals";
 export type MenuConfig = {
   icon: IconType;
   name: string;
@@ -27,6 +28,8 @@ export enum QueryKeys {
   "USERNAME_STATUS" = "USERNAME_STATUS",
   "GET_USERNAMES" = "GET_USERNAMES",
   "EMAIL_RESOLVER" = "EMAIL_RESOLVER",
+  "MILESTONES" = "MILESTONES",
+  "QUICKNODE" = "QUICKNODE",
 }
 
 export type StatusType = {

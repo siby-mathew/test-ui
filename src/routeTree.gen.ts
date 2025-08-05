@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
 import { Route as ULayoutRewardsIndexRouteImport } from './routes/u/_layout/rewards/index'
+import { Route as ULayoutRewardsMilestonesIndexRouteImport } from './routes/u/_layout/rewards/milestones/index'
 import { Route as ULayoutDocusignDashboardIndexRouteImport } from './routes/u/_layout/docusign/dashboard/index'
 import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
 import { Route as ULayoutSolmailSpamIdRouteImport } from './routes/u/_layout/solmail/spam/$id'
@@ -41,6 +42,12 @@ const ULayoutRewardsIndexRoute = ULayoutRewardsIndexRouteImport.update({
   path: '/rewards/',
   getParentRoute: () => ULayoutRoute,
 } as any)
+const ULayoutRewardsMilestonesIndexRoute =
+  ULayoutRewardsMilestonesIndexRouteImport.update({
+    id: '/rewards/milestones/',
+    path: '/rewards/milestones/',
+    getParentRoute: () => ULayoutRoute,
+  } as any)
 const ULayoutDocusignDashboardIndexRoute =
   ULayoutDocusignDashboardIndexRouteImport.update({
     id: '/docusign/dashboard/',
@@ -77,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/docusign/dashboard': typeof ULayoutDocusignDashboardIndexRoute
+  '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
 }
 export interface FileRoutesByTo {
   '/u': typeof ULayoutRouteWithChildren
@@ -87,6 +95,7 @@ export interface FileRoutesByTo {
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/docusign/dashboard': typeof ULayoutDocusignDashboardIndexRoute
+  '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -99,6 +108,7 @@ export interface FileRoutesById {
   '/u/_layout/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/_layout/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/_layout/docusign/dashboard/': typeof ULayoutDocusignDashboardIndexRoute
+  '/u/_layout/rewards/milestones/': typeof ULayoutRewardsMilestonesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
     | '/u/docusign/dashboard'
+    | '/u/rewards/milestones'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/u'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
     | '/u/docusign/dashboard'
+    | '/u/rewards/milestones'
   id:
     | '__root__'
     | '/u'
@@ -132,6 +144,7 @@ export interface FileRouteTypes {
     | '/u/_layout/solmail/spam/$id'
     | '/u/_layout/solmail/trash/$id'
     | '/u/_layout/docusign/dashboard/'
+    | '/u/_layout/rewards/milestones/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/u/rewards'
       preLoaderRoute: typeof ULayoutRewardsIndexRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
+    '/u/_layout/rewards/milestones/': {
+      id: '/u/_layout/rewards/milestones/'
+      path: '/rewards/milestones'
+      fullPath: '/u/rewards/milestones'
+      preLoaderRoute: typeof ULayoutRewardsMilestonesIndexRouteImport
       parentRoute: typeof ULayoutRoute
     }
     '/u/_layout/docusign/dashboard/': {
@@ -214,6 +234,7 @@ interface ULayoutRouteChildren {
   ULayoutSolmailSpamIdRoute: typeof ULayoutSolmailSpamIdRoute
   ULayoutSolmailTrashIdRoute: typeof ULayoutSolmailTrashIdRoute
   ULayoutDocusignDashboardIndexRoute: typeof ULayoutDocusignDashboardIndexRoute
+  ULayoutRewardsMilestonesIndexRoute: typeof ULayoutRewardsMilestonesIndexRoute
 }
 
 const ULayoutRouteChildren: ULayoutRouteChildren = {
@@ -223,6 +244,7 @@ const ULayoutRouteChildren: ULayoutRouteChildren = {
   ULayoutSolmailSpamIdRoute: ULayoutSolmailSpamIdRoute,
   ULayoutSolmailTrashIdRoute: ULayoutSolmailTrashIdRoute,
   ULayoutDocusignDashboardIndexRoute: ULayoutDocusignDashboardIndexRoute,
+  ULayoutRewardsMilestonesIndexRoute: ULayoutRewardsMilestonesIndexRoute,
 }
 
 const ULayoutRouteWithChildren =
