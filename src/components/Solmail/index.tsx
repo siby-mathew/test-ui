@@ -27,6 +27,7 @@ export const Solmail: React.FC = () => {
         borderBottomLeftRadius={21}
         display={{
           base: id ? "none" : "flex",
+          md: "flex",
         }}
       >
         <Flex

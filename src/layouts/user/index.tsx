@@ -71,12 +71,11 @@ export const UserLayout: React.FC = () => {
         flex={"auto"}
         borderLeftRadius={20}
         direction={"column"}
-        boxShadow={`-1px 0px 0px 0px #181818`}
       >
         <Flex
           as={"nav"}
           borderBottom={"solid 1px"}
-          borderBottomColor={"#1a1a1a"}
+          borderBottomColor={"surface.700"}
         >
           <Navbar />
         </Flex>

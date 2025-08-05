@@ -10,6 +10,7 @@ import { FaShareAlt } from "react-icons/fa";
 import AvatarImage from "@assets/avatar.png";
 import { useProfile } from "@hooks/useProfile";
 import { ShareReferralCode } from "@components/ShareReferralCode";
+import { Link } from "@tanstack/react-router";
 
 export const RewardsProfile: React.FC = () => {
   const { data } = useProfile();
@@ -24,12 +25,17 @@ export const RewardsProfile: React.FC = () => {
       direction="column"
       align="center"
       p={5}
-      bg="dark.60"
+      bg="surface.600"
       borderRadius={15}
       py={16}
     >
       <Avatar src={AvatarImage} boxSize={"100px"} mb={4} />
-      <Text fontSize="2xl" fontWeight="bold">
+      <Text
+        fontSize="2xl"
+        fontWeight="bold"
+        as={Link}
+        to="/u/rewards/milestones"
+      >
         {data?.milestone.title} {data?.milestone.icon}
       </Text>
       <Badge mt={2} colorScheme="green" px="8px" py="2px" borderRadius={15}>

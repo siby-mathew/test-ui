@@ -113,13 +113,14 @@ export const Sidebar: React.FC = () => {
       }}
       direction={"row"}
       data-group
+      bg="surface.100"
     >
       <Flex
         w={{
           base: "50px",
         }}
         direction={"column"}
-        bg="surface.200"
+        bg="surface.400"
       >
         <VStack align={"center"} px={"8px"} py={"10px"}>
           <Flex my={"8px"}>
@@ -137,7 +138,7 @@ export const Sidebar: React.FC = () => {
                   color={"light.100"}
                 >
                   <ChakraLink
-                    color={active ? "green.500" : ""}
+                    color={active ? "solana.middle" : ""}
                     as={Link}
                     py={2}
                     to={menu.link}
@@ -296,8 +297,8 @@ const SidebarMenu: React.FC<MenuConfig> = ({
         bg: !_isActive ? "surface.200" : "",
       }}
     >
-      <Icon as={icon} mr={2} color={_isActive ? "green.500" : ""} />
-      <Box as="span" color={_isActive ? "green.500" : ""}>
+      <Icon as={icon} mr={2} color={_isActive ? "solana.middle" : ""} />
+      <Box as="span" color={_isActive ? "solana.middle" : ""}>
         {name}
       </Box>
       <LinkOverlay as={Link} to={link} />

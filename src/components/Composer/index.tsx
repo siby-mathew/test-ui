@@ -30,7 +30,7 @@ export const Composer: React.FC = () => {
             bottom={0}
             borderTopRadius={8}
             maxW={550}
-            bg="#181818"
+            bg="surface.700"
             w="full"
             alignItems={"flex-end"}
           >
