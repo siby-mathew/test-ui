@@ -20,12 +20,7 @@ export const useUsernameStatus = () => {
 
   return useMutation({
     mutationKey: [QueryKeys.USERNAME_STATUS],
-    mutationFn: async ({
-      username,
-    }: {
-      username: string;
-      onComplete?: (data: any) => void;
-    }) => {
+    mutationFn: async ({ username }: { username: string }) => {
       if (!program) return false;
 
       const [usernameAccountPDA] = getUsernamePDA(username, program.programId);
@@ -33,6 +28,7 @@ export const useUsernameStatus = () => {
       try {
         const account =
           await program.account.usernameAccount.fetch(usernameAccountPDA);
+
         return account;
       } catch {
         return false;
