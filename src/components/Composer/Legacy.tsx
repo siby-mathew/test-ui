@@ -38,7 +38,7 @@ import "react-quill/dist/quill.snow.css";
 import QuillEditor from "./Quill";
 import { IoSend } from "react-icons/io5";
 import { Attachments } from "./Attachments";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { EditorToolbar } from "./EditorToolbar";
@@ -46,6 +46,8 @@ import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
 import { generateHtmlTag } from "@utils/string/generateHtml";
+import { useEmailResolver } from "@hooks/useEmailResolver";
+import { useUsernameStatus } from "@hooks/useUsername";
 
 const initialValues = {
   to: "",
@@ -217,11 +219,6 @@ export const ComposerLegacy: React.FC = () => {
     }
   };
 
-  // const reset = () => {
-  //   methods.reset(initialValues);
-  //   set(new Date().getTime());
-  // };
-
   const handleChange = (value: string) => {
     methods.setValue("body", value);
   };
@@ -230,7 +227,26 @@ export const ComposerLegacy: React.FC = () => {
     methods.setValue("solanaPay", payload);
     onClose();
   };
+  const { mutateAsync: _resolveEmail, isPending } = useUsernameStatus();
+  const toAddress = methods.getValues().to;
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      _resolveEmail({
+        username: toAddress,
+        onComplete: (data) => {
+          console.log(data);
+        },
+      });
+    }, 800);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [_resolveEmail, toAddress]);
+
+  methods.watch(["to"]);
   if (composerCollapsed) {
     return null;
   }
@@ -248,6 +264,7 @@ export const ComposerLegacy: React.FC = () => {
         minH={"80vh"}
         h="100%"
       >
+        {isPending ? "Checking..." : ""}
         <Flex direction={"column"}>
           <Flex
             borderBottom={"solid 1px"}

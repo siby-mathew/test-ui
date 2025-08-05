@@ -20,7 +20,12 @@ export const useUsernameStatus = () => {
 
   return useMutation({
     mutationKey: [QueryKeys.USERNAME_STATUS],
-    mutationFn: async ({ username }: { username: string }) => {
+    mutationFn: async ({
+      username,
+    }: {
+      username: string;
+      onComplete?: (data: any) => void;
+    }) => {
       if (!program) return false;
 
       const [usernameAccountPDA] = getUsernamePDA(username, program.programId);
@@ -45,7 +50,11 @@ export const useClaimUserName = () => {
   return useMutation({
     mutationKey: [QueryKeys.USERNAME_STATUS],
     mutationFn: async ({ username }: { username: string }) => {
-      if (!program || !provider?.publicKey) return false;
+      console.log(
+        provider?.publicKey.toString(),
+        provider?.wallet.publicKey.toString()
+      );
+      if (!program || !provider?.publicKey || !provider.wallet) return false;
 
       const [usernameAccountPDA] = getUsernamePDA(username, program.programId);
 

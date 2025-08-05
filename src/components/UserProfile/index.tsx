@@ -12,6 +12,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { RiShutDownLine } from "react-icons/ri";
 
 import { useSessionHandler } from "@hooks/useSessionHandler";
+
 export const UserProfileCard: React.FC = () => {
   const { user } = usePrivy();
 
@@ -84,6 +85,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
 }) => {
   const { onLogout, isPending } = useSessionHandler();
   const { user } = usePrivy();
+
   return (
     <Flex
       mt={2}

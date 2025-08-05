@@ -1,8 +1,11 @@
 import { Flex } from "@chakra-ui/react";
 import { SolBalance } from "@components/SolBalance";
 import { UserProfileCard } from "@components/UserProfile";
+// import { useUsernames } from "@hooks/useUsernames";
 
 export const Navbar: React.FC = () => {
+  // const { data } = useUsernames();
+  // console.log(data);
   return (
     <Flex
       w="100%"
