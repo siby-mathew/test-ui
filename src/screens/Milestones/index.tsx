@@ -54,7 +54,6 @@ const MileStoneCard: React.FC<
 export const Milestones: React.FC = () => {
   const { data: profile } = useProfile();
   const { data } = useMilestones();
-  console.log(data, profile);
 
   return (
     <CustomScrollbarWrapper>

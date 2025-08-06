@@ -28,9 +28,10 @@ export const useUsernameStatus = () => {
       try {
         const account =
           await program.account.usernameAccount.fetch(usernameAccountPDA);
-
+        console.log("Yepppp", account);
         return account;
-      } catch {
+      } catch (e) {
+        console.log(e);
         return false;
       }
     },
@@ -46,10 +47,6 @@ export const useClaimUserName = () => {
   return useMutation({
     mutationKey: [QueryKeys.USERNAME_STATUS],
     mutationFn: async ({ username }: { username: string }) => {
-      console.log(
-        provider?.publicKey.toString(),
-        provider?.wallet.publicKey.toString()
-      );
       if (!program || !provider?.publicKey || !provider.wallet) return false;
 
       const [usernameAccountPDA] = getUsernamePDA(username, program.programId);

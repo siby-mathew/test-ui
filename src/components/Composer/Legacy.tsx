@@ -15,12 +15,7 @@ import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
 import { Subject } from "./Subject";
 import { FieldWrapper } from "@components/Field";
-import {
-  encryptData,
-  getSaltIV,
-  isValidAddress,
-  resolveEmail,
-} from "@utils/index";
+import { encryptData, getSaltIV } from "@utils/index";
 import { web3 } from "@coral-xyz/anchor";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -47,14 +42,14 @@ import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
 import { generateHtmlTag } from "@utils/string/generateHtml";
 
+import { useEmailResolver } from "@hooks/useEmailResolver";
+
 const initialValues = {
   to: "",
   subject: "",
   body: "",
   files: [],
 };
-
-const solEmailRegex = /^[^\s@]+@[^\s@]+\.sol$/;
 
 export const ComposerLegacy: React.FC = () => {
   const connection = useSolanaConnection();
@@ -96,32 +91,19 @@ export const ComposerLegacy: React.FC = () => {
 
   const { onOpen, isOpen, onClose } = useDisclosure();
 
-  const validateToAddress = (value: string) => {
-    if (value === wallet?.address?.toString()) {
-      return "To address cannot be same as your wallet address";
-    }
-
-    const isValidSolAddress = isValidAddress(value);
-    const isValidSolEmail = solEmailRegex.test(value);
-
-    if (!isValidSolAddress && !isValidSolEmail) {
-      return "Enter a valid wallet address or  sol domain";
-    }
-
-    return true;
-  };
-
+  const { mutateAsync: resolveRecepient } = useEmailResolver();
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
     updateStatus("Preparing your mail");
     collpaseComposer();
-    const to = await resolveEmail(values.to, connection);
-    if (!to || !from) {
+    const data = await resolveRecepient({ username: values.to });
+    if (!data || !data.address || !from) {
       expandComposer();
       showToast("Failed to send", {
         type: "error",
       });
       return;
     }
+    const to = data.address;
 
     const [user0, user1] =
       from?.toString() >= to?.toString() ? [from, to] : [to, from];
@@ -217,6 +199,17 @@ export const ComposerLegacy: React.FC = () => {
     }
   };
 
+  const onValidateAddress = async (username: string) => {
+    const res = await resolveRecepient({
+      username,
+    });
+    if (res && res.status) {
+      return !0;
+    }
+
+    return res && res.message ? res.message : "Please enter a valid address";
+  };
+
   const handleChange = (value: string) => {
     methods.setValue("body", value);
   };
@@ -287,7 +280,7 @@ export const ComposerLegacy: React.FC = () => {
                   placeholder="Wallet address or sol domain"
                   {...methods.register("to", {
                     required: "To address is required",
-                    validate: validateToAddress,
+                    validate: onValidateAddress,
                   })}
                 />
               </FieldWrapper>

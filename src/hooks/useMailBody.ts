@@ -99,9 +99,6 @@ export const useMailBody = (
       div.innerHTML = html;
 
       const images: Attachment[] = [];
-      // if (sid && id == sid) {
-      //   console.log(html);
-      // }
 
       div.querySelectorAll("img,[data-file]").forEach((img) => {
         const attr =

@@ -9,6 +9,8 @@ import { AnalyticsList } from "@components/AnalyticsList";
 import { useProfile } from "@hooks/useProfile";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { config } from "@const/config";
+import { RewardsChart } from "@components/RewardsChart";
+import { Quests } from "@components/QuestSlider";
 
 export const ReferralDashboard = () => {
   const { data } = useProfile();
@@ -43,7 +45,9 @@ export const ReferralDashboard = () => {
             rowSpan={2}
             borderRadius={15}
             bg="surface.600"
-          ></GridItem>
+          >
+            <RewardsChart />
+          </GridItem>
 
           <GridItem colSpan={2}>
             <Flex
@@ -75,7 +79,9 @@ export const ReferralDashboard = () => {
             <AnalyticsList />
           </GridItem>
           <GridItem>
-            <Flex h="100%" bg="surface.600" borderRadius={15}></Flex>
+            <Flex h="100%" bg="surface.600" borderRadius={15}>
+              <Quests />
+            </Flex>
           </GridItem>
         </Grid>
       </CustomScrollbarWrapper>

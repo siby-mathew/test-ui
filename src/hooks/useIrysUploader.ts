@@ -20,10 +20,8 @@ export const useIrysUploader = () => {
 
     if (balance.isLessThan(price)) {
       try {
-        console.log("need funding");
         await webIrys.fund(Number(price.toString()));
       } catch {
-        console.log("Failed to fund Arweave node");
         throw "Failed to fund Arweave node";
       }
     }

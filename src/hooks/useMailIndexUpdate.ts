@@ -50,8 +50,8 @@ export const useLabelIndexUpdate = (id: string) => {
         await awaitTransactionSignatureConfirmation(trx, connection);
         clear();
         navigate({ to: "/u/solmail/inbox/all" });
-      } catch (E) {
-        console.log(E);
+      } catch {
+        //
       }
     },
   });

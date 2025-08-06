@@ -44,7 +44,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
           onClose();
         }
       } catch {
-        console.log();
+        //
       }
     });
   };

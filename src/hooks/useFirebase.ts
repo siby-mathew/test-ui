@@ -49,10 +49,8 @@ export const useFirebaseNotification = (isAuthenticated: boolean) => {
         fcmId: token,
       });
       localStorage.removeItem("notification-token");
-
-      console.log("Notifications permission revoked.");
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     // Trigger permission request if user is authorized
