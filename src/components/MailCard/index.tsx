@@ -44,9 +44,9 @@ export const MailCard: React.FC<FormattedMailBox> = ({
       fontWeight={!isRead ? "bold" : ""}
       opacity={!isRead ? 1 : 0.5}
       pr={5}
-      bg={isActive ? "surface.300" : ""}
+      bg={isActive ? "surface.800" : ""}
       _hover={{
-        bg: "surface.300",
+        bg: "surface.800",
       }}
     >
       <Avatar top={2} left={"10px"} name={addres} />
