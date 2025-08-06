@@ -1,14 +1,15 @@
 import { Flex, Icon, Image, Spinner } from "@chakra-ui/react";
 import { download, getFileConfig } from "@utils/file";
-import { shortenPrincipalId } from "@utils/string";
+import { getStorageURLByVersion, shortenPrincipalId } from "@utils/string";
 import { useTransition } from "react";
 
 export const DownloadbleAttachment: React.FC<{
   name: string;
   path: string;
-}> = ({ name, path }) => {
+  version: string;
+}> = ({ name, path, version }) => {
   const config = getFileConfig(name);
-  const URL = `${import.meta.env.VITE_SOLMAIL_IRYS_BASE_URL}${path}`;
+  const URL = getStorageURLByVersion(version, path);
   const [isPending, start] = useTransition();
   const onClick = () => {
     if (isPending) return;

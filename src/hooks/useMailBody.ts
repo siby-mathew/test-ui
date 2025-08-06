@@ -11,7 +11,7 @@ import {
   type FormattedMailBox,
   type PaymentConfig,
 } from "src/types";
-import { decryptData } from "@utils/string";
+import { decryptData, getStorageURLByVersion } from "@utils/string";
 
 async function fetchContent(url: string): Promise<string> {
   try {
@@ -50,12 +50,12 @@ export const useMailBody = (
     if (version === StorageVersion.arweave) {
       const [fileId] = body.split("manifestId=");
       const result = await fetchContent(
-        `${import.meta.env.VITE_SOLMAIL_IRYS_BASE_URL}${fileId}`
+        getStorageURLByVersion(mail?.version ?? "", fileId)
       );
       return result;
     } else {
       const result: any = await fetchContent(
-        `${import.meta.env.VITE_SOLMAIL_PINATA_BASE_URL}${body}`
+        getStorageURLByVersion(mail?.version ?? "", body)
       );
       try {
         const parsed = JSON.parse(result);

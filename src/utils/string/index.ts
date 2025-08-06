@@ -8,3 +8,4 @@ export * from "./getFileName";
 export * from "./isPublicKey";
 export * from "./share";
 export * from "./isActiveRoute";
+export * from "./getStorageUrlByVersion";

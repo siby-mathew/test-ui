@@ -1,39 +1,42 @@
 import { Button, Flex, Icon, Image } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
 
-import GmailLogo from "@assets/gmail.png";
+// import GmailLogo from "@assets/gmail.png";
 
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import { useMemo } from "react";
-import { useGetWalletById } from "@hooks/useGetWalletById";
-import { shortenPrincipalId, trim } from "@utils/string";
+
+import { shortenPrincipalId } from "@utils/string";
 import { ClipboardText } from "@components/ClipboardText";
 
 import { RiShutDownLine } from "react-icons/ri";
 
 import { useSessionHandler } from "@hooks/useSessionHandler";
+import { config } from "@const/config";
+import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
 export const UserProfileCard: React.FC = () => {
-  const { user } = usePrivy();
+  // const { user } = usePrivy();
 
-  const { get } = useGetWalletById();
-  const { isWallet, displayName, icon } = useMemo(() => {
-    const account = user?.linkedAccounts[0] as any;
-    if (!account || !account.address) {
-      return {
-        displayName: "",
-        icon: "",
-        isWallet: !1,
-      };
-    }
-    const displayName = account?.address;
-    const isWallet = account.type !== "email";
-    return {
-      displayName,
-      icon: !isWallet ? GmailLogo : (get(displayName)?.meta.icon ?? ""),
-      isWallet,
-    };
-  }, [get, user?.linkedAccounts]);
+  // const { get } = useGetWalletById();
+  // const { isWallet, displayName, icon } = useMemo(() => {
+  //   const account = user?.linkedAccounts[0] as any;
+  //   if (!account || !account.address) {
+  //     return {
+  //       displayName: "",
+  //       icon: "",
+  //       isWallet: !1,
+  //     };
+  //   }
+  //   const displayName = account?.address;
+  //   const isWallet = account.type !== "email";
+  //   return {
+  //     displayName,
+  //     icon: !isWallet ? GmailLogo : (get(displayName)?.meta.icon ?? ""),
+  //     isWallet,
+  //   };
+  // }, [get, user?.linkedAccounts]);
+
+  const { address } = usePrivyWallet();
 
   return (
     <Flex
@@ -54,11 +57,9 @@ export const UserProfileCard: React.FC = () => {
       }}
     >
       <Flex boxSize={"20px"} borderRadius={8}>
-        <Image src={icon} alt="Gmail" />
+        <Image src={config.logo} alt="Gmail" />
       </Flex>
-      <Flex fontSize={14}>
-        {isWallet ? shortenPrincipalId(displayName) : trim(displayName)}
-      </Flex>
+      <Flex fontSize={14}>{shortenPrincipalId(address)}</Flex>
       <Flex>
         <Icon as={MdOutlineArrowDropDown} />
       </Flex>
@@ -73,7 +74,7 @@ export const UserProfileCard: React.FC = () => {
           display: "flex",
         }}
       >
-        <Profile name={displayName} isWallet={isWallet} />
+        <Profile name={address} isWallet={true} />
       </Flex>
     </Flex>
   );
@@ -89,7 +90,7 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
   return (
     <Flex
       mt={2}
-      bg="surface.400"
+      bg="surface.800"
       borderRadius={10}
       minH={100}
       w="100%"
