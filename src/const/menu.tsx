@@ -15,6 +15,7 @@ import {
 import { TbArrowsTransferDown } from "react-icons/tb";
 import type { MenuConfig } from "src/types";
 import { SolmailHeader } from "@components/SolmailHeader";
+import { LuMilestone } from "react-icons/lu";
 
 export const SOLMAIL_MENU: MenuConfig[] = [
   {
@@ -147,6 +148,13 @@ export const MENU: MenuConfig[] = [
     name: "Rewards",
     link: `/u/rewards`,
     id: "rewards",
-    submenu: [],
+    submenu: [
+      {
+        icon: LuMilestone,
+        name: "Milestones",
+        link: `/u/rewards/milestones`,
+        id: "transactions",
+      },
+    ],
   },
 ];

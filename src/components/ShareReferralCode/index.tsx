@@ -151,7 +151,6 @@ Let’s grow together `;
                 borderRadius={5}
                 transition={"all ease .2s"}
                 bg="surface.300"
-                cursor={"pointer"}
                 onClick={!isEditMode ? onCopy : noop}
                 _hover={{
                   background: "surface.200",
@@ -174,7 +173,6 @@ Let’s grow together `;
                       variant={"unstyled"}
                       fontWeight={"bold"}
                       placeholder="Referral Code"
-                      cursor={"pointer"}
                       textTransform={"uppercase"}
                       {...methods.register("code", {
                         required: "Code is required",

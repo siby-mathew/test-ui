@@ -17,13 +17,10 @@ const MileStoneCard: React.FC<
       borderRadius={10}
       transition={"all ease .2s"}
       cursor={"pointer"}
-      bg={"surface.200"}
+      bg={"surface.500"}
       color={"light.100"}
-      bgGradient={
-        isActive
-          ? "linear(to-tr, solana.middle, surface.200, surface.200,solana.middle)"
-          : ""
-      }
+      position={"relative"}
+      bgGradient={isActive ? "" : ""}
       border={"solid 2px"}
       borderColor={isActive ? "solana.middle" : "transparent"}
       _hover={{
@@ -57,7 +54,7 @@ export const Milestones: React.FC = () => {
 
   return (
     <CustomScrollbarWrapper>
-      <Container maxW={"100%"}>
+      <Container maxW={"100%"} pb={5}>
         <Flex maxW={"500px"} mx="auto" direction={"column"}>
           <Flex py={5} fontSize={20} fontWeight={"bold"}>
             Milstones
