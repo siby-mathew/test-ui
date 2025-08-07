@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { encodeURL } from "@solana/pay";
 import { createQR } from "@solana/pay";
 import { PublicKey } from "@solana/web3.js";
@@ -22,5 +23,5 @@ export const SolanaPayQR: React.FC<{ address: string }> = ({ address }) => {
     }
   }, [address]);
 
-  return <div ref={qrRef} />;
+  return <Box borderRadius={5} overflow={"hidden"} ref={qrRef} />;
 };

@@ -11,23 +11,20 @@ import {
   MenuButton,
   chakra,
   Link as ChakraLink,
-  useClipboard,
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { config } from "@const/config";
 import { MENU } from "@const/menu";
 import { Link, useLocation } from "@tanstack/react-router";
-import { BsArrowUpRightSquareFill, BsPlusCircleFill } from "react-icons/bs";
-import { FaCopy } from "react-icons/fa6";
+import { BsPlusCircleFill } from "react-icons/bs";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { isActive, shortenPrincipalId } from "@utils/index";
 import type { MenuConfig } from "src/types";
-import PrivyLogo from "@assets/privy.jpg";
+
 import JupiterLogo from "@assets/jupiter.svg";
-import { TbCopyCheckFilled } from "react-icons/tb";
-import { useSolanaWallets } from "@hooks/useEmbeddedWallet";
+
 import { LINKS } from "@const/links";
 import { ClipboardText } from "@components/ClipboardText";
 import { getSolscanAddress } from "@utils/string/getSolscanUrl";
@@ -241,30 +238,6 @@ const SidebarFooter: React.FC = () => {
   );
 };
 
-const WalletList: React.FC = () => {
-  const { wallets, exportWallet } = useSolanaWallets();
-  return (
-    <>
-      {wallets &&
-        wallets.length > 0 &&
-        wallets.map((wallet) => {
-          const isSolanaEmbedded =
-            wallet.type === "solana" && wallet.walletClientType === "privy";
-
-          return (
-            <Wallet
-              name={wallet.meta.name}
-              address={wallet.address?.toString()}
-              onExport={isSolanaEmbedded ? exportWallet : undefined}
-              logo={!isSolanaEmbedded ? (wallet.meta.icon ?? "") : PrivyLogo}
-              key={wallet?.address?.toString()}
-            />
-          );
-        })}
-    </>
-  );
-};
-
 const SidebarMenu: React.FC<MenuConfig> = ({
   name,
   link,
@@ -295,58 +268,5 @@ const SidebarMenu: React.FC<MenuConfig> = ({
       </Box>
       <LinkOverlay as={Link} to={link} />
     </LinkBox>
-  );
-};
-
-type WalletProps = {
-  logo: string;
-  name: string;
-  address: string;
-  onExport?: () => void;
-};
-
-const Wallet: React.FC<WalletProps> = ({ logo, name, address, onExport }) => {
-  const { onCopy, hasCopied } = useClipboard(address ?? "");
-  return (
-    <Flex
-      direction={"row"}
-      py={1}
-      position={"relative"}
-      w="100%"
-      cursor={"pointer"}
-      transition={"all ease .2s"}
-      _hover={{
-        opacity: 0.8,
-      }}
-    >
-      <Flex fontSize={13} w="100%" alignItems={"center"}>
-        <Image boxSize={"18px"} borderRadius={5} src={logo} alt={name} />
-        <chakra.span mx={2}>{shortenPrincipalId(address)}</chakra.span>
-        <Flex flex={"auto"} justifyContent={"flex-end"} alignItems={"center"}>
-          {onExport && (
-            <Box
-              p={1}
-              onClick={onExport}
-              opacity={0.2}
-              _hover={{
-                opacity: 1,
-              }}
-            >
-              <Icon fontSize={12} as={BsArrowUpRightSquareFill} />
-            </Box>
-          )}
-          <Box
-            p={1}
-            opacity={0.2}
-            onClick={onCopy}
-            _hover={{
-              opacity: 1,
-            }}
-          >
-            <Icon as={hasCopied ? TbCopyCheckFilled : FaCopy} />
-          </Box>
-        </Flex>
-      </Flex>
-    </Flex>
   );
 };

@@ -9,6 +9,7 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
@@ -31,11 +32,12 @@ import { Link as TanstackRouter } from "@tanstack/react-router";
 import { useGetWalletById } from "@hooks/useGetWalletById";
 import { useMemo } from "react";
 import GmailLogo from "@assets/gmail.png";
+import { ShareAddress } from "@components/ShareAddress";
 export const UserProfileCard: React.FC = () => {
   const { address } = usePrivyWallet();
 
   return (
-    <Menu isOpen>
+    <Menu>
       <MenuButton
         display={"inline-flex"}
         as={Button}
@@ -113,8 +115,10 @@ const ProfileHeader: React.FC = () => {
 
 const ProfileBalance: React.FC = () => {
   const { wallet } = usePrivyWallet();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Flex direction={"column"} my={3}>
+      <ShareAddress isOpen={isOpen} onClose={onClose} />
       <Flex
         fontSize={15}
         direction={"row"}
@@ -124,7 +128,7 @@ const ProfileBalance: React.FC = () => {
         <SolBalance />
       </Flex>
       <Flex alignItems={"center"} justifyContent={"center"} my={2}>
-        <Button>Deposit</Button>
+        <Button onClick={onOpen}>Deposit</Button>
       </Flex>
       <Flex alignItems={"center"} justifyContent={"center"}>
         <ClipboardText textToCopy={wallet?.address ?? ""}>
@@ -151,8 +155,8 @@ const ProfileMenu: React.FC = () => {
         w="100%"
         p={3}
         borderRadius={15}
-        my={1}
         pb={4}
+        mt={2}
       >
         <Flex alignItems={"center"} justifyContent={"center"}>
           <LoginInfo />
@@ -196,9 +200,9 @@ export const LoginInfo: React.FC = () => {
     };
   }, [get, user?.linkedAccounts]);
   return (
-    <Flex direction={"column"}>
+    <Flex direction={"column"} alignItems={"center"}>
       <Flex fontWeight={"bold"}>Logged in via</Flex>
-      <Flex direction={"row"} gap={1} mt={"3px"}>
+      <Flex direction={"row"} gap={1} mt={"3px"} alignItems={"center"}>
         <Flex>
           <Image boxSize={"16px"} src={icon} />
         </Flex>
