@@ -101,16 +101,17 @@ export const Sidebar: React.FC = () => {
   }, [pathname]);
   const { wallet } = usePrivyWallet();
   const { username, isLoading } = useUsernameById(wallet?.address);
-
+  const hasChildMenu =
+    selectedmenu && selectedmenu.submenu && selectedmenu.submenu.length > 0;
   return (
     <Flex
       w={{
         base: "50px",
-        md: "300px",
+        ...(hasChildMenu ? { md: "300px" } : {}),
       }}
       maxW={{
         base: "50px",
-        md: "300px",
+        ...(hasChildMenu ? { md: "300px" } : {}),
       }}
       direction={"row"}
       data-group
@@ -153,6 +154,7 @@ export const Sidebar: React.FC = () => {
         </VStack>
       </Flex>
       <Flex
+        hidden={!hasChildMenu}
         direction={"column"}
         p={5}
         pb={3}

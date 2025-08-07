@@ -101,24 +101,6 @@ export const DOCUSIGN_MENU: MenuConfig[] = [
   },
 ];
 
-// const PROFILE_MENU: MenuConfig[] = [
-//   {
-//     icon: IoSettingsSharp,
-//     name: "Settings",
-//     id: "settings",
-//     link: "",
-//   },
-//   {
-//     icon: RiShutDownLine,
-//     name: "Signout",
-//     id: "signout",
-//     link: "",
-//     onClick: () => {
-//       localStorage.clear();
-//       window.location.reload();
-//     },
-//   },
-// ];
 export const MENU: MenuConfig[] = [
   {
     icon: IoMail,
@@ -132,7 +114,7 @@ export const MENU: MenuConfig[] = [
     icon: MdEditDocument,
     name: "Solsign",
     link: `/u/feature/`,
-    id: "solsign",
+    id: "feature",
     // submenu: DOCUSIGN_MENU,
   },
   { icon: FaWallet, name: "Wallet", link: `/u/coming-soon`, id: "wallet" },
