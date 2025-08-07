@@ -10,7 +10,7 @@ const primary = definePartsStyle({
   },
   dialog: {
     borderRadius: "15px",
-    bg: "surface.400",
+    bg: "surface.900",
   },
 });
 

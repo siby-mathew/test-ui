@@ -33,9 +33,10 @@ import { useGetWalletById } from "@hooks/useGetWalletById";
 import { useMemo } from "react";
 import GmailLogo from "@assets/gmail.png";
 import { ShareAddress } from "@components/ShareAddress";
+import { useBalance } from "@hooks/useBalance";
 export const UserProfileCard: React.FC = () => {
   const { address } = usePrivyWallet();
-
+  const { formattedBalance } = useBalance();
   return (
     <Menu>
       <MenuButton
@@ -47,11 +48,16 @@ export const UserProfileCard: React.FC = () => {
           flexDirection: "row",
         }}
       >
-        <Flex direction={"row"}>
+        <Flex direction={"row"} alignItems={"center"}>
           <chakra.span>
             <Image w="20px" src={config.logo} alt="Solmail" />
           </chakra.span>
-          <chakra.span ml={1}>{shortenPrincipalId(address)}</chakra.span>
+          <chakra.span fontWeight={"medium"} fontSize={13} ml={1}>
+            {shortenPrincipalId(address, 2, 2)}
+            <chakra.span ml={1} color={"solana.middle"} fontWeight={"bold"}>
+              {formattedBalance}
+            </chakra.span>
+          </chakra.span>
         </Flex>
       </MenuButton>
 
@@ -91,23 +97,31 @@ const ProfileHeader: React.FC = () => {
   return (
     <Flex justifyContent={"center"} alignItems={"center"} direction={"row"}>
       <chakra.span> Solmail inbox account</chakra.span>
-      <Menu>
-        <MenuButton
-          mx={2}
-          as={Flex}
-          cursor={"pointer"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          mt={"5px"}
-        >
-          <Icon as={IoInformationCircleSharp} />
-        </MenuButton>
-        <MenuList bg="surface.900" p={3} border={"none"}>
-          <Flex w="300px" fontSize={12}>
-            Your SolMail InBox account is non-custodial wallet powered by Privy,
-            with the option to export your private key.
-          </Flex>
-        </MenuList>
+      <Menu placement="auto">
+        {({ isOpen }) => {
+          return (
+            <>
+              <MenuButton
+                mx={2}
+                as={Flex}
+                cursor={"pointer"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                mt={"5px"}
+              >
+                <Icon as={IoInformationCircleSharp} />
+              </MenuButton>
+              {isOpen && (
+                <MenuList bg="surface.900" p={3} border={"none"}>
+                  <Flex w="300px" fontSize={12}>
+                    Your SolMail InBox account is non-custodial wallet powered
+                    by Privy, with the option to export your private key.
+                  </Flex>
+                </MenuList>
+              )}
+            </>
+          );
+        }}
       </Menu>
     </Flex>
   );
