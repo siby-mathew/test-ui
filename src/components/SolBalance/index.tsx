@@ -16,8 +16,13 @@ export const SolBalance: React.FC = () => {
   const isLoading = !isFetched || isFetching || isRefetching;
 
   return (
-    <Flex alignItems={"center"} px={1}>
-      <chakra.span fontSize={14}>
+    <Flex
+      alignItems={"center"}
+      px={1}
+      justifyContent={"center"}
+      fontWeight={"bold"}
+    >
+      <chakra.span>
         <SkeletonText
           startColor="surface.600"
           noOfLines={1}

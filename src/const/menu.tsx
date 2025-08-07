@@ -129,12 +129,12 @@ export const MENU: MenuConfig[] = [
   },
   {
     icon: MdEditDocument,
-    name: "Docusign",
-    link: `/u/docusign/dashboard`,
-    id: "docusign",
-    submenu: DOCUSIGN_MENU,
+    name: "Solsign",
+    link: `/u/feature/`,
+    id: "solsign",
+    // submenu: DOCUSIGN_MENU,
   },
-  { icon: FaWallet, name: "Wallet", link: `/u/wallet/trade`, id: "wallet" },
+  { icon: FaWallet, name: "Wallet", link: `/u/coming-soon`, id: "wallet" },
   {
     icon: TbArrowsTransferDown,
     name: "Transactions",

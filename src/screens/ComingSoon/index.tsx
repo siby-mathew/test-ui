@@ -10,10 +10,16 @@ export const ComingSoonPage: React.FC = () => {
       direction={"column"}
     >
       <Flex>
-        <chakra.span fontSize={20} fontWeight={"bolder"}>
-          Coming Soon
+        <chakra.span
+          bg="solana"
+          bgClip={"text"}
+          fontWeight={"bold"}
+          fontSize={30}
+        >
+          Solsign
         </chakra.span>
       </Flex>
+
       <Flex>We’re working on something awesome. Stay tuned!</Flex>
     </Flex>
   );

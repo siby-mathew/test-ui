@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { SolBalance } from "@components/SolBalance";
+
 import { UserProfileCard } from "@components/UserProfile";
 
 export const Navbar: React.FC = () => {
@@ -15,7 +15,6 @@ export const Navbar: React.FC = () => {
     >
       <Flex></Flex>
       <Flex gap={3}>
-        <SolBalance />
         <UserProfileCard />
       </Flex>
     </Flex>

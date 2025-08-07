@@ -52,7 +52,6 @@ export const useBalance = (
     const amount = toRawAmount(requestedAmount, decimals);
     const balance = new BigNumber(data);
     return balance.gt(amount);
-    return !0;
   }, [data, decimals, requestedAmount]);
 
   return {

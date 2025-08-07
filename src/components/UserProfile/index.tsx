@@ -1,7 +1,17 @@
-import { Button, Flex, Icon, Image } from "@chakra-ui/react";
+import {
+  Button,
+  chakra,
+  Divider,
+  Flex,
+  Icon,
+  Image,
+  Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  VStack,
+} from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
-
-// import GmailLogo from "@assets/gmail.png";
 
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
@@ -14,77 +24,43 @@ import { useSessionHandler } from "@hooks/useSessionHandler";
 import { config } from "@const/config";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
+import { IoInformationCircleSharp } from "react-icons/io5";
+
+import { SolBalance } from "@components/SolBalance";
+import { Link as TanstackRouter } from "@tanstack/react-router";
+import { useGetWalletById } from "@hooks/useGetWalletById";
+import { useMemo } from "react";
+import GmailLogo from "@assets/gmail.png";
 export const UserProfileCard: React.FC = () => {
-  // const { user } = usePrivy();
-
-  // const { get } = useGetWalletById();
-  // const { isWallet, displayName, icon } = useMemo(() => {
-  //   const account = user?.linkedAccounts[0] as any;
-  //   if (!account || !account.address) {
-  //     return {
-  //       displayName: "",
-  //       icon: "",
-  //       isWallet: !1,
-  //     };
-  //   }
-  //   const displayName = account?.address;
-  //   const isWallet = account.type !== "email";
-  //   return {
-  //     displayName,
-  //     icon: !isWallet ? GmailLogo : (get(displayName)?.meta.icon ?? ""),
-  //     isWallet,
-  //   };
-  // }, [get, user?.linkedAccounts]);
-
   const { address } = usePrivyWallet();
 
   return (
-    <Flex
-      borderRadius={10}
-      border={"solid 1px"}
-      borderColor={"surface.500"}
-      alignItems={"center"}
-      position={"relative"}
-      p={"8px"}
-      px={"10px"}
-      direction={"row"}
-      gap={1}
-      cursor={"pointer"}
-      transition={"all ease .2s"}
-      data-group
-      _hover={{
-        bg: "surface.400",
-      }}
-    >
-      <Flex boxSize={"20px"} borderRadius={8}>
-        <Image src={config.logo} alt="Gmail" />
-      </Flex>
-      <Flex fontSize={14}>{shortenPrincipalId(address)}</Flex>
-      <Flex>
-        <Icon as={MdOutlineArrowDropDown} />
-      </Flex>
-      <Flex
-        position={"absolute"}
-        top={"100%"}
-        right={0}
-        w="300px"
-        display={"none"}
-        zIndex={100}
-        _groupHover={{
+    <Menu isOpen>
+      <MenuButton
+        display={"inline-flex"}
+        as={Button}
+        rightIcon={<MdOutlineArrowDropDown />}
+        style={{
           display: "flex",
+          flexDirection: "row",
         }}
       >
-        <Profile name={address} isWallet={true} />
-      </Flex>
-    </Flex>
+        <Flex direction={"row"}>
+          <chakra.span>
+            <Image w="20px" src={config.logo} alt="Solmail" />
+          </chakra.span>
+          <chakra.span ml={1}>{shortenPrincipalId(address)}</chakra.span>
+        </Flex>
+      </MenuButton>
+
+      <MenuList bg={"transparent"} border={"none"} p={0}>
+        <Profile />
+      </MenuList>
+    </Menu>
   );
 };
 
-const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
-  name,
-  isWallet,
-}) => {
-  const { onLogout, isPending } = useSessionHandler();
+const Profile: React.FC = () => {
   const { user } = usePrivy();
 
   return (
@@ -93,33 +69,142 @@ const Profile: React.FC<{ name: string; isWallet: boolean }> = ({
       bg="surface.800"
       borderRadius={10}
       minH={100}
-      w="100%"
       cursor={"default"}
       p={3}
       py={4}
       direction={"column"}
       data-id={user?.id?.toString()}
+      w="300px"
     >
-      <Flex direction={"column"} alignItems={"center"}>
-        <Flex fontWeight={"medium"}>
-          Connected with {isWallet ? "wallet" : "email"}
+      <ProfileHeader />
+      <Divider my={3} opacity={0.3} />
+      <ProfileBalance />
+      <Divider my={3} opacity={0.3} />
+      <ProfileMenu />
+    </Flex>
+  );
+};
+
+const ProfileHeader: React.FC = () => {
+  return (
+    <Flex justifyContent={"center"} alignItems={"center"} direction={"row"}>
+      <chakra.span> Solmail inbox account</chakra.span>
+      <Menu>
+        <MenuButton
+          mx={2}
+          as={Flex}
+          cursor={"pointer"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          mt={"5px"}
+        >
+          <Icon as={IoInformationCircleSharp} />
+        </MenuButton>
+        <MenuList bg="surface.900" p={3} border={"none"}>
+          <Flex w="300px" fontSize={12}>
+            Your SolMail InBox account is non-custodial wallet powered by Privy,
+            with the option to export your private key.
+          </Flex>
+        </MenuList>
+      </Menu>
+    </Flex>
+  );
+};
+
+const ProfileBalance: React.FC = () => {
+  const { wallet } = usePrivyWallet();
+  return (
+    <Flex direction={"column"} my={3}>
+      <Flex
+        fontSize={15}
+        direction={"row"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <SolBalance />
+      </Flex>
+      <Flex alignItems={"center"} justifyContent={"center"} my={2}>
+        <Button>Deposit</Button>
+      </Flex>
+      <Flex alignItems={"center"} justifyContent={"center"}>
+        <ClipboardText textToCopy={wallet?.address ?? ""}>
+          {shortenPrincipalId(wallet?.address ?? "")}
+        </ClipboardText>
+      </Flex>
+    </Flex>
+  );
+};
+
+const ProfileMenu: React.FC = () => {
+  const { onLogout, isPending } = useSessionHandler();
+  return (
+    <VStack>
+      <Link as={TanstackRouter} to="">
+        My Profile
+      </Link>
+      <Link as={TanstackRouter} to="/u/rewards">
+        Rewards
+      </Link>
+      <Flex
+        direction={"column"}
+        bg="surface.400"
+        w="100%"
+        p={3}
+        borderRadius={15}
+        my={1}
+        pb={4}
+      >
+        <Flex alignItems={"center"} justifyContent={"center"}>
+          <LoginInfo />
         </Flex>
-        <Flex opacity={0.5} fontSize={13}>
-          <ClipboardText trim={isWallet}>{name}</ClipboardText>
+        <Flex pt={5} justifyContent={"center"}>
+          <Button
+            bg="red.500"
+            _hover={{
+              bg: "red.600",
+            }}
+            onClick={onLogout}
+            leftIcon={<RiShutDownLine />}
+          >
+            Disconnect{isPending ? "ing..." : ""}
+          </Button>
         </Flex>
       </Flex>
+    </VStack>
+  );
+};
 
-      <Flex pt={5} justifyContent={"center"}>
-        <Button
-          bg="red.500"
-          _hover={{
-            bg: "red.600",
-          }}
-          onClick={onLogout}
-          leftIcon={<RiShutDownLine />}
-        >
-          Disconnect{isPending ? "ing..." : ""}
-        </Button>
+export const LoginInfo: React.FC = () => {
+  const { user } = usePrivy();
+
+  const { get } = useGetWalletById();
+  const { isWallet, displayName, icon } = useMemo(() => {
+    const account = user?.linkedAccounts[0] as any;
+    if (!account || !account.address) {
+      return {
+        displayName: "",
+        icon: "",
+        isWallet: !1,
+      };
+    }
+    const displayName = account?.address;
+    const isWallet = account.type !== "email";
+    return {
+      displayName,
+      icon: !isWallet ? GmailLogo : (get(displayName)?.meta.icon ?? ""),
+      isWallet,
+    };
+  }, [get, user?.linkedAccounts]);
+  return (
+    <Flex direction={"column"}>
+      <Flex fontWeight={"bold"}>Logged in via</Flex>
+      <Flex direction={"row"} gap={1} mt={"3px"}>
+        <Flex>
+          <Image boxSize={"16px"} src={icon} />
+        </Flex>
+        <Flex fontSize={13}>
+          {isWallet ? shortenPrincipalId(displayName) : displayName}
+        </Flex>
       </Flex>
     </Flex>
   );

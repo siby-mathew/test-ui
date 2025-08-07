@@ -20,7 +20,7 @@ import { MENU } from "@const/menu";
 import { Link, useLocation } from "@tanstack/react-router";
 import { BsArrowUpRightSquareFill, BsPlusCircleFill } from "react-icons/bs";
 import { FaCopy } from "react-icons/fa6";
-import { LiaWalletSolid } from "react-icons/lia";
+
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { isActive, shortenPrincipalId } from "@utils/index";
 import type { MenuConfig } from "src/types";
@@ -196,14 +196,6 @@ export const Sidebar: React.FC = () => {
                 <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
               </Flex>
             </Flex>
-
-            <Flex fontSize={14} opacity={0.5} alignItems={"center"}>
-              <Icon as={LiaWalletSolid} mr={2} /> Wallet
-            </Flex>
-
-            <VStack py={2} align={"start"} w="full">
-              <WalletList />
-            </VStack>
           </Flex>
         </Flex>
         <SidebarFooter />
