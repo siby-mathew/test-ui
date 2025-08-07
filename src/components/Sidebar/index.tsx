@@ -33,6 +33,8 @@ import { MenuHeader } from "@components/MenuHeader";
 import { noop } from "lodash";
 import { ClaimUserName } from "@components/ClaimUsername";
 import { DOMAINS } from "@const/domain";
+import { useUsernameById } from "@hooks/useUsernames";
+import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
 export const AppSwitch: React.FC = () => {
   return (
@@ -97,6 +99,8 @@ export const Sidebar: React.FC = () => {
     const menu = MENU.find((menu) => pathname.indexOf(menu.id) > -1);
     return menu || MENU[0];
   }, [pathname]);
+  const { wallet } = usePrivyWallet();
+  const { username, isLoading } = useUsernameById(wallet?.address);
 
   return (
     <Flex
@@ -164,36 +168,38 @@ export const Sidebar: React.FC = () => {
               return <SidebarMenu key={menu.id} {...menu} />;
             })}
           </VStack>
-          <Flex
-            align={"start"}
-            borderTop={"solid 1px"}
-            borderTopColor={"surface.300"}
-            py={3}
-            px={3}
-            direction={"column"}
-          >
-            <Flex direction={"column"}>
-              <Flex fontSize={14} opacity={0.5}>
-                Create username
-              </Flex>
-              <Flex
-                cursor={"pointer"}
-                alignItems={"center"}
-                mb={5}
-                transition={"all ease .2s"}
-                _hover={{
-                  opacity: 0.5,
-                }}
-                onClick={onOpen}
-                fontWeight={"bold"}
-                color={"solana.middle"}
-              >
-                <ClaimUserName isOpen={isOpen} onClose={onClose} />
-                {DOMAINS.DEFAULT}
-                <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
+          {!username && !isLoading && (
+            <Flex
+              align={"start"}
+              borderTop={"solid 1px"}
+              borderTopColor={"surface.300"}
+              py={3}
+              px={3}
+              direction={"column"}
+            >
+              <Flex direction={"column"}>
+                <Flex fontSize={14} opacity={0.5}>
+                  Create username
+                </Flex>
+                <Flex
+                  cursor={"pointer"}
+                  alignItems={"center"}
+                  mb={5}
+                  transition={"all ease .2s"}
+                  _hover={{
+                    opacity: 0.5,
+                  }}
+                  onClick={onOpen}
+                  fontWeight={"bold"}
+                  color={"solana.middle"}
+                >
+                  <ClaimUserName isOpen={isOpen} onClose={onClose} />
+                  {DOMAINS.DEFAULT}
+                  <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
+          )}
         </Flex>
         <SidebarFooter />
       </Flex>

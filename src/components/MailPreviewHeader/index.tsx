@@ -1,10 +1,12 @@
 import { chakra, Flex, IconButton, Tooltip } from "@chakra-ui/react";
 import { Avatar } from "@components/Avatar";
 import { ClipboardText } from "@components/ClipboardText";
+import { DOMAINS } from "@const/domain";
 import { useComposer } from "@hooks/useComposer";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useLabelIndexUpdate } from "@hooks/useMailIndexUpdate";
+import { useUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
 import { format } from "@utils/time";
 
@@ -17,13 +19,14 @@ export const MailPreviewHeader: React.FC = () => {
   const { context, id } = useMailBoxContext();
   const { onOpen } = useComposer();
   const { isPending, mutateAsync } = useLabelIndexUpdate(id ?? "");
+
   const label = context !== MailBoxLabels.outbox ? "From" : "To";
   const { mail } = useMailBody(id, context);
   const address =
     context !== MailBoxLabels.outbox
       ? mail?.from?.toString()
       : mail?.to?.toString();
-
+  const { displayName } = useUsernameById(address);
   const onStatusUpdate = async (status: MailLabelIndex) => {
     await mutateAsync({ index: status });
   };
@@ -48,9 +51,9 @@ export const MailPreviewHeader: React.FC = () => {
           <chakra.span mr={1}>{label}</chakra.span>
 
           <ClipboardText
-            textToCopy={address}
+            textToCopy={displayName}
             trim={!1}
-          >{`<${shortenPrincipalId(address, 8, 8)}>`}</ClipboardText>
+          >{`<${shortenPrincipalId(displayName, 4, DOMAINS.DEFAULT.length)}>`}</ClipboardText>
         </Flex>
         <Flex opacity={0.6} fontSize={13}>
           {format(Number(mail?.createdAt ?? 0) * 1000)}
@@ -67,8 +70,9 @@ export const MailPreviewHeader: React.FC = () => {
             />
           </Tooltip>
         )}
-        {context === MailBoxLabels.inbox && (
-          <>
+
+        {context !== MailBoxLabels.trash &&
+          context !== MailBoxLabels.outbox && (
             <Tooltip placement="auto" label="Delete" isDisabled={isPending}>
               <IconButton
                 onClick={() => onStatusUpdate(MailLabelIndex.trash)}
@@ -78,6 +82,9 @@ export const MailPreviewHeader: React.FC = () => {
                 disabled={isPending}
               />
             </Tooltip>
+          )}
+        {context === MailBoxLabels.inbox && (
+          <>
             <Tooltip
               placement="auto"
               label="Mark as spam"

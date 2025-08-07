@@ -3,12 +3,13 @@ import { Attachment } from "@components/Attachment";
 import { Avatar } from "@components/Avatar";
 import { CustomSkeleton } from "@components/CustomSkeleton";
 import { SolanaPayRequest } from "@components/SolanaPayRequest";
+import { UserDisplayName } from "@components/UserDisplayName";
 import { useEncryptionKey } from "@hooks/useEncryptionKey";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useMailStatus } from "@hooks/useMailStatus";
 import { Link } from "@tanstack/react-router";
-import { decryptData, shortenPrincipalId, trim } from "@utils/string";
+import { decryptData, trim } from "@utils/string";
 import { formatTime } from "@utils/time";
 
 import { MailBoxLabels, type FormattedMailBox } from "src/types";
@@ -51,7 +52,10 @@ export const MailCard: React.FC<FormattedMailBox> = ({
     >
       <Avatar top={2} left={"10px"} name={addres} />
       <Flex mb={"2px"} justifyContent={"space-between"}>
-        <Flex>{shortenPrincipalId(addres)}</Flex>
+        <Flex>
+          <UserDisplayName address={addres} />
+          {/* {shortenPrincipalId(addres)} */}
+        </Flex>
         <Flex fontSize={12}>{formatTime(Number(createdAt) * 1000)}</Flex>
       </Flex>
       <Box

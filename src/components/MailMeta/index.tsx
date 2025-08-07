@@ -1,40 +1,25 @@
 import { chakra, Flex, Icon, Image, Link } from "@chakra-ui/react";
-import { useMailBody } from "@hooks/useMailBody";
+
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { shortenPrincipalId } from "@utils/string";
-import {
-  getSolScanAccountUrl,
-  getSolscanAddress,
-} from "@utils/string/getSolscanUrl";
-import { MailBoxLabels } from "src/types";
+import { getSolScanAccountUrl } from "@utils/string/getSolscanUrl";
 
-import { FaUserCircle } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { RiExternalLinkLine } from "react-icons/ri";
 import SolScan from "@assets/soscan.png";
 import { useMemo } from "react";
 export const MailMeta: React.FC = () => {
-  const { id, context } = useMailBoxContext();
-  const { mail } = useMailBody(id, context);
-  const address =
-    context !== MailBoxLabels.outbox
-      ? mail?.from?.toString()
-      : mail?.to?.toString();
+  const { id } = useMailBoxContext();
 
   const links = useMemo(
     () => [
-      {
-        icon: FaUserCircle,
-        link: getSolscanAddress(address ?? ""),
-        label: shortenPrincipalId(address),
-      },
       {
         icon: IoMdMail,
         link: getSolScanAccountUrl(id ?? ""),
         label: shortenPrincipalId(id),
       },
     ],
-    [address, id]
+    [id]
   );
   return (
     <Flex

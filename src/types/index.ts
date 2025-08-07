@@ -30,6 +30,8 @@ export enum QueryKeys {
   "EMAIL_RESOLVER" = "EMAIL_RESOLVER",
   "MILESTONES" = "MILESTONES",
   "QUICKNODE" = "QUICKNODE",
+  "TRANSFER" = "TRANSFER",
+  "CLAIM_USERNAME" = "CLAIM_USERNAME",
 }
 
 export type StatusType = {

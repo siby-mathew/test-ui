@@ -1,11 +1,13 @@
 import { chakra, Flex, type BoxProps } from "@chakra-ui/react";
+import { useUsernameById } from "@hooks/useUsernames";
 import { getAvatarColor } from "@utils/string";
 
 export const Avatar: React.FC<{ name: string } & BoxProps> = ({
   name = "",
   ...boxProps
 }) => {
-  const bg = getAvatarColor(name);
+  const { displayName } = useUsernameById(name);
+  const bg = getAvatarColor(displayName ?? "");
   return (
     <Flex
       boxSize={"30px"}
@@ -20,7 +22,7 @@ export const Avatar: React.FC<{ name: string } & BoxProps> = ({
       alignItems={"center"}
       justifyContent={"center"}
     >
-      <chakra.span opacity={0.8}>{name[0].toUpperCase()}</chakra.span>
+      <chakra.span opacity={0.8}>{displayName[0].toUpperCase()}</chakra.span>
     </Flex>
   );
 };

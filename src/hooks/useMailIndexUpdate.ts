@@ -30,6 +30,7 @@ export const useLabelIndexUpdate = (id: string) => {
         return data.filter((item) => item.publicKey?.toString() !== id);
       }
     );
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.MAILBOX] });
   };
 
   return useMutation({

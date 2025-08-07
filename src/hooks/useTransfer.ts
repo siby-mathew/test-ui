@@ -8,11 +8,12 @@ import {
 } from "@solana/web3.js";
 
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
+import { QueryKeys } from "src/types";
 
 export const useTransfer = () => {
   const { provider } = useGetMailProgramInstance();
   return useMutation({
-    mutationKey: ["transfer"],
+    mutationKey: [QueryKeys.TRANSFER],
     mutationFn: async ({ to, amount }: { to: string; amount: number }) => {
       if (!provider || !provider.publicKey) {
         return alert("Wallet not connected");

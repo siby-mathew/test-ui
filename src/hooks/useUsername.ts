@@ -45,7 +45,7 @@ export const useClaimUserName = () => {
     showToast("Failed to create username", { type: "error" });
   };
   return useMutation({
-    mutationKey: [QueryKeys.USERNAME_STATUS],
+    mutationKey: [QueryKeys.CLAIM_USERNAME],
     mutationFn: async ({ username }: { username: string }) => {
       if (!program || !provider?.publicKey || !provider.wallet) return false;
 

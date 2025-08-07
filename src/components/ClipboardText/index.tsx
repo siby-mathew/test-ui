@@ -25,7 +25,7 @@ export const ClipboardText: React.FC<ClipboardTextProps> = ({
         opacity: 0.8,
       }}
     >
-      {trim ? shortenPrincipalId(children) : children}
+      {trim ? shortenPrincipalId(children, 6, 4) : children}
       <Icon ml={2} as={!hasCopied ? FaCopy : TbCopyCheckFilled} />
     </chakra.span>
   );
