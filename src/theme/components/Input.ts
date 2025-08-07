@@ -20,6 +20,9 @@ const secondary = definePartsStyle({
     bg: "surface.400",
     borderRadius: 10,
     fontSize: 13,
+    _placeholder: {
+      color: "#999",
+    },
   },
 });
 
