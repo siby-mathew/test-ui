@@ -240,7 +240,7 @@ export const ComposerLegacy: React.FC = () => {
         <Flex direction={"column"}>
           <Flex
             borderBottom={"solid 1px"}
-            borderBottomColor={"surface.400"}
+            borderBottomColor={"#1a1e28"}
             direction={"row"}
             justifyContent={"space-between"}
             py={3}
@@ -298,7 +298,7 @@ export const ComposerLegacy: React.FC = () => {
         <Flex flex={"auto"} direction={"column"} position={"relative"}>
           <Flex position={"absolute"} inset={0}>
             <CustomScrollbarWrapper>
-              <Box w="100%">
+              <Box w="100%" px={1}>
                 <QuillEditor key={id} onChange={handleChange} />
               </Box>
               <Box w="100%">
