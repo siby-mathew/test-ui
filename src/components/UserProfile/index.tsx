@@ -34,6 +34,8 @@ import { useMemo } from "react";
 import GmailLogo from "@assets/gmail.png";
 import { ShareAddress } from "@components/ShareAddress";
 import { useBalance } from "@hooks/useBalance";
+import { LuWalletMinimal } from "react-icons/lu";
+import SolanaLogo from "@assets/solanaLogoMark.svg";
 export const UserProfileCard: React.FC = () => {
   const { address } = usePrivyWallet();
   const { formattedBalance } = useBalance();
@@ -46,17 +48,18 @@ export const UserProfileCard: React.FC = () => {
         style={{
           display: "flex",
           flexDirection: "row",
+          borderRadius: 20,
         }}
       >
-        <Flex direction={"row"} alignItems={"center"}>
-          <chakra.span>
-            <Image w="20px" src={config.logo} alt="Solmail" />
+        <Flex direction={"row"} alignItems={"center"} gap={2}>
+          <chakra.span mt={"2px"}>
+            <Icon as={LuWalletMinimal} fontSize={18} />
           </chakra.span>
-          <chakra.span fontWeight={"medium"} fontSize={13} ml={1}>
-            {shortenPrincipalId(address, 2, 2)}
-            <chakra.span ml={1} color={"solana.middle"} fontWeight={"bold"}>
-              {formattedBalance}
-            </chakra.span>
+          <chakra.span>
+            <Image w="15px" alt="solana" src={SolanaLogo} />
+          </chakra.span>
+          <chakra.span color={"solana.middle"} fontWeight={"bold"}>
+            {formattedBalance}
           </chakra.span>
         </Flex>
       </MenuButton>

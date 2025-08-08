@@ -1,9 +1,9 @@
-import { chakra, Flex, Icon, SkeletonText } from "@chakra-ui/react";
+import { chakra, Flex, Icon, SkeletonText, Image } from "@chakra-ui/react";
 import { useBalance } from "@hooks/useBalance";
 
 import { keyframes } from "@emotion/react";
 import { TbReload } from "react-icons/tb";
-
+import SolanaLogo from "@assets/solanaLogoMark.svg";
 const spin = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -21,7 +21,18 @@ export const SolBalance: React.FC = () => {
       px={1}
       justifyContent={"center"}
       fontWeight={"bold"}
+      gap={1}
     >
+      <chakra.span>
+        <Image
+          src={SolanaLogo}
+          boxSize="16px"
+          alt={"solana"}
+          border={"none"}
+          outline={"none"}
+          mb={1}
+        />
+      </chakra.span>
       <chakra.span>
         <SkeletonText
           startColor="surface.600"
@@ -37,7 +48,6 @@ export const SolBalance: React.FC = () => {
         display="inline-flex"
         onClick={() => refetch()}
         animation={isLoading ? `${spin} .4s linear infinite` : undefined}
-        ml={1}
         cursor="pointer"
       >
         <Icon as={TbReload} />
