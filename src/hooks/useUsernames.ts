@@ -2,7 +2,6 @@ import { skipToken, useQuery } from "@tanstack/react-query";
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
 import { QueryKeys } from "src/types";
 import { useMemo } from "react";
-import { usePrivyWallet } from "./usePrivyWallet";
 
 export const useUsernames = () => {
   const { program } = useGetMailProgramInstance();

@@ -22,7 +22,7 @@ import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import type { ReactNode } from "react";
 import { tokens } from "@const/tokens";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
-import { shortenPrincipalId } from "@utils/string";
+
 import { FieldWrapper } from "@components/Field";
 import { isFunction } from "lodash";
 import type { SolanaPayPayload } from "src/types";

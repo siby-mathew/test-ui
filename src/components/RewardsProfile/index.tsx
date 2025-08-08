@@ -1,13 +1,6 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Flex,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Badge, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import { FaShareAlt } from "react-icons/fa";
-import AvatarImage from "@assets/avatar.png";
+
 import { useProfile } from "@hooks/useProfile";
 import { ShareReferralCode } from "@components/ShareReferralCode";
 import { Link } from "@tanstack/react-router";

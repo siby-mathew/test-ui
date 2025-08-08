@@ -6,12 +6,7 @@ import {
   FaWallet,
 } from "react-icons/fa6";
 import { GrAction } from "react-icons/gr";
-import {
-  FaMailBulk,
-  FaMoneyBillWaveAlt,
-  FaSmile,
-  FaWalking,
-} from "react-icons/fa";
+import { FaMailBulk, FaWalking } from "react-icons/fa";
 
 import { RiInbox2Fill, RiSpam3Fill } from "react-icons/ri";
 import { GoHomeFill } from "react-icons/go";
@@ -23,7 +18,6 @@ import {
   MdSmsFailed,
 } from "react-icons/md";
 
-import { TbArrowsTransferDown, TbMoneybag } from "react-icons/tb";
 import type { MenuConfig } from "src/types";
 import { SolmailHeader } from "@components/SolmailHeader";
 import { LuMilestone } from "react-icons/lu";
