@@ -70,6 +70,7 @@ export const ComposerLegacy: React.FC = () => {
   const { uploadContentWithAttchment } = useIrysUploader();
   const { mailAccountAddress, program, provider } = useGetMailProgramInstance();
   const { sendTransaction } = useSendTransaction();
+
   const { showToast } = useToast();
   const [id] = useState(0);
 

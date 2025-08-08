@@ -29,14 +29,25 @@ export const RewardsProfile: React.FC = () => {
       borderRadius={15}
       py={16}
     >
-      <Avatar src={AvatarImage} boxSize={"100px"} mb={4} />
+      <Flex
+        boxSize={"90px"}
+        bg="surface.900"
+        borderRadius={"50%"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        fontSize={40}
+        userSelect={"none"}
+      >
+        {data?.milestone.icon}
+      </Flex>
       <Text
         fontSize="2xl"
         fontWeight="bold"
         as={Link}
         to="/u/rewards/milestones"
+        my={2}
       >
-        {data?.milestone.title} {data?.milestone.icon}
+        {data?.milestone.title}
       </Text>
       <Badge mt={2} colorScheme="green" px="8px" py="2px" borderRadius={15}>
         Boost 🚀 x{data?.milestone?.boost_factor}

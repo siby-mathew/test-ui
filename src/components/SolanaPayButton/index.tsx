@@ -22,8 +22,11 @@ export const SolanaPayButton: React.FC<{ onOpenSolanaPay: () => void }> = ({
       pr={hasSolanaPay ? "50px" : ""}
       onClick={onOpenSolanaPay}
       position={"relative"}
+      fontWeight={"medium"}
+      fontSize={14}
     >
-      <Image w="50px" src={SolanaPayLogo} alt="Solana pay" />
+      Add payment request{" "}
+      <Image ml={2} w="50px" src={SolanaPayLogo} alt="Solana pay" />
       {hasSolanaPay && solanaPay && (
         <>
           <chakra.span

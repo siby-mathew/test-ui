@@ -116,7 +116,10 @@ export const RequestSolanaPay: React.FC<
       <ModalContent position={"relative"}>
         <ModalCloseButton />
         <ModalHeader textAlign={"center"}>
-          <Image w="70px" src={SolanaPayLogo} alt="Solana pay" />
+          <Flex direction={"row"} gap={2}>
+            Add payment request
+            <Image w="70px" src={SolanaPayLogo} alt="Solana pay" hidden />
+          </Flex>
         </ModalHeader>
         <FormProvider {...methods}>
           <ModalBody
@@ -126,12 +129,16 @@ export const RequestSolanaPay: React.FC<
           >
             <HStack>
               <Flex w="full" mb={2}>
-                <FieldWrapper name="wallet" label="Wallet Address">
-                  <Input
-                    readOnly
-                    value={shortenPrincipalId(wallet?.address ?? "", 9, 9)}
-                    placeholder="Wallet Address"
-                  />
+                <FieldWrapper name="wallet" label="Receive wallet">
+                  <Flex
+                    py={1}
+                    wordBreak={"break-all"}
+                    opacity={0.5}
+                    whiteSpace={"pre-wrap"}
+                    fontSize={13}
+                  >
+                    {wallet?.address ?? ""}
+                  </Flex>
                 </FieldWrapper>
               </Flex>
             </HStack>
@@ -172,11 +179,11 @@ export const RequestSolanaPay: React.FC<
               </Flex>
 
               <Flex w="full" mb={2} mt={1}>
-                <FieldWrapper label="Message" name="message" hasPadding={!1}>
+                <FieldWrapper label="Add a note" name="message" hasPadding={!1}>
                   <Input
-                    placeholder="Message"
+                    placeholder="Add a note"
                     {...methods.register("message", {
-                      required: "Message is required",
+                      required: "Note is required",
                       maxLength: {
                         value: 60,
                         message: "Maximum 60 characters allowed ",
@@ -191,7 +198,7 @@ export const RequestSolanaPay: React.FC<
         <ModalFooter gap={4}>
           <Button onClick={onClose}>Cancel</Button>
           <Button form="solana-pay" variant={"green"} type="submit">
-            Add
+            Add Request
           </Button>
         </ModalFooter>
       </ModalContent>

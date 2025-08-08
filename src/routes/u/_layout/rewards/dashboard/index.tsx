@@ -1,6 +1,6 @@
 import { ReferralDashboard } from "@screens/rewards/landing";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/u/_layout/rewards/")({
+export const Route = createFileRoute("/u/_layout/rewards/dashboard/")({
   component: ReferralDashboard,
 });

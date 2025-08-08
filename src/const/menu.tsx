@@ -1,18 +1,29 @@
 import { IoMail, IoSend } from "react-icons/io5";
-import { FaCheckToSlot, FaTrash, FaWallet } from "react-icons/fa6";
+import {
+  FaCheckToSlot,
+  FaMoneyBillWave,
+  FaTrash,
+  FaWallet,
+} from "react-icons/fa6";
 import { GrAction } from "react-icons/gr";
-import { FaMailBulk, FaSmile, FaWalking } from "react-icons/fa";
+import {
+  FaMailBulk,
+  FaMoneyBillWaveAlt,
+  FaSmile,
+  FaWalking,
+} from "react-icons/fa";
 
 import { RiInbox2Fill, RiSpam3Fill } from "react-icons/ri";
 import { GoHomeFill } from "react-icons/go";
 import {
+  MdAnalytics,
   MdDrafts,
   MdEditDocument,
   MdOutlineForwardToInbox,
   MdSmsFailed,
 } from "react-icons/md";
 
-import { TbArrowsTransferDown } from "react-icons/tb";
+import { TbArrowsTransferDown, TbMoneybag } from "react-icons/tb";
 import type { MenuConfig } from "src/types";
 import { SolmailHeader } from "@components/SolmailHeader";
 import { LuMilestone } from "react-icons/lu";
@@ -115,27 +126,26 @@ export const MENU: MenuConfig[] = [
     name: "Solsign",
     link: `/u/feature/`,
     id: "feature",
-    // submenu: DOCUSIGN_MENU,
   },
-  { icon: FaWallet, name: "Wallet", link: `/u/coming-soon`, id: "wallet" },
+  { icon: FaWallet, name: "Wallet", link: `/u/feature`, id: "wallet" },
+
   {
-    icon: TbArrowsTransferDown,
-    name: "Transactions",
-    link: `/u/solmail/inbox`,
-    id: "transactions",
-    submenu: [],
-  },
-  {
-    icon: FaSmile,
+    icon: FaMoneyBillWave,
     name: "Rewards",
-    link: `/u/rewards`,
+    link: `/u/rewards/dashboard`,
     id: "rewards",
     submenu: [
       {
+        icon: MdAnalytics,
+        name: "Dashboard",
+        link: `/u/rewards/dashboard`,
+        id: "dashboard",
+      },
+      {
         icon: LuMilestone,
-        name: "Milestones",
+        name: "Milstones",
         link: `/u/rewards/milestones`,
-        id: "transactions",
+        id: "milestones",
       },
     ],
   },

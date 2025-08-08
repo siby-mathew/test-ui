@@ -22,7 +22,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { RiShutDownLine } from "react-icons/ri";
 
 import { useSessionHandler } from "@hooks/useSessionHandler";
-import { config } from "@const/config";
+
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
 import { IoInformationCircleSharp } from "react-icons/io5";
@@ -37,7 +37,6 @@ import { useBalance } from "@hooks/useBalance";
 import { LuWalletMinimal } from "react-icons/lu";
 import SolanaLogo from "@assets/solanaLogoMark.svg";
 export const UserProfileCard: React.FC = () => {
-  const { address } = usePrivyWallet();
   const { formattedBalance } = useBalance();
   return (
     <Menu>
@@ -58,7 +57,11 @@ export const UserProfileCard: React.FC = () => {
           <chakra.span>
             <Image w="15px" alt="solana" src={SolanaLogo} />
           </chakra.span>
-          <chakra.span color={"solana.middle"} fontWeight={"bold"}>
+          <chakra.span
+            fontSize={14}
+            color={"solana.middle"}
+            fontWeight={"medium"}
+          >
             {formattedBalance}
           </chakra.span>
         </Flex>

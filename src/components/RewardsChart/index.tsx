@@ -1,6 +1,5 @@
-import { Flex, Icon } from "@chakra-ui/react";
-import { useProfile } from "@hooks/useProfile";
-import { useMemo } from "react";
+import { Flex, Icon, Image, useDisclosure } from "@chakra-ui/react";
+
 import { FaArrowTrendUp } from "react-icons/fa6";
 import {
   Line,
@@ -11,33 +10,34 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-
+import ReferIcon from "@assets/refer-icon.png";
+const ComingSoonFeature: React.FC = () => {
+  return (
+    <Flex
+      direction={"column"}
+      w="100%"
+      alignItems={"center"}
+      justifyContent={"center"}
+      p={5}
+    >
+      <Flex py={5}>
+        <Image w="90px" src={ReferIcon} alt="refer" />
+      </Flex>
+      <Flex fontSize={18} fontWeight={"bold"}>
+        Refer and Earn
+      </Flex>
+      <Flex opacity={0.6} fontSize={13} textAlign={"center"}>
+        Earn XP from referrals and quests. Also you get 50% fees of your friends
+        trade!
+      </Flex>
+    </Flex>
+  );
+};
 export const RewardsChart = () => {
-  const { data } = useProfile();
-
-  const graphData = useMemo(() => {
-    if (!data?.referrals.count) {
-      return [];
-    }
-    const res: Record<string, number> = {};
-    data.referrals.users?.map((item) => {
-      const date = new Date(item.timestamp).toDateString();
-      const timestamp = date.toString();
-      if (!res[timestamp]) {
-        res[timestamp] = 0;
-      }
-      res[timestamp] += 1;
-    });
-
-    const result = Object.entries(res).map(([name, rewards]) => ({
-      name,
-      rewards,
-    }));
-
-    return result;
-  }, [data]);
-
-  console.log(graphData);
+  const { isOpen } = useDisclosure();
+  if (!isOpen) {
+    return <ComingSoonFeature />;
+  }
   return (
     <Flex w="100%" h="100%" direction={"column"} p={5} fontSize={13}>
       <Flex direction={"column"}>

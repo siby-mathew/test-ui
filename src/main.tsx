@@ -39,8 +39,6 @@ export const ALL_SUPPORTED_WALLETS: WalletListEntry[] = [
   "binance",
 ];
 
-console.log(routeTree);
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <DevTools />

@@ -16,7 +16,7 @@ export const ComingSoonPage: React.FC = () => {
           fontWeight={"bold"}
           fontSize={30}
         >
-          Solsign
+          Coming soon
         </chakra.span>
       </Flex>
 
