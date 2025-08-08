@@ -39,7 +39,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
     }
     startTransition(async () => {
       try {
-        const res = await mutateAsync({ username });
+        const res = await mutateAsync({ username: username.toLowerCase() });
         if (res) {
           onClose();
         }
