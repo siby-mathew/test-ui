@@ -1,4 +1,11 @@
-import { chakra, Container, Flex, HStack, VStack } from "@chakra-ui/react";
+import {
+  chakra,
+  Container,
+  Flex,
+  HStack,
+  Spinner,
+  VStack,
+} from "@chakra-ui/react";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { useMilestones } from "@hooks/useMilestones";
 import { useProfile } from "@hooks/useProfile";
@@ -50,7 +57,7 @@ const MileStoneCard: React.FC<
 };
 export const Milestones: React.FC = () => {
   const { data: profile } = useProfile();
-  const { data } = useMilestones();
+  const { data, isLoading } = useMilestones();
 
   return (
     <CustomScrollbarWrapper>
@@ -60,6 +67,18 @@ export const Milestones: React.FC = () => {
             Milstones
           </Flex>
           <VStack w="100%" gap={4}>
+            {isLoading && (
+              <Flex
+                bg={"surface.500"}
+                minH={130}
+                alignItems={"center"}
+                w="100%"
+                justifyContent={"center"}
+                borderRadius={5}
+              >
+                <Spinner />
+              </Flex>
+            )}
             {Object.values(data ?? {}).map((item) => {
               if (!item) return null;
               return (

@@ -1,7 +1,7 @@
 // Constants
-const ALLOWED_SPECIAL_CHARS = "_-.";
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 150;
+const ALLOWED_SPECIAL_CHARS = "_-";
+const USERNAME_MIN_LENGTH = 1;
+const USERNAME_MAX_LENGTH = 15;
 
 /**
  * Validates a username string based on given rules.

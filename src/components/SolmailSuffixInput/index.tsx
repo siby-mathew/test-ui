@@ -96,6 +96,7 @@ export const SolmailSuffixInput: React.FC = () => {
             color="light.100"
             autoComplete="off"
             readOnly={isPending}
+            textTransform={disablePlaceholder ? "initial" : "lowercase"}
             pr="120px"
             {...register("username", {
               required: "Username is required",
@@ -113,6 +114,7 @@ export const SolmailSuffixInput: React.FC = () => {
             zIndex={1}
             transition="all ease .2s"
             opacity={disablePlaceholder ? 0 : 1}
+            textTransform={"lowercase"}
           >
             <chakra.span opacity={0}>{value || PLACEHOLDER}</chakra.span>
             <chakra.span color="solana.middle">{DOMAINS.DEFAULT}</chakra.span>
