@@ -11,3 +11,8 @@ export const getTelegramLink = (options: Option) => {
   const message = `${options.message}`;
   return `https://telegram.me/share/url?url=${options.link}&text=${message}`;
 };
+
+export const getXShareUrl = (options: Option) => {
+  const message = `${options.message}`;
+  return `https://twitter.com/intent/tweet?url=${options.link}&text=${message}`;
+};

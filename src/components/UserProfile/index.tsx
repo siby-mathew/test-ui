@@ -14,8 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
 
-import { MdOutlineArrowDropDown } from "react-icons/md";
-
 import { shortenPrincipalId } from "@utils/string";
 import { ClipboardText } from "@components/ClipboardText";
 
@@ -35,42 +33,72 @@ import GmailLogo from "@assets/gmail.png";
 import { ShareAddress } from "@components/ShareAddress";
 import { useBalance } from "@hooks/useBalance";
 import { LuWalletMinimal } from "react-icons/lu";
-import SolanaLogo from "@assets/solanaLogoMark.svg";
+
+import { useMyUsername } from "@hooks/useMyUsername";
+import { IoIosArrowDown } from "react-icons/io";
 export const UserProfileCard: React.FC = () => {
   const { formattedBalance } = useBalance();
+  const { username, address } = useMyUsername();
   return (
-    <Menu>
-      <MenuButton
-        display={"inline-flex"}
-        as={Button}
-        rightIcon={<MdOutlineArrowDropDown />}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          borderRadius: 20,
-        }}
+    <Flex direction={"row"} alignItems={"center"} gap={3}>
+      <Flex
+        bg="rgba(255,255,255,.1)"
+        alignItems={"center"}
+        gap={1}
+        px={3}
+        py={"8px"}
+        borderRadius={4}
       >
-        <Flex direction={"row"} alignItems={"center"} gap={2}>
-          <chakra.span mt={"2px"}>
-            <Icon as={LuWalletMinimal} fontSize={18} />
-          </chakra.span>
-          <chakra.span>
-            <Image w="15px" alt="solana" src={SolanaLogo} />
-          </chakra.span>
-          <chakra.span
-            fontSize={14}
-            color={"solana.middle"}
-            fontWeight={"medium"}
-          >
-            {formattedBalance}
-          </chakra.span>
-        </Flex>
-      </MenuButton>
+        <chakra.span alignItems={"center"} display={"inline-flex"}>
+          <Icon as={LuWalletMinimal} fontSize={18} />
+        </chakra.span>
 
-      <MenuList bg={"transparent"} border={"none"} p={0}>
-        <Profile />
-      </MenuList>
-    </Menu>
+        <chakra.span fontSize={14} fontWeight={"medium"}>
+          {formattedBalance}
+        </chakra.span>
+      </Flex>
+      <Flex w={"1px"} h="100%" py={"3px"}>
+        <Flex h="100%" bg="light.500" w="100%" opacity={0.4} />
+      </Flex>
+      <Flex>
+        <Menu>
+          <MenuButton
+            display={"inline-flex"}
+            as={Button}
+            bg="transparent !important"
+            rightIcon={<IoIosArrowDown />}
+            lineHeight={"initial"}
+            fontWeight={"normal"}
+            fontSize={14}
+            px={0}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              borderRadius: 20,
+            }}
+          >
+            <Flex direction={"column"} gap={0}>
+              {username && (
+                <Flex fontWeight={"medium"} maxW={"100px"}>
+                  <chakra.span
+                    whiteSpace={"nowrap"}
+                    overflow={"hidden"}
+                    textOverflow={"ellipsis"}
+                  >
+                    {username}
+                  </chakra.span>
+                </Flex>
+              )}
+              <Flex opacity={0.5}>{shortenPrincipalId(address)}</Flex>
+            </Flex>
+          </MenuButton>
+
+          <MenuList bg={"transparent"} border={"none"} p={0}>
+            <Profile />
+          </MenuList>
+        </Menu>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -164,11 +192,9 @@ const ProfileMenu: React.FC = () => {
   return (
     <VStack>
       <Link as={TanstackRouter} to="">
-        My Profile
+        Manage Account
       </Link>
-      <Link as={TanstackRouter} to="/u/rewards">
-        Rewards
-      </Link>
+
       <Flex
         direction={"column"}
         bg="surface.400"

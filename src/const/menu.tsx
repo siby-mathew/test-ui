@@ -131,7 +131,7 @@ export const MENU: MenuConfig[] = [
     submenu: [
       {
         icon: MdAnalytics,
-        name: "Dashboard",
+        name: "Overview",
         link: `/u/rewards/dashboard`,
         id: "dashboard",
       },

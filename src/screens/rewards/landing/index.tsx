@@ -69,7 +69,13 @@ export const ReferralDashboard = () => {
                 value="0"
               />
               <Flex px={5}>
-                <Button size={"sm"} variant="green" borderRadius={20}>
+                <Button
+                  isDisabled
+                  size={"sm"}
+                  variant="green"
+                  borderRadius={20}
+                  bg="green.500 !important"
+                >
                   Claim all
                 </Button>
               </Flex>

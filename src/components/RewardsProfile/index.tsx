@@ -4,10 +4,12 @@ import { FaShareAlt } from "react-icons/fa";
 import { useProfile } from "@hooks/useProfile";
 import { ShareReferralCode } from "@components/ShareReferralCode";
 import { Link } from "@tanstack/react-router";
+import { ClipboardText } from "@components/ClipboardText";
 
 export const RewardsProfile: React.FC = () => {
   const { data } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     isOpen: isEditMode,
     onOpen: enableEditMode,
@@ -20,7 +22,7 @@ export const RewardsProfile: React.FC = () => {
       p={5}
       bg="surface.600"
       borderRadius={15}
-      py={16}
+      py={8}
     >
       <Flex
         boxSize={"90px"}
@@ -52,7 +54,6 @@ export const RewardsProfile: React.FC = () => {
         }}
         borderRadius={20}
         mt={4}
-        variant="ghost"
         w="full"
       >
         Edit Referral
@@ -75,6 +76,20 @@ export const RewardsProfile: React.FC = () => {
           onClose={onClose}
         />
       </Button>
+
+      <Flex py={3}>
+        <Flex
+          display={"inline-flex"}
+          border={"dashed 1px"}
+          borderColor={"#3f3f3f"}
+          px={4}
+          py={1}
+          borderRadius={5}
+          fontSize={12}
+        >
+          <ClipboardText>{data?.referral_code}</ClipboardText>
+        </Flex>
+      </Flex>
     </Flex>
   );
 };

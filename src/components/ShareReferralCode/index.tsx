@@ -23,9 +23,9 @@ import { BsTelegram } from "react-icons/bs";
 
 import { ClipboardText } from "@components/ClipboardText";
 import { useEffect, useId, useMemo } from "react";
-import { FaCopy, FaPencil } from "react-icons/fa6";
+import { FaCopy, FaPencil, FaXTwitter } from "react-icons/fa6";
 import { TbCopyCheckFilled } from "react-icons/tb";
-import { getTelegramLink, getWhatsAppLink } from "@utils/string";
+import { getTelegramLink, getWhatsAppLink, getXShareUrl } from "@utils/string";
 import { noop } from "lodash";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FieldWrapper } from "@components/Field";
@@ -269,6 +269,10 @@ Let’s grow together `;
                     color="#25a3e2"
                     link={getTelegramLink({ message, link: URL })}
                     icon={BsTelegram}
+                  />
+                  <ShareButton
+                    link={getXShareUrl({ message, link: URL })}
+                    icon={FaXTwitter}
                   />
                 </Flex>
               </Flex>
