@@ -58,7 +58,7 @@ export const UserProfileCard: React.FC = () => {
         </chakra.span>
       </Flex>
       <Flex w={"1px"} h="100%" py={"3px"}>
-        <Flex h="100%" bg="light.500" w="100%" opacity={0.4} />
+        <Flex h="100%" bg="light.500" w="100%" opacity={0.3} />
       </Flex>
       <Flex>
         <Menu>
