@@ -19,6 +19,7 @@ import { Route as ULayoutWalletLayoutRouteImport } from './routes/u/_layout/wall
 import { Route as ULayoutSolsignDashboardIndexRouteImport } from './routes/u/_layout/solsign/dashboard/index'
 import { Route as ULayoutRewardsMilestonesIndexRouteImport } from './routes/u/_layout/rewards/milestones/index'
 import { Route as ULayoutRewardsDashboardIndexRouteImport } from './routes/u/_layout/rewards/dashboard/index'
+import { Route as ULayoutAccountPrivateKeyIndexRouteImport } from './routes/u/_layout/account/private-key/index'
 import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
 import { Route as ULayoutSolmailSpamIdRouteImport } from './routes/u/_layout/solmail/spam/$id'
 import { Route as ULayoutSolmailOutboxIdRouteImport } from './routes/u/_layout/solmail/outbox/$id'
@@ -80,6 +81,12 @@ const ULayoutRewardsDashboardIndexRoute =
     path: '/rewards/dashboard/',
     getParentRoute: () => ULayoutRoute,
   } as any)
+const ULayoutAccountPrivateKeyIndexRoute =
+  ULayoutAccountPrivateKeyIndexRouteImport.update({
+    id: '/account/private-key/',
+    path: '/account/private-key/',
+    getParentRoute: () => ULayoutRoute,
+  } as any)
 const ULayoutSolmailTrashIdRoute = ULayoutSolmailTrashIdRouteImport.update({
   id: '/solmail/trash/$id',
   path: '/solmail/trash/$id',
@@ -123,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/account/private-key': typeof ULayoutAccountPrivateKeyIndexRoute
   '/u/rewards/dashboard': typeof ULayoutRewardsDashboardIndexRoute
   '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
   '/u/solsign/dashboard': typeof ULayoutSolsignDashboardIndexRoute
@@ -139,6 +147,7 @@ export interface FileRoutesByTo {
   '/u/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/account/private-key': typeof ULayoutAccountPrivateKeyIndexRoute
   '/u/rewards/dashboard': typeof ULayoutRewardsDashboardIndexRoute
   '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
   '/u/solsign/dashboard': typeof ULayoutSolsignDashboardIndexRoute
@@ -158,6 +167,7 @@ export interface FileRoutesById {
   '/u/_layout/solmail/outbox/$id': typeof ULayoutSolmailOutboxIdRoute
   '/u/_layout/solmail/spam/$id': typeof ULayoutSolmailSpamIdRoute
   '/u/_layout/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
+  '/u/_layout/account/private-key/': typeof ULayoutAccountPrivateKeyIndexRoute
   '/u/_layout/rewards/dashboard/': typeof ULayoutRewardsDashboardIndexRoute
   '/u/_layout/rewards/milestones/': typeof ULayoutRewardsMilestonesIndexRoute
   '/u/_layout/solsign/dashboard/': typeof ULayoutSolsignDashboardIndexRoute
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
+    | '/u/account/private-key'
     | '/u/rewards/dashboard'
     | '/u/rewards/milestones'
     | '/u/solsign/dashboard'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/u/solmail/outbox/$id'
     | '/u/solmail/spam/$id'
     | '/u/solmail/trash/$id'
+    | '/u/account/private-key'
     | '/u/rewards/dashboard'
     | '/u/rewards/milestones'
     | '/u/solsign/dashboard'
@@ -210,6 +222,7 @@ export interface FileRouteTypes {
     | '/u/_layout/solmail/outbox/$id'
     | '/u/_layout/solmail/spam/$id'
     | '/u/_layout/solmail/trash/$id'
+    | '/u/_layout/account/private-key/'
     | '/u/_layout/rewards/dashboard/'
     | '/u/_layout/rewards/milestones/'
     | '/u/_layout/solsign/dashboard/'
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ULayoutRewardsDashboardIndexRouteImport
       parentRoute: typeof ULayoutRoute
     }
+    '/u/_layout/account/private-key/': {
+      id: '/u/_layout/account/private-key/'
+      path: '/account/private-key'
+      fullPath: '/u/account/private-key'
+      preLoaderRoute: typeof ULayoutAccountPrivateKeyIndexRouteImport
+      parentRoute: typeof ULayoutRoute
+    }
     '/u/_layout/solmail/trash/$id': {
       id: '/u/_layout/solmail/trash/$id'
       path: '/solmail/trash/$id'
@@ -372,6 +392,7 @@ interface ULayoutRouteChildren {
   ULayoutSolmailOutboxIdRoute: typeof ULayoutSolmailOutboxIdRoute
   ULayoutSolmailSpamIdRoute: typeof ULayoutSolmailSpamIdRoute
   ULayoutSolmailTrashIdRoute: typeof ULayoutSolmailTrashIdRoute
+  ULayoutAccountPrivateKeyIndexRoute: typeof ULayoutAccountPrivateKeyIndexRoute
   ULayoutRewardsDashboardIndexRoute: typeof ULayoutRewardsDashboardIndexRoute
   ULayoutRewardsMilestonesIndexRoute: typeof ULayoutRewardsMilestonesIndexRoute
   ULayoutSolsignDashboardIndexRoute: typeof ULayoutSolsignDashboardIndexRoute
@@ -385,6 +406,7 @@ const ULayoutRouteChildren: ULayoutRouteChildren = {
   ULayoutSolmailOutboxIdRoute: ULayoutSolmailOutboxIdRoute,
   ULayoutSolmailSpamIdRoute: ULayoutSolmailSpamIdRoute,
   ULayoutSolmailTrashIdRoute: ULayoutSolmailTrashIdRoute,
+  ULayoutAccountPrivateKeyIndexRoute: ULayoutAccountPrivateKeyIndexRoute,
   ULayoutRewardsDashboardIndexRoute: ULayoutRewardsDashboardIndexRoute,
   ULayoutRewardsMilestonesIndexRoute: ULayoutRewardsMilestonesIndexRoute,
   ULayoutSolsignDashboardIndexRoute: ULayoutSolsignDashboardIndexRoute,

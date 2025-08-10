@@ -10,6 +10,7 @@ export type MenuConfig = {
   submenu?: MenuConfig[];
   header?: () => ReactElement;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  skipRender?: boolean;
 };
 
 export enum QueryKeys {
@@ -32,6 +33,7 @@ export enum QueryKeys {
   "QUICKNODE" = "QUICKNODE",
   "TRANSFER" = "TRANSFER",
   "CLAIM_USERNAME" = "CLAIM_USERNAME",
+  "QUICK_NODE_QUERY" = "QUICK_NODE_QUERY",
 }
 
 export type StatusType = {

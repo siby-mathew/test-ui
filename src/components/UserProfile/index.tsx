@@ -191,7 +191,7 @@ const ProfileMenu: React.FC = () => {
   const { onLogout, isPending } = useSessionHandler();
   return (
     <VStack>
-      <Link as={TanstackRouter} to="">
+      <Link as={TanstackRouter} to="/u/account/private-key">
         Manage Account
       </Link>
 

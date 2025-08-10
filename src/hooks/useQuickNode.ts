@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { QueryKeys } from "src/types";
 
@@ -15,11 +15,12 @@ export type SnsMethod =
   | "sns_resolveDomain"
   | "sns_getFavouriteDomain"
   | "sns_getDomainDataV2"
-  | "sns_getDomainRecordV2Key";
+  | "sns_getDomainRecordV2Key"
+  | "getTokenAccountsByOwner";
 
 type QuickNodePayload = {
   method: SnsMethod;
-  params: string[];
+  params: any[];
 };
 
 export const useQuickNode = () =>
@@ -48,3 +49,15 @@ export const useQuickNode = () =>
       }
     },
   });
+
+export const useQuickNodeQuery = ({ method, params }: QuickNodePayload) => {
+  const { mutateAsync } = useQuickNode();
+  return useQuery({
+    queryKey: [QueryKeys.QUICK_NODE_QUERY, method, params],
+    queryFn: () =>
+      mutateAsync({
+        method,
+        params,
+      }),
+  });
+};

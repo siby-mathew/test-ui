@@ -131,6 +131,9 @@ export const Sidebar: React.FC = () => {
             </Link>
           </Flex>
           {MENU.map((menu) => {
+            if (menu.skipRender) {
+              return null;
+            }
             const active = isActive(menu.id, pathname);
             return (
               <Flex key={menu.id}>
