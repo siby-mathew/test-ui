@@ -189,6 +189,9 @@ export const ComposerLegacy: React.FC = () => {
       await sendTransaction({
         transaction: transaction,
         connection: connection,
+        uiOptions: {
+          showWalletUIs: !1,
+        },
       });
 
       close();
