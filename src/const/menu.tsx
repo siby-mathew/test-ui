@@ -1,4 +1,4 @@
-import { IoLockOpenSharp, IoMail, IoSend } from "react-icons/io5";
+import { IoMail, IoSend } from "react-icons/io5";
 import {
   FaCheckToSlot,
   FaMoneyBillWave,
@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa6";
 import { GrAction } from "react-icons/gr";
 import { FaMailBulk, FaWalking } from "react-icons/fa";
-import { TiUser } from "react-icons/ti";
+
 import { RiInbox2Fill, RiSpam3Fill } from "react-icons/ri";
 import { GoHomeFill } from "react-icons/go";
 import {
@@ -128,20 +128,6 @@ export const MENU: MenuConfig[] = [
     link: `/u/account`,
     id: "account",
     skipRender: true,
-    submenu: [
-      {
-        icon: IoLockOpenSharp,
-        name: "Private Key",
-        link: `/u/account/private-key`,
-        id: "private-key",
-      },
-      {
-        icon: TiUser,
-        name: "Usernames",
-        link: `/u/account/usernames`,
-        id: "usernames",
-      },
-    ],
   },
   {
     icon: FaMoneyBillWave,

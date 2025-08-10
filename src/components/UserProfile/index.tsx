@@ -36,6 +36,7 @@ import { LuWalletMinimal } from "react-icons/lu";
 
 import { useMyUsername } from "@hooks/useMyUsername";
 import { IoIosArrowDown } from "react-icons/io";
+import { getWalletIcon } from "@utils/wallet";
 export const UserProfileCard: React.FC = () => {
   const { formattedBalance } = useBalance();
   const { username, address } = useMyUsername();
@@ -191,7 +192,7 @@ const ProfileMenu: React.FC = () => {
   const { onLogout, isPending } = useSessionHandler();
   return (
     <VStack>
-      <Link as={TanstackRouter} to="/u/account/private-key">
+      <Link as={TanstackRouter} to="/u/account">
         Manage Account
       </Link>
 
@@ -229,7 +230,10 @@ export const LoginInfo: React.FC = () => {
 
   const { get } = useGetWalletById();
   const { isWallet, displayName, icon } = useMemo(() => {
-    const account = user?.linkedAccounts[0] as any;
+    const account: any = user?.linkedAccounts.sort((a, b) => {
+      return Number(b.latestVerifiedAt) - Number(a.latestVerifiedAt);
+    })[0];
+
     if (!account || !account.address) {
       return {
         displayName: "",
@@ -241,7 +245,9 @@ export const LoginInfo: React.FC = () => {
     const isWallet = account.type !== "email";
     return {
       displayName,
-      icon: !isWallet ? GmailLogo : (get(displayName)?.meta.icon ?? ""),
+      icon: !isWallet
+        ? getWalletIcon(displayName)
+        : (get(displayName)?.meta.icon ?? ""),
       isWallet,
     };
   }, [get, user?.linkedAccounts]);
