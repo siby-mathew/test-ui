@@ -29,7 +29,7 @@ import { SolBalance } from "@components/SolBalance";
 import { Link as TanstackRouter } from "@tanstack/react-router";
 import { useGetWalletById } from "@hooks/useGetWalletById";
 import { useMemo } from "react";
-import GmailLogo from "@assets/gmail.png";
+
 import { ShareAddress } from "@components/ShareAddress";
 import { useBalance } from "@hooks/useBalance";
 import { LuWalletMinimal } from "react-icons/lu";
