@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export const useUsernames = () => {
   const { program } = useGetMailProgramInstance();
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: [QueryKeys.GET_USERNAMES],
     staleTime: 1000 * 60 * 2,
     queryFn: program
@@ -23,16 +23,16 @@ export const useUsernames = () => {
     data,
     isLoading,
     isFetching,
+    refetch,
   };
 };
 
-export const useUsernameById = (address: string | undefined) => {
+export const useGetMyUsernamesByOwner = (address: string | undefined) => {
   const { data, isLoading } = useUsernames();
-  const account = useMemo(() => {
-    if (!data || !data.length || !address) {
-      return null;
-    }
-    const ownedAccounts = data
+
+  const usernames = useMemo(() => {
+    if (!data) return [];
+    return data
       .filter((item) => {
         return item.account.authority.toString() === address;
       })
@@ -41,10 +41,27 @@ export const useUsernameById = (address: string | undefined) => {
           Number(a.account.createdAt.toString()) -
           Number(b.account.createdAt.toString())
       );
-
-    const account = ownedAccounts[0] ?? null;
-    return account && account?.account ? account.account : null;
   }, [address, data]);
+  return {
+    usernames,
+    isLoading,
+  };
+};
+
+export const useUsernameById = (address: string | undefined) => {
+  const { usernames, isLoading } = useGetMyUsernamesByOwner(address);
+  const account = useMemo(() => {
+    if (!usernames || !usernames.length || !address) {
+      return null;
+    }
+
+    const linkedAccounts = usernames.filter(
+      (acc) => acc.account.mailbox?.toString() === address
+    );
+
+    const account = linkedAccounts[0] ?? null;
+    return account && account?.account ? account.account : null;
+  }, [address, usernames]);
 
   const username = useMemo(
     () => (account ? account.username?.toString() : null),

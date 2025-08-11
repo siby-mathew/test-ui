@@ -16,7 +16,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { ShareAddress } from "@components/ShareAddress";
 import { Link, Outlet } from "@tanstack/react-router";
 import { isFunction } from "lodash";
-import { Holdings } from "@components/Holdings";
+
 const MenuButton: React.FC<{
   name: string;
   icon: IconType;
@@ -65,7 +65,7 @@ export const WalletLayout: React.FC = () => {
           {formattedBalance}
         </chakra.span>
       </Box>
-      <Holdings />
+
       <Box w="100%">
         <HStack align={"center"} justifyContent={"center"}>
           <MenuButton name="Receive" icon={LuQrCode} onClick={onOpen} />

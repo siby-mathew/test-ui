@@ -16,6 +16,16 @@ const green = defineStyle({
   },
 });
 
+const red = defineStyle({
+  bg: "red.500",
+  color: "red.100",
+  _hover: {
+    bg: "red.400",
+  },
+  _active: {
+    bg: "red.400",
+  },
+});
 export const Button = defineStyleConfig({
-  variants: { danger, green },
+  variants: { danger, green, red },
 });

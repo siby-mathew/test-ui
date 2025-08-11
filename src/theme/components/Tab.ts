@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const primary = definePartsStyle({
   tab: {
     borderBottom: "solid 1px",
-    borderBottomColor: "dark.70",
+    borderBottomColor: "dark.800",
     _selected: {
       color: "green.500",
       borderBottomColor: "green.500",

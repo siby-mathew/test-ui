@@ -7,6 +7,7 @@ import {
   Image,
   VStack,
   Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { useSessionHandler } from "@hooks/useSessionHandler";
@@ -20,6 +21,8 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import { usePrivy } from "@privy-io/react-auth";
 
 import { ClipboardText } from "@components/ClipboardText";
+import { LinkUserName } from "@components/LinkUsername";
+import { useUsernameById } from "@hooks/useUsernames";
 
 const ExportKeySettings: React.FC = () => {
   const { exportWallet } = usePrivyWallet();
@@ -38,15 +41,19 @@ const ExportKeySettings: React.FC = () => {
 };
 
 export const UsernameSwitch: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const { address } = usePrivyWallet();
+  const { displayName } = useUsernameById(address);
   return (
     <Flex w="100%" direction={"column"}>
+      <LinkUserName onClose={onClose} isOpen={isOpen} />
       <Flex w="100%">
         <Setting
           title="Username"
           info=" Choose a different username to display across the app. This does not change your wallet address."
         >
-          <Button size={"sm"} rightIcon={<TbEdit />}>
-            siby@sol.mail
+          <Button onClick={onOpen} size={"sm"} rightIcon={<TbEdit />}>
+            {displayName}
           </Button>
         </Setting>
       </Flex>

@@ -34,6 +34,8 @@ export enum QueryKeys {
   "TRANSFER" = "TRANSFER",
   "CLAIM_USERNAME" = "CLAIM_USERNAME",
   "QUICK_NODE_QUERY" = "QUICK_NODE_QUERY",
+  "TOKENS" = "TOKENS",
+  "UNLINNK_USERNAME" = "UNLINNK_USERNAME",
 }
 
 export type StatusType = {

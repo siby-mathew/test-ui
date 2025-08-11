@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { QueryKeys } from "src/types";
-import { useGetMailProgramInstance } from "./useMailProgramInstance";
+import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { DOMAINS } from "@const/domain";
-import { useToast } from "./useToast";
+import { useToast } from "@hooks/useToast";
+import { useUsernames } from "@hooks/useUsernames";
 
 const getUsernamePDA = (username: string, programId: PublicKey) =>
   PublicKey.findProgramAddressSync(
@@ -17,21 +18,17 @@ const getUsernamePDA = (username: string, programId: PublicKey) =>
 
 export const useUsernameStatus = () => {
   const { program } = useGetMailProgramInstance();
-
   return useMutation({
     mutationKey: [QueryKeys.USERNAME_STATUS],
     mutationFn: async ({ username }: { username: string }) => {
       if (!program) return false;
-
       const [usernameAccountPDA] = getUsernamePDA(username, program.programId);
-
       try {
         const account =
           await program.account.usernameAccount.fetch(usernameAccountPDA);
-        console.log("Yepppp", account);
+
         return account;
-      } catch (e) {
-        console.log(e);
+      } catch {
         return false;
       }
     },
@@ -39,10 +36,12 @@ export const useUsernameStatus = () => {
 };
 
 export const useClaimUserName = () => {
+  const { refetch } = useUsernames();
   const { program, provider } = useGetMailProgramInstance();
   const { showToast } = useToast();
   const onFail = () => {
     showToast("Failed to create username", { type: "error" });
+    refetch();
   };
   return useMutation({
     mutationKey: [QueryKeys.CLAIM_USERNAME],
@@ -110,6 +109,97 @@ export const useClaimUserName = () => {
       } else {
         onFail();
       }
+      refetch();
+    },
+  });
+};
+
+export const useUnlinkUsername = () => {
+  const { program, provider } = useGetMailProgramInstance();
+  const { refetch } = useUsernames();
+  const { showToast } = useToast();
+  return useMutation({
+    mutationKey: [QueryKeys.UNLINNK_USERNAME],
+    mutationFn: async ({ usernameAccount }: { usernameAccount: PublicKey }) => {
+      try {
+        if (!provider || !program) {
+          return;
+        }
+        const [mailAccountPDA] = PublicKey.findProgramAddressSync(
+          [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
+          program.programId
+        );
+
+        await program.methods
+          .unlinkMailboxFromUsername()
+          .accounts({
+            usernameAccount,
+            mailAccountV2: mailAccountPDA,
+            authority: provider.wallet.publicKey,
+          } as any)
+          .rpc();
+      } catch {
+        return !0;
+      }
+    },
+    onError: () => {
+      refetch();
+      showToast("Failed to unlink mailbox", {
+        type: "error",
+      });
+    },
+    onSuccess: () => {
+      refetch();
+      showToast("Mailbox unlinked successfully", {
+        type: "success",
+      });
+    },
+  });
+};
+
+export const useLinkUsername = () => {
+  const { refetch } = useUsernames();
+  const { program, provider } = useGetMailProgramInstance();
+  const { showToast } = useToast();
+  return useMutation({
+    mutationKey: [QueryKeys.UNLINNK_USERNAME],
+    mutationFn: async ({ usernameAccount }: { usernameAccount: PublicKey }) => {
+      try {
+        if (!provider || !program) {
+          return;
+        }
+        const [mailAccountPDA] = PublicKey.findProgramAddressSync(
+          [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
+          program.programId
+        );
+
+        const mailAccount =
+          await program.account.solMailAccountV2.fetch(mailAccountPDA);
+        const mailboxToLink = mailAccount.mailbox;
+
+        await program.methods
+          .linkMailboxToUsername(mailboxToLink)
+          .accounts({
+            usernameAccount: usernameAccount,
+            mailAccountV2: mailAccountPDA,
+            authority: provider.publicKey,
+          })
+          .rpc();
+      } catch {
+        return !0;
+      }
+    },
+    onError: () => {
+      refetch();
+      showToast("Failed to link mailbox", {
+        type: "error",
+      });
+    },
+    onSuccess: () => {
+      refetch();
+      showToast("Mailbox linked successfully", {
+        type: "success",
+      });
     },
   });
 };
