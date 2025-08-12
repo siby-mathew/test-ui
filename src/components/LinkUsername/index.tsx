@@ -118,9 +118,12 @@ export const LinkUserName: React.FC<Omit<ModalProps, "children">> = ({
                   />
                 );
               })}
+
+            {(!usernames || !usernames.length) && (
+              <Flex>No usernames avalable</Flex>
+            )}
           </VStack>
         </ModalBody>
-        <ModalFooter gap={3}></ModalFooter>
       </ModalContent>
     </Modal>
   );

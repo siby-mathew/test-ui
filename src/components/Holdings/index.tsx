@@ -10,6 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { TokenCard } from "@components/TokenCard";
+
 import { useBalance } from "@hooks/useBalance";
 
 import { useTokensOwned } from "@hooks/useTokensOwned";
@@ -18,7 +19,7 @@ export const Holdings: React.FC = () => {
   const { data, isLoading } = useTokensOwned();
   const { data: solBalance } = useBalance();
   return (
-    <Box w="100%" bg="surface.500" borderRadius={15}>
+    <Box w="100%" bg="surface.500" borderRadius={5}>
       <Tabs>
         <TabList>
           <Tab py={4} flex={"auto"}>
@@ -50,23 +51,19 @@ export const Holdings: React.FC = () => {
                 data.token_accounts.map((token) => {
                   return <TokenCard key={token.address} {...token} />;
                 })}
-
-              {!data ||
-                !data.token_accounts ||
-                (!data.token_accounts.length && (
-                  <Flex
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    minH={100}
-                    opacity={0.5}
-                  >
-                    No tokens found
-                  </Flex>
-                ))}
             </VStack>
           </TabPanel>
+
           <TabPanel>
-            <p>two!</p>
+            <Flex
+              opacity={0.5}
+              minH={100}
+              alignItems={"center"}
+              justifyContent={"center"}
+              userSelect={"none"}
+            >
+              Coming soon
+            </Flex>
           </TabPanel>
         </TabPanels>
       </Tabs>

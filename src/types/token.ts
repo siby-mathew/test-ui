@@ -99,3 +99,18 @@ export type FormattedToken = {
   decimals: number;
   logo: string;
 };
+
+export type SolanaTransactionSignatureInfo = {
+  blockTime: number;
+  confirmationStatus: "processed" | "confirmed" | "finalized";
+  err: null | object;
+  memo: string | null;
+  signature: string;
+  slot: number;
+};
+
+export type TokenTransferForm = {
+  to: string;
+  token: string;
+  amount: string;
+};

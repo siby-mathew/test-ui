@@ -79,5 +79,7 @@ export const useUsernameById = (address: string | undefined) => {
     isLoading: isLoading,
     fullUsername,
     displayName: fullUsername || username || address || "",
+    isWalletAddress: !fullUsername && !username,
+    hasUserNames: usernames && usernames.length > 0,
   };
 };

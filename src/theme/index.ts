@@ -21,6 +21,12 @@ export const AppTheme = extendTheme({
         fontSize: 15,
         color: "#b6b6b6",
       },
+      ".Toastify__toast-theme--dark": {
+        background: "#101527ab",
+        color: "var(--toastify-text-color-dark)",
+        "backdrop-filter": "blur(10px)",
+        border: "solid 1px #161927",
+      },
     }),
   },
   components: {

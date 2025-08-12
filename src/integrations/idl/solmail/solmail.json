@@ -1,5 +1,5 @@
 {
-  "address": "FmrTN4C8NauWrDqz67F6qD3S71Jgvmp94CUy6hXNcjPk",
+  "address": "HDXZfiQUehMZJTB4ZwNyJ4Xx9okuzXUTVJ58G3ALUu2G",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -26,6 +26,32 @@
         {
           "name": "bid_account",
           "writable": true
+        },
+        {
+          "name": "user_bids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
         },
         {
           "name": "bidder",
@@ -118,6 +144,32 @@
           }
         },
         {
+          "name": "user_bids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "winner"
+              }
+            ]
+          }
+        },
+        {
           "name": "winner",
           "writable": true,
           "signer": true
@@ -125,6 +177,52 @@
         {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cleanup_expired_user_bids",
+      "discriminator": [
+        212,
+        246,
+        171,
+        19,
+        5,
+        45,
+        109,
+        176
+      ],
+      "accounts": [
+        {
+          "name": "user_bids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -174,6 +272,32 @@
                   105,
                   108
                 ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_bids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
               }
             ]
           }
@@ -1237,7 +1361,8 @@
           "writable": true
         },
         {
-          "name": "mail_account_v2"
+          "name": "mail_account_v2",
+          "writable": true
         },
         {
           "name": "authority",
@@ -1626,6 +1751,10 @@
           "writable": true
         },
         {
+          "name": "mail_account_v2",
+          "writable": true
+        },
+        {
           "name": "authority",
           "signer": true
         }
@@ -1854,17 +1983,68 @@
           }
         },
         {
+          "name": "new_user_bids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "new_bidder"
+              }
+            ]
+          }
+        },
+        {
           "name": "new_bidder",
           "writable": true,
           "signer": true
         },
         {
           "name": "previous_bidder",
-          "docs": [
-            "FIXED: Made optional to handle reset bids (after cancellation)"
-          ],
           "writable": true,
           "optional": true
+        },
+        {
+          "name": "previous_user_bids",
+          "writable": true,
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.current_highest_bidder",
+                "account": "BidAccount"
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -2298,6 +2478,19 @@
       ]
     },
     {
+      "name": "UserBids",
+      "discriminator": [
+        146,
+        79,
+        182,
+        223,
+        41,
+        20,
+        192,
+        47
+      ]
+    },
+    {
       "name": "UserRateLimit",
       "discriminator": [
         156,
@@ -2401,6 +2594,19 @@
         2,
         244,
         28
+      ]
+    },
+    {
+      "name": "BidStatusChangeEvent",
+      "discriminator": [
+        245,
+        13,
+        92,
+        176,
+        132,
+        250,
+        64,
+        253
       ]
     },
     {
@@ -2635,6 +2841,19 @@
         36,
         249,
         116
+      ]
+    },
+    {
+      "name": "UserBidsCleanupEvent",
+      "discriminator": [
+        165,
+        93,
+        217,
+        22,
+        189,
+        6,
+        70,
+        240
       ]
     },
     {
@@ -3214,6 +3433,16 @@
       "code": 6083,
       "name": "InvalidAccountState",
       "msg": "Invalid account state or data"
+    },
+    {
+      "code": 6084,
+      "name": "MailboxAlreadyLinked",
+      "msg": "This mailbox is already linked to another username"
+    },
+    {
+      "code": 6085,
+      "name": "MailboxLinkMismatch",
+      "msg": "Mailbox link mismatch - username not linked to this mailbox"
     }
   ],
   "types": [
@@ -3419,6 +3648,20 @@
       }
     },
     {
+      "name": "BidMethod",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "CreateBid"
+          },
+          {
+            "name": "UpdateBid"
+          }
+        ]
+      }
+    },
+    {
       "name": "BidRefundEvent",
       "type": {
         "kind": "struct",
@@ -3458,6 +3701,65 @@
           {
             "name": "refund_success",
             "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Outbid"
+          },
+          {
+            "name": "Won"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Expired"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BidStatusChangeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_status",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "u32"
           }
         ]
       }
@@ -4133,6 +4435,12 @@
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "linked_username",
+            "type": {
+              "option": "pubkey"
+            }
           }
         ]
       }
@@ -4287,6 +4595,124 @@
           },
           {
             "name": "affected_users_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserBidInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bid_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bid_amount",
+            "type": "u64"
+          },
+          {
+            "name": "bid_expiration",
+            "type": "u32"
+          },
+          {
+            "name": "is_current_highest",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "u32"
+          },
+          {
+            "name": "last_updated",
+            "type": "u32"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "BidStatus"
+              }
+            }
+          },
+          {
+            "name": "bid_method",
+            "type": {
+              "defined": {
+                "name": "BidMethod"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserBids",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "active_bids",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "UserBidInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "total_bids_created",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserBidsCleanupEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "initial_count",
+            "type": "u16"
+          },
+          {
+            "name": "expired_count",
+            "type": "u16"
+          },
+          {
+            "name": "removed_count",
+            "type": "u16"
+          },
+          {
+            "name": "final_count",
+            "type": "u16"
+          },
+          {
+            "name": "cleaned_at",
             "type": "u32"
           }
         ]

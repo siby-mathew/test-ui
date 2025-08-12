@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solmail.json`.
  */
 export type Solmail = {
-  "address": "FmrTN4C8NauWrDqz67F6qD3S71Jgvmp94CUy6hXNcjPk",
+  "address": "HDXZfiQUehMZJTB4ZwNyJ4Xx9okuzXUTVJ58G3ALUu2G",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -32,6 +32,32 @@ export type Solmail = {
         {
           "name": "bidAccount",
           "writable": true
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
         },
         {
           "name": "bidder",
@@ -124,6 +150,32 @@ export type Solmail = {
           }
         },
         {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "winner"
+              }
+            ]
+          }
+        },
+        {
           "name": "winner",
           "writable": true,
           "signer": true
@@ -131,6 +183,52 @@ export type Solmail = {
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cleanupExpiredUserBids",
+      "discriminator": [
+        212,
+        246,
+        171,
+        19,
+        5,
+        45,
+        109,
+        176
+      ],
+      "accounts": [
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "signer": true
         }
       ],
       "args": []
@@ -180,6 +278,32 @@ export type Solmail = {
                   105,
                   108
                 ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
               }
             ]
           }
@@ -1243,7 +1367,8 @@ export type Solmail = {
           "writable": true
         },
         {
-          "name": "mailAccountV2"
+          "name": "mailAccountV2",
+          "writable": true
         },
         {
           "name": "authority",
@@ -1632,6 +1757,10 @@ export type Solmail = {
           "writable": true
         },
         {
+          "name": "mailAccountV2",
+          "writable": true
+        },
+        {
           "name": "authority",
           "signer": true
         }
@@ -1860,17 +1989,68 @@ export type Solmail = {
           }
         },
         {
+          "name": "newUserBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "newBidder"
+              }
+            ]
+          }
+        },
+        {
           "name": "newBidder",
           "writable": true,
           "signer": true
         },
         {
           "name": "previousBidder",
-          "docs": [
-            "FIXED: Made optional to handle reset bids (after cancellation)"
-          ],
           "writable": true,
           "optional": true
+        },
+        {
+          "name": "previousUserBids",
+          "writable": true,
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.current_highest_bidder",
+                "account": "bidAccount"
+              }
+            ]
+          }
         },
         {
           "name": "systemProgram",
@@ -2304,6 +2484,19 @@ export type Solmail = {
       ]
     },
     {
+      "name": "userBids",
+      "discriminator": [
+        146,
+        79,
+        182,
+        223,
+        41,
+        20,
+        192,
+        47
+      ]
+    },
+    {
       "name": "userRateLimit",
       "discriminator": [
         156,
@@ -2407,6 +2600,19 @@ export type Solmail = {
         2,
         244,
         28
+      ]
+    },
+    {
+      "name": "bidStatusChangeEvent",
+      "discriminator": [
+        245,
+        13,
+        92,
+        176,
+        132,
+        250,
+        64,
+        253
       ]
     },
     {
@@ -2641,6 +2847,19 @@ export type Solmail = {
         36,
         249,
         116
+      ]
+    },
+    {
+      "name": "userBidsCleanupEvent",
+      "discriminator": [
+        165,
+        93,
+        217,
+        22,
+        189,
+        6,
+        70,
+        240
       ]
     },
     {
@@ -3220,6 +3439,16 @@ export type Solmail = {
       "code": 6083,
       "name": "invalidAccountState",
       "msg": "Invalid account state or data"
+    },
+    {
+      "code": 6084,
+      "name": "mailboxAlreadyLinked",
+      "msg": "This mailbox is already linked to another username"
+    },
+    {
+      "code": 6085,
+      "name": "mailboxLinkMismatch",
+      "msg": "Mailbox link mismatch - username not linked to this mailbox"
     }
   ],
   "types": [
@@ -3425,6 +3654,20 @@ export type Solmail = {
       }
     },
     {
+      "name": "bidMethod",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "createBid"
+          },
+          {
+            "name": "updateBid"
+          }
+        ]
+      }
+    },
+    {
       "name": "bidRefundEvent",
       "type": {
         "kind": "struct",
@@ -3464,6 +3707,65 @@ export type Solmail = {
           {
             "name": "refundSuccess",
             "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "bidStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "active"
+          },
+          {
+            "name": "outbid"
+          },
+          {
+            "name": "won"
+          },
+          {
+            "name": "cancelled"
+          },
+          {
+            "name": "expired"
+          }
+        ]
+      }
+    },
+    {
+      "name": "bidStatusChangeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bidAccount",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bidder",
+            "type": "pubkey"
+          },
+          {
+            "name": "newStatus",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "u32"
           }
         ]
       }
@@ -4139,6 +4441,12 @@ export type Solmail = {
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "linkedUsername",
+            "type": {
+              "option": "pubkey"
+            }
           }
         ]
       }
@@ -4293,6 +4601,124 @@ export type Solmail = {
           },
           {
             "name": "affectedUsersCount",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userBidInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bidAccount",
+            "type": "pubkey"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "bidAmount",
+            "type": "u64"
+          },
+          {
+            "name": "bidExpiration",
+            "type": "u32"
+          },
+          {
+            "name": "isCurrentHighest",
+            "type": "bool"
+          },
+          {
+            "name": "createdAt",
+            "type": "u32"
+          },
+          {
+            "name": "lastUpdated",
+            "type": "u32"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "bidStatus"
+              }
+            }
+          },
+          {
+            "name": "bidMethod",
+            "type": {
+              "defined": {
+                "name": "bidMethod"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "userBids",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "activeBids",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "userBidInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "totalBidsCreated",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "userBidsCleanupEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "initialCount",
+            "type": "u16"
+          },
+          {
+            "name": "expiredCount",
+            "type": "u16"
+          },
+          {
+            "name": "removedCount",
+            "type": "u16"
+          },
+          {
+            "name": "finalCount",
+            "type": "u16"
+          },
+          {
+            "name": "cleanedAt",
             "type": "u32"
           }
         ]

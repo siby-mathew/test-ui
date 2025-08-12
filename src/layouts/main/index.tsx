@@ -12,6 +12,7 @@ import GooglePlay from "@assets/playstore.png";
 import { PulseLoader } from "@components/PulseLoader";
 import { useExistingQueries } from "@hooks/useExistingQueries";
 import LogoFull from "@assets/logo-full.png";
+
 export const AppMainLayout: React.FC = () => {
   const { ready, authenticated } = usePrivy();
   const navigate = useNavigate();

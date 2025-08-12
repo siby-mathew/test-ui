@@ -12,6 +12,17 @@ const primary = definePartsStyle({
   },
 });
 
+const payment = definePartsStyle({
+  field: {
+    p: 8,
+    bg: "surface.500",
+    borderRadius: 30,
+    _hover: {
+      bg: "surface.600",
+    },
+  },
+});
+
 const secondary = definePartsStyle({
   field: {
     px: 4,
@@ -26,7 +37,7 @@ const secondary = definePartsStyle({
 });
 
 export const Input = defineMultiStyleConfig({
-  variants: { primary, secondary },
+  variants: { primary, secondary, payment },
   defaultProps: {
     variant: "primary",
   },

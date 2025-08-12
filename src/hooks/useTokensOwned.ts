@@ -19,7 +19,7 @@ export const useTokensOwned = () => {
   });
 };
 
-export const useTokenMeta = (id: string) => {
+export const useTokenMeta = (id: string | undefined) => {
   const { data, isLoading, isFetching } = useHeliusApi<TokenResult>({
     method: "getAsset",
     params: {

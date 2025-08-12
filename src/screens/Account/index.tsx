@@ -23,6 +23,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import { ClipboardText } from "@components/ClipboardText";
 import { LinkUserName } from "@components/LinkUsername";
 import { useUsernameById } from "@hooks/useUsernames";
+import { shortenPrincipalId } from "@utils/string";
+import { ClaimUserName } from "@components/ClaimUsername";
 
 const ExportKeySettings: React.FC = () => {
   const { exportWallet } = usePrivyWallet();
@@ -43,24 +45,28 @@ const ExportKeySettings: React.FC = () => {
 export const UsernameSwitch: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
   const { address } = usePrivyWallet();
-  const { displayName } = useUsernameById(address);
+  const { displayName, isWalletAddress, hasUserNames } =
+    useUsernameById(address);
+
   return (
     <Flex w="100%" direction={"column"}>
-      <LinkUserName onClose={onClose} isOpen={isOpen} />
+      {!hasUserNames && <ClaimUserName isOpen={isOpen} onClose={onClose} />}
+      {hasUserNames && <LinkUserName onClose={onClose} isOpen={isOpen} />}
       <Flex w="100%">
         <Setting
           title="Username"
           info=" Choose a different username to display across the app. This does not change your wallet address."
         >
           <Button onClick={onOpen} size={"sm"} rightIcon={<TbEdit />}>
-            {displayName}
+            {isWalletAddress ? shortenPrincipalId(displayName) : displayName}
           </Button>
         </Setting>
       </Flex>
+
       <Flex mt={5} mb={3} opacity={0.6} fontSize={13}>
         Discover, bid and claim your unique identity in
       </Flex>
-      <Flex>
+      <Flex gap={2}>
         <Link
           as={TansatackLink}
           to={import.meta.env.VITE_SOLMAIL_MAIL_DOT_FUN}

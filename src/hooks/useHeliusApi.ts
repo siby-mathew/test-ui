@@ -3,7 +3,12 @@ import axios from "axios";
 import { QueryKeys } from "src/types";
 
 type PayLoad = {
-  method: "getTokenAccounts" | "getAsset";
+  method:
+    | "getTokenAccounts"
+    | "getAsset"
+    | "getSignaturesForAddress"
+    | "getTransaction";
+
   params: any;
 };
 export const useHeliusApi = <T>({ method, params }: PayLoad) => {
