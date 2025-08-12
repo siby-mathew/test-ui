@@ -1,12 +1,12 @@
 import { chakra, Flex, type BoxProps } from "@chakra-ui/react";
-import { useUsernameById } from "@hooks/useUsernames";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { getAvatarColor } from "@utils/string";
 
 export const Avatar: React.FC<{ name: string } & BoxProps> = ({
   name = "",
   ...boxProps
 }) => {
-  const { displayName } = useUsernameById(name);
+  const { displayName } = useGetLinkedUsernameById(name);
   const bg = getAvatarColor(displayName ?? "");
   return (
     <Flex

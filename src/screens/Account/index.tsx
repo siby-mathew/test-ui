@@ -21,8 +21,8 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import { usePrivy } from "@privy-io/react-auth";
 
 import { ClipboardText } from "@components/ClipboardText";
-import { LinkUserName } from "@components/LinkUsername";
-import { useUsernameById } from "@hooks/useUsernames";
+import { UsernameLinkBox } from "@components/LinkUsername";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
 import { ClaimUserName } from "@components/ClaimUsername";
 
@@ -46,24 +46,31 @@ export const UsernameSwitch: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
   const { address } = usePrivyWallet();
   const { displayName, isWalletAddress, hasUserNames } =
-    useUsernameById(address);
+    useGetLinkedUsernameById(address);
 
   return (
     <Flex w="100%" direction={"column"}>
       {!hasUserNames && <ClaimUserName isOpen={isOpen} onClose={onClose} />}
-      {hasUserNames && <LinkUserName onClose={onClose} isOpen={isOpen} />}
-      <Flex w="100%">
+
+      <Flex w="100%" direction={"column"}>
         <Setting
           title="Username"
-          info=" Choose a different username to display across the app. This does not change your wallet address."
+          info="You can add multiple Usernames to your Mailbox, all have the same Wallet address, but you can operate with different names"
         >
-          <Button onClick={onOpen} size={"sm"} rightIcon={<TbEdit />}>
-            {isWalletAddress ? shortenPrincipalId(displayName) : displayName}
-          </Button>
+          {!hasUserNames && (
+            <Button onClick={onOpen} size={"sm"} rightIcon={<TbEdit />}>
+              {isWalletAddress ? shortenPrincipalId(displayName) : displayName}
+            </Button>
+          )}
         </Setting>
-      </Flex>
 
-      <Flex mt={5} mb={3} opacity={0.6} fontSize={13}>
+        {hasUserNames && (
+          <Flex bg="surface.500" p={5} borderRadius={5} my={5}>
+            <UsernameLinkBox />
+          </Flex>
+        )}
+      </Flex>
+      <Flex mb={3} opacity={0.6} fontSize={13}>
         Discover, bid and claim your unique identity in
       </Flex>
       <Flex gap={2}>
@@ -165,7 +172,7 @@ export const AccountPage: React.FC = () => {
         <VStack py={5} gap={6}>
           <ExportKeySettings />
           <UsernameSwitch />
-          <LinkedAccounts />
+
           <SessionHandler />
         </VStack>
       </Box>

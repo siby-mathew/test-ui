@@ -6,18 +6,24 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   ModalProps,
   Spinner,
   VStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
-import { useLinkUsername, useUnlinkUsername } from "@hooks/useUsername";
-import { useGetMyUsernamesByOwner } from "@hooks/useUsernames";
+import {
+  useLinkUsername,
+  useUnlinkUsername,
+  useUsernameUpdateStatus,
+} from "@hooks/useUsername";
+import { useGetMyUsernames } from "@hooks/useUsernames";
 import { PublicKey } from "@solana/web3.js";
+
 import { isFunction } from "lodash";
+import { useState } from "react";
 
 type LinkableMail = {
   username: string;
@@ -25,8 +31,10 @@ type LinkableMail = {
   mailbox: PublicKey | null;
   account: PublicKey;
   onUpdate: () => void;
+  updatePending: boolean;
+  updateStatus: (s: boolean) => void;
 };
-const LinkableMail: React.FC<LinkableMail> = ({
+export const LinkableMail: React.FC<LinkableMail> = ({
   username,
   domain,
   mailbox,
@@ -37,7 +45,11 @@ const LinkableMail: React.FC<LinkableMail> = ({
   const isLinked = address && address === mailbox?.toString();
   const { mutateAsync, isPending } = useUnlinkUsername();
   const { mutateAsync: linkUsername, isPending: isLinking } = useLinkUsername();
+  const { updatingUsername } = useUsernameUpdateStatus();
   const onUnlinkHandler = async () => {
+    if (updatingUsername) {
+      return;
+    }
     await mutateAsync({
       usernameAccount: account,
     });
@@ -47,6 +59,9 @@ const LinkableMail: React.FC<LinkableMail> = ({
   };
 
   const onLinkHandler = async () => {
+    if (updatingUsername) {
+      return;
+    }
     await linkUsername({
       usernameAccount: account,
     });
@@ -70,17 +85,24 @@ const LinkableMail: React.FC<LinkableMail> = ({
           </Flex>
         )}
       </Flex>
-      <Flex>
-        {isLinked && (
-          <Button variant={"red"} size={"sm"} onClick={onUnlinkHandler}>
-            Unlink {isPending && <Spinner ml={1} size={"sm"} />}
-          </Button>
-        )}
-        {!isLinked && (
-          <Button onClick={onLinkHandler} size={"sm"}>
-            Link {isLinking && <Spinner ml={1} size={"sm"} />}
-          </Button>
-        )}
+      <Flex data-key={updatingUsername ? "updating" : "not-updating"}>
+        <Tooltip
+          isDisabled={!updatingUsername}
+          hasArrow
+          label="Update is in progress"
+        >
+          {isLinked && (
+            <Button variant={"red"} size={"sm"} onClick={onUnlinkHandler}>
+              Unlink {isPending && <Spinner ml={1} size={"sm"} />}
+            </Button>
+          )}
+
+          {!isLinked && (
+            <Button onClick={onLinkHandler} size={"sm"}>
+              Link {isLinking && <Spinner ml={1} size={"sm"} />}
+            </Button>
+          )}
+        </Tooltip>
       </Flex>
     </Flex>
   );
@@ -90,12 +112,6 @@ export const LinkUserName: React.FC<Omit<ModalProps, "children">> = ({
   onClose,
   ...props
 }) => {
-  const { address } = usePrivyWallet();
-  const { usernames } = useGetMyUsernamesByOwner(address);
-
-  const onUpdate = () => {
-    onClose();
-  };
   return (
     <Modal isCentered {...props} onClose={onClose}>
       <ModalOverlay />
@@ -105,26 +121,44 @@ export const LinkUserName: React.FC<Omit<ModalProps, "children">> = ({
           <ModalCloseButton />
         </ModalHeader>
         <ModalBody pt={0}>
-          <VStack w="100%">
-            {usernames &&
-              usernames.map(({ account, publicKey }) => {
-                return (
-                  <LinkableMail
-                    username={account.username}
-                    domain={account.domain}
-                    mailbox={account.mailbox}
-                    account={publicKey}
-                    onUpdate={onUpdate}
-                  />
-                );
-              })}
-
-            {(!usernames || !usernames.length) && (
-              <Flex>No usernames avalable</Flex>
-            )}
-          </VStack>
+          <Flex w="100%" mb={5}>
+            <UsernameLinkBox />
+          </Flex>
         </ModalBody>
       </ModalContent>
     </Modal>
+  );
+};
+
+export const UsernameLinkBox: React.FC<{ onUpdate?: () => void }> = ({
+  onUpdate,
+}) => {
+  const { address } = usePrivyWallet();
+  const { usernames } = useGetMyUsernames(address);
+  const [isUpdating, setIsUpdating] = useState<boolean>(!1);
+  const onUpdateHandler = () => {
+    if (isFunction(onUpdate)) {
+      onUpdate();
+    }
+  };
+  return (
+    <VStack w="100%">
+      {usernames &&
+        usernames.map(({ account, publicKey }) => {
+          return (
+            <LinkableMail
+              username={account.username}
+              domain={account.domain}
+              mailbox={account.mailbox}
+              account={publicKey}
+              onUpdate={onUpdateHandler}
+              updateStatus={setIsUpdating}
+              updatePending={isUpdating}
+            />
+          );
+        })}
+
+      {(!usernames || !usernames.length) && <Flex>No usernames avalable</Flex>}
+    </VStack>
   );
 };

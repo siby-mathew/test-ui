@@ -7,16 +7,33 @@ import {
   TokenResult,
 } from "src/types/token";
 import { useMemo } from "react";
+import { useBalance } from "./useBalance";
+import { BASE_TOKEN } from "@const/tokens";
 
 export const useTokensOwned = () => {
+  const { data: solBalance } = useBalance();
   const { address } = usePrivyWallet();
-  return useHeliusApi<TokenAccountsResponse>({
+  const { data, isLoading, isFetching } = useHeliusApi<TokenAccountsResponse>({
     params: {
       owner: address,
       options: { showZeroBalance: true },
     },
     method: "getTokenAccounts",
   });
+
+  const tokens = useMemo(() => {
+    const arr = [{ ...BASE_TOKEN, amount: solBalance ?? 0 }];
+    if (!data || !data.token_accounts || !data.token_accounts.length) {
+      return arr;
+    }
+    return arr.concat([...data.token_accounts]);
+  }, [data, solBalance]);
+
+  return {
+    tokens,
+    isLoading,
+    isFetching,
+  };
 };
 
 export const useTokenMeta = (id: string | undefined) => {
@@ -42,4 +59,15 @@ export const useTokenMeta = (id: string | undefined) => {
     isFetching,
     token: formatted,
   };
+};
+
+export const useGetTokenById = (id: string | undefined) => {
+  const { tokens } = useTokensOwned();
+  const token = useMemo(() => {
+    if (!tokens || !tokens.length) {
+      return null;
+    }
+    return tokens.find((item) => item.mint === id);
+  }, [id, tokens]);
+  return token;
 };

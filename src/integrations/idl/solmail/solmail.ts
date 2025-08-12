@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solmail.json`.
  */
 export type Solmail = {
-  "address": "HDXZfiQUehMZJTB4ZwNyJ4Xx9okuzXUTVJ58G3ALUu2G",
+  "address": "3guus8b2ELcHCU5yT39RCsnKGfg3W43TdLAvTvaWTSw5",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -4761,22 +4761,8 @@ export type Solmail = {
         "kind": "struct",
         "fields": [
           {
-            "name": "username",
-            "type": "string"
-          },
-          {
             "name": "authority",
             "type": "pubkey"
-          },
-          {
-            "name": "mailbox",
-            "type": {
-              "option": "pubkey"
-            }
-          },
-          {
-            "name": "domain",
-            "type": "string"
           },
           {
             "name": "domainAccount",
@@ -4789,6 +4775,20 @@ export type Solmail = {
           {
             "name": "createdAt",
             "type": "u32"
+          },
+          {
+            "name": "mailbox",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "domain",
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "type": "string"
           },
           {
             "name": "bump",

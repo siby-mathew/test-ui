@@ -6,7 +6,7 @@ import { useComposer } from "@hooks/useComposer";
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useLabelIndexUpdate } from "@hooks/useMailIndexUpdate";
-import { useUsernameById } from "@hooks/useUsernames";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
 import { format } from "@utils/time";
 
@@ -26,7 +26,7 @@ export const MailPreviewHeader: React.FC = () => {
     context !== MailBoxLabels.outbox
       ? mail?.from?.toString()
       : mail?.to?.toString();
-  const { displayName } = useUsernameById(address);
+  const { displayName } = useGetLinkedUsernameById(address);
   const onStatusUpdate = async (status: MailLabelIndex) => {
     await mutateAsync({ index: status });
   };

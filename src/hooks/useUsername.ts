@@ -4,7 +4,11 @@ import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { DOMAINS } from "@const/domain";
 import { useToast } from "@hooks/useToast";
-import { useUsernames } from "@hooks/useUsernames";
+import { usePrivyWallet } from "./usePrivyWallet";
+import { useGetLinkedUsernameById, useUsernameUpdater } from "./useUsernames";
+import { useAtom } from "jotai";
+import { appState } from "@state/index";
+import { useEffect } from "react";
 
 const getUsernamePDA = (username: string, programId: PublicKey) =>
   PublicKey.findProgramAddressSync(
@@ -36,9 +40,12 @@ export const useUsernameStatus = () => {
 };
 
 export const useClaimUserName = () => {
-  const { refetch } = useUsernames();
   const { program, provider } = useGetMailProgramInstance();
+  const { address } = usePrivyWallet();
+  const { account } = useGetLinkedUsernameById(address);
   const { showToast } = useToast();
+  const { refetch } = useUsernameUpdater();
+
   const onFail = () => {
     showToast("Failed to create username", { type: "error" });
     refetch();
@@ -76,23 +83,25 @@ export const useClaimUserName = () => {
 
             .rpc();
 
-          const [mailAccountPDA] = PublicKey.findProgramAddressSync(
-            [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
-            program.programId
-          );
+          if (!account || !account.account) {
+            const [mailAccountPDA] = PublicKey.findProgramAddressSync(
+              [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
+              program.programId
+            );
 
-          const mailAccount =
-            await program.account.solMailAccountV2.fetch(mailAccountPDA);
-          const mailboxToLink = mailAccount.mailbox;
+            const mailAccount =
+              await program.account.solMailAccountV2.fetch(mailAccountPDA);
+            const mailboxToLink = mailAccount.mailbox;
 
-          await program.methods
-            .linkMailboxToUsername(mailboxToLink)
-            .accounts({
-              usernameAccount: usernameAccountPDA,
-              mailAccountV2: mailAccountPDA,
-              authority: provider.publicKey,
-            })
-            .rpc();
+            await program.methods
+              .linkMailboxToUsername(mailboxToLink)
+              .accounts({
+                usernameAccount: usernameAccountPDA,
+                mailAccountV2: mailAccountPDA,
+                authority: provider.publicKey,
+              })
+              .rpc();
+          }
 
           return true;
         } catch {
@@ -104,21 +113,22 @@ export const useClaimUserName = () => {
       onFail();
     },
     onSuccess: (res) => {
+      refetch();
       if (res) {
         showToast("Username created", { type: "success" });
       } else {
         onFail();
       }
-      refetch();
     },
   });
 };
 
 export const useUnlinkUsername = () => {
+  const { updateStatus } = useUsernameUpdateStatus();
   const { program, provider } = useGetMailProgramInstance();
-  const { refetch } = useUsernames();
+  const { refetch } = useUsernameUpdater();
   const { showToast } = useToast();
-  return useMutation({
+  const mutation = useMutation({
     mutationKey: [QueryKeys.UNLINNK_USERNAME],
     mutationFn: async ({ usernameAccount }: { usernameAccount: PublicKey }) => {
       try {
@@ -155,13 +165,37 @@ export const useUnlinkUsername = () => {
       });
     },
   });
+
+  useEffect(() => {
+    updateStatus(mutation.isPending);
+  }, [mutation.isPending, updateStatus]);
+
+  return mutation;
 };
 
+export const useUsernameUpdateStatus = () => {
+  const [{ updatingUsername }, set] = useAtom(appState);
+
+  const updateStatus = (status: boolean) => {
+    set((prev) => ({
+      ...prev,
+      updatingUsername: status,
+    }));
+  };
+  return {
+    updatingUsername,
+    updateStatus,
+  };
+};
 export const useLinkUsername = () => {
-  const { refetch } = useUsernames();
+  const { updateStatus } = useUsernameUpdateStatus();
+  const { address } = usePrivyWallet();
+  const { account } = useGetLinkedUsernameById(address);
+  const { mutateAsync } = useUnlinkUsername();
   const { program, provider } = useGetMailProgramInstance();
   const { showToast } = useToast();
-  return useMutation({
+  const { refetch } = useUsernameUpdater();
+  const mutation = useMutation({
     mutationKey: [QueryKeys.UNLINNK_USERNAME],
     mutationFn: async ({ usernameAccount }: { usernameAccount: PublicKey }) => {
       try {
@@ -172,6 +206,12 @@ export const useLinkUsername = () => {
           [Buffer.from("mail-accountv2"), provider.publicKey.toBuffer()],
           program.programId
         );
+
+        if (account && account.account) {
+          await mutateAsync({
+            usernameAccount: account.publicKey,
+          });
+        }
 
         const mailAccount =
           await program.account.solMailAccountV2.fetch(mailAccountPDA);
@@ -195,6 +235,7 @@ export const useLinkUsername = () => {
         type: "error",
       });
     },
+
     onSuccess: () => {
       refetch();
       showToast("Mailbox linked successfully", {
@@ -202,4 +243,10 @@ export const useLinkUsername = () => {
       });
     },
   });
+
+  useEffect(() => {
+    updateStatus(mutation.isPending);
+  }, [mutation.isPending, updateStatus]);
+
+  return mutation;
 };

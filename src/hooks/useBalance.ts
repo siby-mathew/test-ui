@@ -9,10 +9,6 @@ import { useToken } from "./useToken";
 import { useMemo } from "react";
 import BigNumber from "bignumber.js";
 
-/**
- * useBalance hook
- * @param tokenMint optional token mint address; if not provided, fetches native SOL
- */
 export const useBalance = (
   tokenMint?: string,
   requestedAmount?: string | number
@@ -63,6 +59,11 @@ export const useBalance = (
     isLoading,
     isFetched,
 
-    formattedBalance: formatTokenBalance(data ?? 0, decimals, symbol),
+    formattedBalance: formatTokenBalance({
+      rawAmount: data ?? 0,
+      mintDecimals: decimals,
+      suffix: symbol,
+      decimals: 2,
+    }),
   };
 };

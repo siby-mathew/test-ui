@@ -17,7 +17,7 @@ const getRegex = () => {
   return pattern;
 };
 
-const SAME_ADDRESS_ERROR =
+export const SAME_ADDRESS_ERROR =
   "Recipient address cannot be the same as your own address.";
 export const useEmailResolver = () => {
   const { address } = usePrivyWallet();

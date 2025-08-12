@@ -5,6 +5,7 @@ export type AtomType = {
   composerCollapsed: boolean;
   thread: string;
   ref: string;
+  updatingUsername: boolean;
 };
 export const appState = atom<AtomType>({
   isComposerOpen: !1,
@@ -12,6 +13,7 @@ export const appState = atom<AtomType>({
   composerState: "",
   thread: "",
   ref: "",
+  updatingUsername: !1,
 });
 
 appState.debugLabel = "AppState";

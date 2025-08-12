@@ -11,21 +11,19 @@ import {
 } from "@chakra-ui/react";
 import { TokenCard } from "@components/TokenCard";
 
-import { useBalance } from "@hooks/useBalance";
-
 import { useTokensOwned } from "@hooks/useTokensOwned";
 
 export const Holdings: React.FC = () => {
-  const { data, isLoading } = useTokensOwned();
-  const { data: solBalance } = useBalance();
+  const { tokens, isLoading } = useTokensOwned();
+
   return (
-    <Box w="100%" bg="surface.500" borderRadius={5}>
+    <Box w="100%" borderRadius={5}>
       <Tabs>
         <TabList>
-          <Tab py={4} flex={"auto"}>
+          <Tab fontWeight={"bold"} py={4} flex={"auto"}>
             Tokens
           </Tab>
-          <Tab py={4} flex={"auto"}>
+          <Tab fontWeight={"bold"} py={4} flex={"auto"}>
             Activity
           </Tab>
         </TabList>
@@ -33,23 +31,27 @@ export const Holdings: React.FC = () => {
         <TabPanels>
           <TabPanel>
             <VStack gap={0} w="100%">
-              <TokenCard
-                address=""
-                mint={import.meta.env.VITE_SOLMAIL_SOLANA_ADDRESS}
-                amount={solBalance ?? 0}
-                delegated_amount={0}
-                frozen
-                owner=""
-              />
               {isLoading && (
                 <Flex h={100} alignItems={"center"} justifyContent={"center"}>
                   <Spinner />
                 </Flex>
               )}
-              {data &&
-                data.token_accounts &&
-                data.token_accounts.map((token) => {
-                  return <TokenCard key={token.address} {...token} />;
+              {tokens &&
+                tokens.length > 0 &&
+                tokens.map((token) => {
+                  return (
+                    <Flex
+                      w="100%"
+                      key={token.address}
+                      transition={"all ease .2s"}
+                      _hover={{
+                        opacity: 0.6,
+                        bg: "surface.300",
+                      }}
+                    >
+                      <TokenCard {...token} />
+                    </Flex>
+                  );
                 })}
             </VStack>
           </TabPanel>

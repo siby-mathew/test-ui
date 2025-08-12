@@ -14,6 +14,9 @@ const green = defineStyle({
   _hover: {
     bg: "green.400",
   },
+  _disabled: {
+    bg: "green.400 !important",
+  },
 });
 
 const red = defineStyle({
@@ -24,6 +27,9 @@ const red = defineStyle({
   },
   _active: {
     bg: "red.400",
+  },
+  _disabled: {
+    bg: "red.500 !important",
   },
 });
 export const Button = defineStyleConfig({

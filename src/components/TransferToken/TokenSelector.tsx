@@ -27,12 +27,18 @@ export const TokenSelector: React.FC = () => {
 
   const onSelectToken = (mint: string) => {
     setValue("token", mint);
+    setValue("amount", "");
     onClose();
   };
 
   return (
     <FieldWrapper label="Token" name="token">
-      <TokenList onSelect={onSelectToken} isOpen={isOpen} onClose={onClose} />
+      <TokenList
+        selected={value}
+        onSelect={onSelectToken}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       <Input
         position={"relative"}
         variant={"payment"}

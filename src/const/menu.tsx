@@ -1,10 +1,5 @@
 import { IoMail, IoSend } from "react-icons/io5";
-import {
-  FaCheckToSlot,
-  FaMoneyBillWave,
-  FaTrash,
-  FaWallet,
-} from "react-icons/fa6";
+import { FaCheckToSlot, FaGift, FaTrash, FaWallet } from "react-icons/fa6";
 import { GrAction } from "react-icons/gr";
 import { FaMailBulk, FaWalking } from "react-icons/fa";
 
@@ -130,7 +125,7 @@ export const MENU: MenuConfig[] = [
     skipRender: true,
   },
   {
-    icon: FaMoneyBillWave,
+    icon: FaGift,
     name: "Rewards",
     link: `/u/rewards/dashboard`,
     id: "rewards",

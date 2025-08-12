@@ -33,7 +33,7 @@ import { MenuHeader } from "@components/MenuHeader";
 import { noop } from "lodash";
 import { ClaimUserName } from "@components/ClaimUsername";
 import { DOMAINS } from "@const/domain";
-import { useUsernameById } from "@hooks/useUsernames";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
 export const AppSwitch: React.FC = () => {
@@ -100,7 +100,7 @@ export const Sidebar: React.FC = () => {
     return menu || MENU[0];
   }, [pathname]);
   const { wallet } = usePrivyWallet();
-  const { username, isLoading } = useUsernameById(wallet?.address);
+  const { username, isLoading } = useGetLinkedUsernameById(wallet?.address);
   const hasChildMenu =
     selectedmenu && selectedmenu.submenu && selectedmenu.submenu.length > 0;
   return (

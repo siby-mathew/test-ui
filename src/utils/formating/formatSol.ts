@@ -6,16 +6,54 @@
  * @param suffix optional suffix like "SOL" or "USDC"
  * @returns formatted balance string
  */
-export function formatTokenBalance(
-  rawAmount: number | bigint,
-  mintDecimals: number,
 
-  suffix?: string,
-  displayDecimals: number = 2
-): string {
+type Options = {
+  rawAmount: number | bigint;
+  mintDecimals?: number;
+  suffix?: string;
+  decimals?: number;
+  compact?: boolean;
+  prefix?: string;
+};
+export function formatTokenBalance({
+  rawAmount,
+  mintDecimals = 9,
+  suffix = "",
+  decimals = 0,
+  compact = true,
+  prefix = "",
+}: Options): string {
   const divisor = 10 ** mintDecimals;
   const balance = Number(rawAmount) / divisor;
-  return `${balance.toFixed(displayDecimals)}${suffix ? ` ${suffix}` : ""}`;
+
+  if (compact) {
+    const absBalance = Math.abs(balance);
+    const units = [
+      { value: 1e12, symbol: "T" },
+      { value: 1e9, symbol: "B" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e3, symbol: "K" },
+    ];
+
+    for (const unit of units) {
+      if (absBalance >= unit.value) {
+        const val = balance / unit.value;
+        const hasDecimals = val % 1 !== 0;
+        return `${val.toLocaleString(undefined, {
+          minimumFractionDigits: hasDecimals && decimals > 0 ? 1 : 0,
+          maximumFractionDigits: hasDecimals && decimals > 0 ? decimals : 0,
+        })}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
+      }
+    }
+  }
+
+  const hasDecimals = balance % 1 !== 0;
+  const formatted = balance.toLocaleString(undefined, {
+    minimumFractionDigits: hasDecimals && decimals > 0 ? 1 : 0,
+    maximumFractionDigits: hasDecimals && decimals > 0 ? decimals : 0,
+  });
+
+  return `${prefix ? `${prefix} ` : ""}${formatted}${suffix ? ` ${suffix}` : ""}`;
 }
 
 import BigNumber from "bignumber.js";
