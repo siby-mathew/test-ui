@@ -12,7 +12,10 @@ import {
   Spinner,
   VStack,
   Tooltip,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
+import { USERNAME_SWITCH_INFO } from "@const/info";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import {
   useLinkUsername,
@@ -68,8 +71,13 @@ export const LinkableMail: React.FC<LinkableMail> = ({
   };
   return (
     <Flex w="100%" direction={"row"}>
-      <Flex direction={"column"} flex={"auto"}>
-        <Flex w="100%">
+      <Flex direction={"column"} flex={"auto"} h="100%">
+        <Flex
+          w="100%"
+          color={isLinked ? "green.500" : ""}
+          alignItems={"center"}
+          h="100%"
+        >
           {username}@{domain}
         </Flex>
         {isLinked && (
@@ -120,9 +128,15 @@ export const LinkUserName: React.FC<Omit<ModalProps, "children">> = ({
           Link username
           <ModalCloseButton />
         </ModalHeader>
-        <ModalBody pt={0}>
-          <Flex w="100%" mb={5}>
+        <ModalBody pt={0} mb={5}>
+          <Flex w="100%">
             <UsernameLinkBox />
+          </Flex>
+          <Flex mt={5}>
+            <Alert status="info" borderRadius={5} fontSize={12}>
+              <AlertIcon />
+              {USERNAME_SWITCH_INFO}
+            </Alert>
           </Flex>
         </ModalBody>
       </ModalContent>

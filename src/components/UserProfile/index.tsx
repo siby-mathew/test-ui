@@ -179,7 +179,7 @@ const ProfileBalance: React.FC = () => {
       <Flex alignItems={"center"} justifyContent={"center"} my={2}>
         <Button onClick={onOpen}>Deposit</Button>
       </Flex>
-      <Flex alignItems={"center"} justifyContent={"center"}>
+      <Flex alignItems={"center"} justifyContent={"center"} fontSize={13}>
         <ClipboardText textToCopy={wallet?.address ?? ""}>
           {shortenPrincipalId(wallet?.address ?? "")}
         </ClipboardText>

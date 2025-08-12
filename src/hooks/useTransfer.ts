@@ -12,6 +12,7 @@ import { QueryKeys } from "src/types";
 
 export const useTransfer = () => {
   const { provider } = useGetMailProgramInstance();
+
   return useMutation({
     mutationKey: [QueryKeys.TRANSFER],
     mutationFn: async ({ to, amount }: { to: string; amount: number }) => {

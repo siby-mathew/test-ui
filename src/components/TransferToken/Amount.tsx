@@ -1,18 +1,21 @@
 import { Flex, Input } from "@chakra-ui/react";
 import { FieldWrapper } from "@components/Field";
 import { BASE_TOKEN } from "@const/tokens";
+
 import { useEstimatedFee } from "@hooks/useEstimatedFee";
 import { useGetTokenById, useTokenMeta } from "@hooks/useTokensOwned";
 import { formatTokenBalance } from "@utils/formating";
 import BigNumber from "bignumber.js";
 import { useFormContext } from "react-hook-form";
 import { TokenTransferForm } from "src/types/token";
+
 export const PaymentAmount: React.FC = () => {
   const { register, getValues, watch, setValue } =
     useFormContext<TokenTransferForm>();
   const tokenAddress = getValues().token;
   const { token: tokenMeta } = useTokenMeta(tokenAddress);
   const tokenBalance = useGetTokenById(tokenAddress);
+
   const isBaseToken = tokenAddress === BASE_TOKEN.address;
   const { fee } = useEstimatedFee();
   watch(["token", "amount"]);
@@ -24,6 +27,7 @@ export const PaymentAmount: React.FC = () => {
       rawAmount: spendable.toNumber(),
       mintDecimals: tokenMeta?.decimals ?? 9,
       suffix: "",
+      decimals: tokenMeta?.decimals,
     });
   };
 
@@ -69,7 +73,6 @@ export const PaymentAmount: React.FC = () => {
           </Flex>
         </Flex>
 
-        {/* Balance Display */}
         <Flex fontSize={13} justifyContent="space-between" py={2}>
           <Flex>Available balance</Flex>
           {tokenBalance && (

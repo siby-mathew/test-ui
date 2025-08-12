@@ -8,7 +8,6 @@ import { usePrivyWallet } from "./usePrivyWallet";
 import { useGetLinkedUsernameById, useUsernameUpdater } from "./useUsernames";
 import { useAtom } from "jotai";
 import { appState } from "@state/index";
-import { useEffect } from "react";
 
 const getUsernamePDA = (username: string, programId: PublicKey) =>
   PublicKey.findProgramAddressSync(
@@ -153,22 +152,23 @@ export const useUnlinkUsername = () => {
       }
     },
     onError: () => {
+      updateStatus(!1);
       refetch();
       showToast("Failed to unlink mailbox", {
         type: "error",
       });
     },
+    onMutate: () => {
+      updateStatus(!0);
+    },
     onSuccess: () => {
+      updateStatus(!1);
       refetch();
       showToast("Mailbox unlinked successfully", {
         type: "success",
       });
     },
   });
-
-  useEffect(() => {
-    updateStatus(mutation.isPending);
-  }, [mutation.isPending, updateStatus]);
 
   return mutation;
 };
@@ -230,23 +230,23 @@ export const useLinkUsername = () => {
       }
     },
     onError: () => {
+      updateStatus(!1);
       refetch();
       showToast("Failed to link mailbox", {
         type: "error",
       });
     },
-
+    onMutate: () => {
+      updateStatus(!0);
+    },
     onSuccess: () => {
+      updateStatus(!1);
       refetch();
       showToast("Mailbox linked successfully", {
         type: "success",
       });
     },
   });
-
-  useEffect(() => {
-    updateStatus(mutation.isPending);
-  }, [mutation.isPending, updateStatus]);
 
   return mutation;
 };

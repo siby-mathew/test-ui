@@ -36,6 +36,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
             _hover={{
               opacity: 0.7,
             }}
+            color="solana.end"
           >
             {displayName}
             <Icon ml={1} mt={"1px"} fontSize={9} as={BiSolidDownArrow} />

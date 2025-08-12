@@ -127,7 +127,7 @@ export const Sidebar: React.FC = () => {
         <VStack align={"center"} px={"8px"} py={"10px"}>
           <Flex my={"8px"}>
             <Link to={"/"}>
-              <Image src={config.logo} />
+              <Image src={config.logo} w="28px" />
             </Link>
           </Flex>
           {MENU.map((menu) => {

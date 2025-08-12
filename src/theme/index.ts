@@ -26,6 +26,10 @@ export const AppTheme = extendTheme({
         color: "var(--toastify-text-color-dark)",
         "backdrop-filter": "blur(10px)",
         border: "solid 1px #161927",
+        borderRadius: "20px",
+      },
+      ".Toastify__close-button>svg": {
+        width: "11px !important",
       },
     }),
   },

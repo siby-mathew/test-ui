@@ -4,16 +4,15 @@ import {
   createTransferInstruction,
   getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
-import { useMutation } from "@tanstack/react-query";
+import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toRawAmount } from "@utils/formating";
 import { QueryKeys } from "src/types";
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
 import { usePrivyWallet } from "./usePrivyWallet";
 import { useSolanaConnection } from "./useConnection";
 import { useToast } from "./useToast";
-import { createTransfer } from "@solana/pay";
-import BigNumber from "bignumber.js";
+
 type PayLoad = {
   to: string;
   amount: string;
@@ -26,7 +25,12 @@ export const usePaymentTransfer = () => {
 
   const connection = useSolanaConnection();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.SOL_BALANCE] });
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.TOKENS] });
+  };
   return useMutation({
     mutationKey: [QueryKeys.PAYMENT_TRANSFER],
     mutationFn: async ({ to, amount, token, decimals }: PayLoad) => {
@@ -38,8 +42,9 @@ export const usePaymentTransfer = () => {
 
       const splToken =
         token !== BASE_TOKEN.address ? new PublicKey(token ?? "") : null;
+
       const recipient = new PublicKey(to);
-      const _amount = new BigNumber(amount ?? "0");
+
       try {
         let transaction: Transaction;
 
@@ -48,6 +53,7 @@ export const usePaymentTransfer = () => {
             splToken,
             provider.publicKey
           );
+
           const toTokenAccount = await getAssociatedTokenAddress(
             splToken,
             recipient
@@ -76,15 +82,12 @@ export const usePaymentTransfer = () => {
           tx.add(transferIx);
           transaction = tx;
         } else {
-          transaction = await createTransfer(
-            connection,
-            provider.publicKey,
-            {
-              recipient,
-              amount: _amount,
-              reference: Keypair.generate().publicKey,
-            },
-            { commitment: "confirmed" }
+          transaction = new Transaction().add(
+            SystemProgram.transfer({
+              fromPubkey: provider.publicKey,
+              toPubkey: recipient,
+              lamports: Number(toRawAmount(amount.toString(), decimals)),
+            })
           );
         }
 
@@ -94,9 +97,10 @@ export const usePaymentTransfer = () => {
         await wallet.sendTransaction(transaction, connection, {
           skipPreflight: false,
         });
-
+        invalidate();
         showToast("Successfully transferred", { type: "success" });
       } catch {
+        invalidate();
         showToast("Failed transfer", { type: "error" });
       }
     },

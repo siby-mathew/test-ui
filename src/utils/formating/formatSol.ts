@@ -19,7 +19,7 @@ export function formatTokenBalance({
   rawAmount,
   mintDecimals = 9,
   suffix = "",
-  decimals = 0,
+  decimals = 2,
   compact = true,
   prefix = "",
 }: Options): string {
@@ -39,23 +39,30 @@ export function formatTokenBalance({
       if (absBalance >= unit.value) {
         const val = balance / unit.value;
         const hasDecimals = val % 1 !== 0;
-        return `${val.toLocaleString(undefined, {
-          minimumFractionDigits: hasDecimals && decimals > 0 ? 1 : 0,
-          maximumFractionDigits: hasDecimals && decimals > 0 ? decimals : 0,
-        })}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
+
+        return `${
+          hasDecimals && decimals > 0
+            ? val.toLocaleString(undefined, {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: decimals,
+              })
+            : Math.trunc(val).toLocaleString()
+        }${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
       }
     }
   }
 
   const hasDecimals = balance % 1 !== 0;
-  const formatted = balance.toLocaleString(undefined, {
-    minimumFractionDigits: hasDecimals && decimals > 0 ? 1 : 0,
-    maximumFractionDigits: hasDecimals && decimals > 0 ? decimals : 0,
-  });
+  const formatted =
+    decimals === 0
+      ? Math.trunc(balance).toLocaleString() // avoid rounding
+      : balance.toLocaleString(undefined, {
+          minimumFractionDigits: hasDecimals ? 1 : 0,
+          maximumFractionDigits: decimals,
+        });
 
   return `${prefix ? `${prefix} ` : ""}${formatted}${suffix ? ` ${suffix}` : ""}`;
 }
-
 import BigNumber from "bignumber.js";
 
 /**

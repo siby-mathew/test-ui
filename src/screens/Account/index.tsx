@@ -25,6 +25,7 @@ import { UsernameLinkBox } from "@components/LinkUsername";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
 import { ClaimUserName } from "@components/ClaimUsername";
+import { USERNAME_SWITCH_INFO } from "@const/info";
 
 const ExportKeySettings: React.FC = () => {
   const { exportWallet } = usePrivyWallet();
@@ -53,10 +54,7 @@ export const UsernameSwitch: React.FC = () => {
       {!hasUserNames && <ClaimUserName isOpen={isOpen} onClose={onClose} />}
 
       <Flex w="100%" direction={"column"}>
-        <Setting
-          title="Username"
-          info="You can add multiple Usernames to your Mailbox, all have the same Wallet address, but you can operate with different names"
-        >
+        <Setting title="Username" info={USERNAME_SWITCH_INFO}>
           {!hasUserNames && (
             <Button onClick={onOpen} size={"sm"} rightIcon={<TbEdit />}>
               {isWalletAddress ? shortenPrincipalId(displayName) : displayName}
