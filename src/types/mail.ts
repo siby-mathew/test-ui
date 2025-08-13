@@ -99,7 +99,7 @@ export type ComposerFormInputs = {
 };
 
 export enum StorageVersion {
-  "pinata" = "0.0.5",
+  "pinata" = "1.0.0",
   "arweave" = "0.0.4",
 }
 

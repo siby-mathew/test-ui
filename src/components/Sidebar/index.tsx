@@ -100,9 +100,12 @@ export const Sidebar: React.FC = () => {
     return menu || MENU[0];
   }, [pathname]);
   const { wallet } = usePrivyWallet();
-  const { username, isLoading } = useGetLinkedUsernameById(wallet?.address);
+  const { username, isLoading, hasUserNames } = useGetLinkedUsernameById(
+    wallet?.address
+  );
   const hasChildMenu =
     selectedmenu && selectedmenu.submenu && selectedmenu.submenu.length > 0;
+
   return (
     <Flex
       w={{
@@ -173,7 +176,7 @@ export const Sidebar: React.FC = () => {
               return <SidebarMenu key={menu.id} {...menu} />;
             })}
           </VStack>
-          {!username && !isLoading && (
+          {!hasUserNames && !username && !isLoading && (
             <Flex
               align={"start"}
               borderTop={"solid 1px"}

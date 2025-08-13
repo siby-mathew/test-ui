@@ -5,7 +5,7 @@ import { Sidebar } from "@components/Sidebar";
 
 import { useSigner } from "@hooks/useSigner";
 import { Outlet } from "@tanstack/react-router";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
@@ -15,6 +15,10 @@ import { useProfile } from "@hooks/useProfile";
 import { ReferalCodeClaim } from "@components/ReferalCodeClaim";
 import { usePrivy } from "@privy-io/react-auth";
 import { useGetMailProgramInstance } from "@hooks/useMailProgramInstance";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
+import { usePrivyWallet } from "@hooks/usePrivyWallet";
+import { ClaimUserName } from "@components/ClaimUsername";
+import { LinkUserName } from "@components/LinkUsername";
 
 export const UserLayout: React.FC = () => {
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
@@ -24,6 +28,27 @@ export const UserLayout: React.FC = () => {
   useEmbeddedWallet();
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
+
+  const { address } = usePrivyWallet();
+  const { hasUserNames, account } = useGetLinkedUsernameById(address);
+  const META = `meta:${address}`;
+  const [walletPrompt, set] = useState<string>(
+    sessionStorage.getItem(META) ?? ""
+  );
+
+  const [isUserReady, setIsUserReady] = useState<boolean>(!1);
+
+  const onWalletPromptClose = () => {
+    const id = new Date().getTime().toString();
+    sessionStorage.setItem(
+      META,
+      JSON.stringify({
+        rejectionTime: new Date().getTime(),
+        address,
+      })
+    );
+    set(id);
+  };
 
   useEffect(() => {
     if (
@@ -52,6 +77,26 @@ export const UserLayout: React.FC = () => {
 
   const requestWalletCreation = isFetched && !hasAccount && !isLoading;
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (authenticated && !requestProfileCreation && !requestWalletCreation) {
+      timer = setTimeout(() => {
+        setIsUserReady(!0);
+      }, 5000);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [authenticated, requestProfileCreation, requestWalletCreation]);
+
+  const CAN_REQUEST_USERNAME =
+    isUserReady &&
+    isAuthenticated &&
+    !requestProfileCreation &&
+    !requestWalletCreation;
+
   return (
     <Flex w="100%" direction={"row"}>
       <ReferalCodeClaim
@@ -63,6 +108,15 @@ export const UserLayout: React.FC = () => {
         }
         onClose={onCloseHandler}
       />
+
+      {CAN_REQUEST_USERNAME && !hasUserNames && !walletPrompt && (
+        <ClaimUserName isOpen onClose={onWalletPromptClose} />
+      )}
+
+      {CAN_REQUEST_USERNAME && hasUserNames && !walletPrompt && !account && (
+        <LinkUserName isOpen onClose={onWalletPromptClose} />
+      )}
+
       <Flex as={"aside"}>
         <Sidebar />
       </Flex>

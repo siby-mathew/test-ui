@@ -1,20 +1,19 @@
 import { Flex, Icon, Image, Spinner } from "@chakra-ui/react";
 import { download, getFileConfig } from "@utils/file";
-import { getStorageURLByVersion, shortenPrincipalId } from "@utils/string";
+import { shortenPrincipalId } from "@utils/string";
 import { useTransition } from "react";
 
 export const DownloadbleAttachment: React.FC<{
   name: string;
   path: string;
-  version: string;
-}> = ({ name, path, version }) => {
+}> = ({ name, path }) => {
   const config = getFileConfig(name);
-  const URL = getStorageURLByVersion(version, path);
+
   const [isPending, start] = useTransition();
   const onClick = () => {
     if (isPending) return;
     start(async () => {
-      await download(URL, name);
+      await download(path, name);
     });
   };
   return (
@@ -41,7 +40,7 @@ export const DownloadbleAttachment: React.FC<{
                 h="100%"
                 borderLeftRadius={"inherit"}
                 objectFit={"cover"}
-                src={URL}
+                src={path}
                 alt={name}
               />
             )}

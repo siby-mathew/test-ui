@@ -101,11 +101,10 @@ export const RequestSolanaPay: React.FC<
   }) => {
     if (isFunction(onSubmit)) {
       onSubmit({
-        "data-recipient": wallet?.address ?? "",
-        class: "payment-button",
-        "data-amount": Number(amount).toString(),
-        "data-tokenaddress": token ?? "",
-        "data-message": message ?? "",
+        recipient: wallet?.address ?? "",
+        amount: Number(amount).toString(),
+        tokenaddress: token ?? "",
+        message: message ?? "",
       });
     }
   };

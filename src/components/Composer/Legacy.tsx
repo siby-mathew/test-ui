@@ -19,7 +19,6 @@ import { encryptData, getSaltIV } from "@utils/index";
 import { web3 } from "@coral-xyz/anchor";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import {
-  useIrysUploader,
   usePrivyWallet,
   useSolanaConnection,
   useGenerateEncryptionKey,
@@ -33,17 +32,18 @@ import "react-quill/dist/quill.snow.css";
 import QuillEditor from "./Quill";
 import { IoSend } from "react-icons/io5";
 import { Attachments } from "./Attachments";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 import { EditorToolbar } from "./EditorToolbar";
 import { useComposer } from "@hooks/useComposer";
 import { AttachmentsList } from "./AttachmentsList";
 import { RequestSolanaPay } from "@components/RequestSolanaPay";
-import { generateHtmlTag } from "@utils/string/generateHtml";
 
 import { useEmailResolver } from "@hooks/useEmailResolver";
-
+import { usePinataUploader } from "@hooks/usePinataUploader";
+import { v4 as uuidv4 } from "uuid";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 const initialValues = {
   to: "",
   subject: "",
@@ -57,20 +57,38 @@ export const ComposerLegacy: React.FC = () => {
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
   const { thread, ref, onClose: closeComposer } = useComposer();
+  const {
+    account: _account,
+    displayName,
+    isLoading,
+  } = useGetLinkedUsernameById(thread);
   const methods = useForm<ComposerFormInputs>({
     mode: "all",
     reValidateMode: "onSubmit",
     shouldFocusError: true,
     defaultValues: {
       ...initialValues,
-      to: thread,
+      to: "",
     },
   });
 
-  const { uploadContentWithAttchment } = useIrysUploader();
+  useEffect(() => {
+    if (thread && !isLoading) {
+      methods.setValue(
+        "to",
+        _account && _account.publicKey ? displayName : thread,
+        {
+          shouldValidate: !0,
+        }
+      );
+    }
+  }, [_account, displayName, isLoading, methods, thread]);
+
   const { mailAccountAddress, program, provider } = useGetMailProgramInstance();
   const { sendTransaction } = useSendTransaction();
-
+  const { mutateAsync: uploadToPinata } = usePinataUploader();
+  const { address } = usePrivyWallet();
+  const { account } = useGetLinkedUsernameById(address);
   const { showToast } = useToast();
   const [id] = useState(0);
 
@@ -121,17 +139,57 @@ export const ComposerLegacy: React.FC = () => {
     } else {
       sleep(1500);
     }
-    const payments = values.solanaPay
-      ? generateHtmlTag("button", values.solanaPay)
-      : "";
-    const id = await uploadContentWithAttchment(
-      {
-        content: `${values.body}${payments}`,
-        files: values.files,
-      },
-      encrypt
-    );
 
+    /**
+     *
+     */
+    const uuid = uuidv4();
+    const attachMentFormData = new FormData();
+    const attachmentFiles: any[] = [];
+
+    let attachmentHash: string = "";
+    if (values.files && values.files.length) {
+      values.files.forEach((file) => {
+        attachMentFormData.append("file", file, `${uuid}/${file.name}`);
+        attachmentFiles.push(file.name);
+      });
+
+      const response = await uploadToPinata({
+        data: attachMentFormData,
+      });
+      if (response && response.IpfsHash) {
+        attachmentHash = response.IpfsHash;
+      }
+    }
+
+    const body = `${values.body}`;
+    const json: Record<string, any> = {
+      body,
+      origin: account?.publicKey?.toString() ?? "",
+    };
+    if (attachmentHash) {
+      json["attachments"] = {
+        id: attachmentHash,
+        files: attachmentFiles,
+      };
+    }
+    if (values.solanaPay?.amount && values.solanaPay.tokenaddress) {
+      json["solanaPay"] = [values.solanaPay];
+    }
+    const encryptedContent = await encrypt(`${JSON.stringify(json)}`);
+
+    const textFile = new File([encryptedContent], `${uuid}/body.txt`, {
+      type: "text/plain",
+    });
+
+    const formData = new FormData();
+    formData.append("file", textFile);
+
+    const contentId = await uploadToPinata({
+      data: formData,
+    });
+
+    const id = contentId && contentId.IpfsHash;
     if (!id) {
       expandComposer();
       showToast("Failed to send email", {
@@ -156,7 +214,7 @@ export const ComposerLegacy: React.FC = () => {
           to,
           "salt!",
           cData.iv,
-          StorageVersion.arweave,
+          StorageVersion.pinata,
           ref || "0"
         )
         .accounts({
@@ -194,6 +252,9 @@ export const ComposerLegacy: React.FC = () => {
         },
       });
 
+      showToast("Mail sent successfully", {
+        type: "success",
+      });
       close();
     } catch {
       expandComposer();
@@ -227,6 +288,7 @@ export const ComposerLegacy: React.FC = () => {
   if (composerCollapsed) {
     return null;
   }
+
   return (
     <FormProvider {...methods}>
       <Flex

@@ -104,12 +104,13 @@ const SmartView: React.FC<{ id: string }> = ({ id }) => {
       alignItems={"center"}
       mt={1}
     >
-      {payments && payments.length > 0 && (
+      {payments && payments.length > 0 && payments[0] && (
         <SolanaPayRequest
-          amount={payments[0].amount}
-          token={payments[0].token}
+          amount={payments[0]?.amount}
+          token={payments[0]?.token}
         />
       )}
+
       {attachments.length > 0 &&
         attachments
           .slice(0, MAX_ATTACHMENTS_TO_SHOW)

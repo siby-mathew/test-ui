@@ -42,7 +42,7 @@ export const SolmailSuffixInput: React.FC = () => {
 
   const { mutateAsync, isPending } = useUsernameStatus();
 
-  const debouncedMutateRef = useRef(debounceAsync(mutateAsync, 350));
+  const debouncedMutateRef = useRef(debounceAsync(mutateAsync, 1000));
 
   const checkUserName = async (value: string) => {
     const commonValidation = validateUsername(value);

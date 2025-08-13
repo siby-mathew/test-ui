@@ -1,18 +1,32 @@
 import { useEncryptionKey } from "@hooks/useEncryptionKey";
 import { useGetInbox } from "@hooks/useGetInbox";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import {
   MailBoxLabels,
   QueryKeys,
   StorageVersion,
-  type Attachment,
   type FormattedMailBox,
   type PaymentConfig,
 } from "src/types";
-import { decryptData, getStorageURLByVersion } from "@utils/string";
+import { decryptData } from "@utils/string";
+import { PINATA_GATEWAY_URL } from "@const/config";
 
+type MailBodyResponse = {
+  body: string;
+  attachments?: {
+    id: string;
+    files: string[];
+  };
+  solanaPay?: PaymentConfig[];
+  origin: string;
+};
+
+export type Attachment = {
+  name: string;
+  path: string;
+};
 async function fetchContent(url: string): Promise<string> {
   try {
     const response = await fetch(url);
@@ -47,34 +61,22 @@ export const useMailBody = (
 
   const { data } = useEncryptionKey(mail?.encKey ?? "");
   const getMailContent = async (body: string, version: StorageVersion) => {
-    if (version === StorageVersion.arweave) {
-      const [fileId] = body.split("manifestId=");
-      const result = await fetchContent(
-        getStorageURLByVersion(mail?.version ?? "", fileId)
-      );
-      return result;
-    } else {
-      const result: any = await fetchContent(
-        getStorageURLByVersion(mail?.version ?? "", body)
-      );
-      try {
-        const parsed = JSON.parse(result);
-        if (parsed && parsed.content) {
-          return parsed.content;
-        }
-      } catch {
-        return "";
-      }
+    if (version !== StorageVersion.pinata) {
+      return "";
     }
-    return "";
+
+    const URL = `${PINATA_GATEWAY_URL}${body}/body.txt`;
+
+    const result: string = await fetchContent(URL);
+    return result ?? "";
   };
 
   const {
     data: content,
     isLoading,
     isFetched,
-  } = useQuery({
-    queryKey: [QueryKeys.MAIL_BODY, id],
+  } = useQuery<string>({
+    queryKey: [QueryKeys.MAIL_BODY, id, mail?.body],
     queryFn:
       mail && mail.body
         ? () => getMailContent(mail.body, mail.version as StorageVersion)
@@ -88,43 +90,42 @@ export const useMailBody = (
     string,
     PaymentConfig[],
   ] => {
-    if (!content) return ["", [], "", []];
+    if (!content || !content) return ["", [], "[deprecated content]", []];
 
     try {
-      const html = decryptData(content, mail?.iv, data);
+      const decryptedContent = JSON.parse(
+        decryptData(content ?? "", mail?.iv, data)
+      ) as unknown as MailBodyResponse;
 
-      if (!html) return ["", [], "", []];
+      if (!decryptedContent) return ["", [], "", []];
 
       const div = document.createElement("div");
-      div.innerHTML = html;
+      div.innerHTML = decryptedContent.body;
 
-      const images: Attachment[] = [];
+      const attachments: Attachment[] = [];
 
-      div.querySelectorAll("img,[data-file]").forEach((img) => {
-        const attr =
-          img.getAttribute("data-size") && img.getAttribute("data-size");
-        if (!attr) {
-          return;
-        }
-        images.push({
-          src: img.getAttribute("data-id") || "",
-          name: img.getAttribute("data-name") || "",
-          size: img.getAttribute("data-size") || "",
-          type: img.getAttribute("data-type") || "",
+      if (decryptedContent.attachments && decryptedContent.attachments.id) {
+        decryptedContent.attachments.files.forEach((file) => {
+          attachments.push({
+            path: `${PINATA_GATEWAY_URL}${decryptedContent.attachments?.id}/${file}`,
+            name: file,
+          });
         });
-        img.remove();
-      });
+      }
+
       const payments: PaymentConfig[] = [];
-      div.querySelectorAll(".payment-button").forEach((button) => {
-        payments.push({
-          recipient: button.getAttribute("data-recipient") ?? "",
-          amount: button.getAttribute("data-amount") ?? "",
-          message: button.getAttribute("data-message") ?? "",
-          token: button.getAttribute("data-tokenaddress") ?? "",
+
+      if (decryptedContent.solanaPay && decryptedContent.solanaPay.length) {
+        decryptedContent.solanaPay.map((pay) => {
+          payments.push(pay);
         });
-        div.removeChild(button);
-      });
-      return [div.innerHTML, images, div.textContent?.trim() ?? "", payments];
+      }
+      return [
+        div.innerHTML,
+        attachments,
+        div.textContent?.trim() ?? "",
+        payments,
+      ];
     } catch {
       return ["", [], "", []];
     }
@@ -136,6 +137,12 @@ export const useMailBody = (
     }
     return "";
   }, [data, mail]);
+
+  useEffect(() => {
+    fetchContent(
+      `${import.meta.env.VITE_SOLMAIL_PINATA_BASE_URL}Qmbzd23TX18xE1YAfmGMVxyzsZAnR1TjCDnWthXAsh8PuW`
+    );
+  }, []);
 
   return {
     content: mailContent,

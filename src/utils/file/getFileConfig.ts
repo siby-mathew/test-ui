@@ -16,12 +16,12 @@ const configs: Record<string, FileConfig> = {
     icon: BsFileEarmarkPdfFill,
     image: false,
   },
-  "jpg,jpeg,png,image": {
+  "jpg,jpeg,png,image,svg,webp": {
     color: "blue.500",
     icon: IoMdImage,
     image: true,
   },
-  "doc,docx,xml,json": {
+  "doc,docx,xml,json,js": {
     color: "blue.500",
     icon: IoDocument,
     image: false,

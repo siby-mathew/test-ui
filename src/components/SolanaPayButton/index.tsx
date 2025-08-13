@@ -11,7 +11,7 @@ export const SolanaPayButton: React.FC<{ onOpenSolanaPay: () => void }> = ({
   watch(["solanaPay"]);
   const solanaPay = getValues().solanaPay;
   const hasSolanaPay = Object.keys(solanaPay ?? {}).length > 0;
-  const { symbol } = useToken(solanaPay?.["data-tokenaddress"] ?? "");
+  const { symbol } = useToken(solanaPay?.["tokenaddress"] ?? "");
 
   const onClickRemove = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -29,9 +29,7 @@ export const SolanaPayButton: React.FC<{ onOpenSolanaPay: () => void }> = ({
       <Image ml={2} w="50px" src={SolanaPayLogo} alt="Solana pay" />
       {hasSolanaPay && solanaPay && (
         <>
-          <chakra.span
-            mx={2}
-          >{`${solanaPay["data-amount"]} ${symbol}`}</chakra.span>
+          <chakra.span mx={2}>{`${solanaPay["amount"]} ${symbol}`}</chakra.span>
           <Box
             borderRightRadius={"inherit"}
             bg="red.500"

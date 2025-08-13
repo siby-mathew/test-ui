@@ -20,17 +20,16 @@ export const SolBalance: React.FC = () => {
       alignItems={"center"}
       px={1}
       justifyContent={"center"}
-      fontWeight={"bold"}
+      fontSize={13}
       gap={1}
     >
-      <chakra.span>
+      <chakra.span alignItems={"center"} display={"inline-flex"}>
         <Image
           src={SolanaLogo}
           boxSize="16px"
           alt={"solana"}
           border={"none"}
           outline={"none"}
-          mb={1}
         />
       </chakra.span>
       <chakra.span>
@@ -39,6 +38,7 @@ export const SolBalance: React.FC = () => {
           noOfLines={1}
           minW={"20px"}
           isLoaded={!isLoading}
+          fontWeight={"normal"}
         >
           {formattedBalance}
         </SkeletonText>

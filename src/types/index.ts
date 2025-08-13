@@ -39,6 +39,10 @@ export enum QueryKeys {
   "PAYMENT_TRANSFER" = "PAYMENT_TRANSFER",
   "SOL_PRICE" = "SOL_PRICE",
   "GET_USERNAMES_BY_ID" = "GET_USERNAMES_BY_ID",
+
+  "MUTATION_GET_SIGNER_MESSAGE" = "MUTATION_GET_SIGNER_MESSAGE",
+  "MUTATION_PINATA_TOKEN" = "MUTATION_PINATA_TOKEN",
+  "MUTATION_UPLOAD_TO_PINATA" = "MUTATION_UPLOAD_TO_PINATA",
 }
 
 export type StatusType = {
@@ -56,9 +60,8 @@ export type Token = {
 };
 
 export type SolanaPayPayload = {
-  "data-recipient": string;
-  "data-amount": string;
-  "data-message": string;
-  "data-tokenaddress": string;
-  class: "payment-button";
+  recipient: string;
+  amount: string;
+  message: string;
+  tokenaddress: string;
 };

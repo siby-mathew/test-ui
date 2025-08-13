@@ -229,20 +229,23 @@ export const LoginInfo: React.FC = () => {
   const { user } = usePrivy();
 
   const { get } = useGetWalletById();
+
   const { isWallet, displayName, icon } = useMemo(() => {
     const account: any = user?.linkedAccounts.sort((a, b) => {
       return Number(b.latestVerifiedAt) - Number(a.latestVerifiedAt);
     })[0];
 
-    if (!account || !account.address) {
+    if (!account || (!account.address && !account.email)) {
       return {
         displayName: "",
         icon: "",
         isWallet: !1,
       };
     }
-    const displayName = account?.address;
-    const isWallet = account.type !== "email";
+
+    const displayName = account?.address || account.email;
+    const isWallet = account.type === "wallet";
+
     return {
       displayName,
       icon: !isWallet
@@ -251,6 +254,7 @@ export const LoginInfo: React.FC = () => {
       isWallet,
     };
   }, [get, user?.linkedAccounts]);
+
   return (
     <Flex direction={"column"} alignItems={"center"}>
       <Flex fontWeight={"bold"}>Logged in via</Flex>
@@ -258,6 +262,7 @@ export const LoginInfo: React.FC = () => {
         <Flex>
           <Image boxSize={"16px"} src={icon} />
         </Flex>
+
         <Flex fontSize={13}>
           {isWallet ? shortenPrincipalId(displayName) : displayName}
         </Flex>
