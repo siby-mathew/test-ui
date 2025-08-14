@@ -12,7 +12,7 @@ import { format } from "@utils/time";
 
 import { IoIosShareAlt } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import { RiSpam3Fill } from "react-icons/ri";
+import { RiReplyFill, RiSpam3Fill } from "react-icons/ri";
 import { MailBoxLabels, MailLabelIndex } from "src/types";
 
 export const MailPreviewHeader: React.FC = () => {
@@ -61,14 +61,25 @@ export const MailPreviewHeader: React.FC = () => {
       </Flex>
       <Flex gap={1} display={{ base: "none", md: "flex" }}>
         {context !== MailBoxLabels.outbox && (
-          <Tooltip label="Reply" placement="auto">
-            <IconButton
-              size={"sm"}
-              aria-label="Reply"
-              icon={<IoIosShareAlt />}
-              onClick={onReplay}
-            />
-          </Tooltip>
+          <>
+            <Tooltip label="Reply" placement="auto">
+              <IconButton
+                size={"sm"}
+                aria-label="Reply"
+                icon={<RiReplyFill />}
+                onClick={onReplay}
+              />
+            </Tooltip>
+
+            <Tooltip label="Forward" placement="auto">
+              <IconButton
+                size={"sm"}
+                aria-label="Forward"
+                icon={<IoIosShareAlt />}
+                onClick={onReplay}
+              />
+            </Tooltip>
+          </>
         )}
 
         {context !== MailBoxLabels.trash &&

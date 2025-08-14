@@ -28,7 +28,7 @@ export const useGetUsernames = (
   offset: FilterOffsets = FilterOffsets.withAuthority
 ) => {
   const { program } = useGetMailProgramInstance();
-  const { data, isLoading, isFetching, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch, isFetched } = useQuery({
     queryKey: [QueryKeys.GET_USERNAMES_BY_ID, address, offset],
     staleTime: 1000 * 60 * 2,
     enabled: !!(address && address.trim()),
@@ -55,7 +55,8 @@ export const useGetUsernames = (
               },
             ]);
             return allAccounts;
-          } catch {
+          } catch (e) {
+            console.log(e);
             return [];
           }
         }
@@ -75,6 +76,7 @@ export const useGetUsernames = (
     isLoading,
     isFetching,
     refetch,
+    isFetched,
   };
 };
 
@@ -84,7 +86,7 @@ export const useGetMyUsernames = (address: string | undefined) => {
 
 export const useGetLinkedUsernameById = (address: string | undefined) => {
   const { usernames: usernameCollection } = useGetMyUsernames(address);
-  const { usernames, isLoading } = useGetUsernames(
+  const { usernames, isLoading, isFetched } = useGetUsernames(
     address,
     FilterOffsets.withMailBox
   );
@@ -124,5 +126,6 @@ export const useGetLinkedUsernameById = (address: string | undefined) => {
     isWalletAddress: !fullUsername && !username,
     hasUserNames: usernameCollection && usernameCollection.length > 0,
     account,
+    isFetched,
   };
 };

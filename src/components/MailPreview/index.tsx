@@ -67,8 +67,10 @@ export const MailPreview: React.FC = () => {
                               my: 1,
                             },
                           }}
-                          dangerouslySetInnerHTML={{ __html: content }}
-                          color={"surface.900"}
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              content && content.length ? content : textContent,
+                          }}
                         />
                       )}
                       {payments && payments.length > 0 && <PaymentRequests />}

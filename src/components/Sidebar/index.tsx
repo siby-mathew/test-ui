@@ -20,7 +20,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { BsPlusCircleFill } from "react-icons/bs";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { isActive, shortenPrincipalId } from "@utils/index";
+import { isActive } from "@utils/index";
 import type { MenuConfig } from "src/types";
 
 import JupiterLogo from "@assets/jupiter.svg";
@@ -234,9 +234,7 @@ const SidebarFooter: React.FC = () => {
           <chakra.span textDecoration={"underline"}>Solmail</chakra.span>
         </ChakraLink>
         <chakra.span>
-          <ClipboardText>
-            {shortenPrincipalId(config.SOLMAIL_CONTRACT)}
-          </ClipboardText>
+          <ClipboardText>{config.SOLMAIL_CONTRACT}</ClipboardText>
         </chakra.span>
         <chakra.span>
           <ChakraLink href={LINKS.jupiter} target="_blank">

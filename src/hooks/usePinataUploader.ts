@@ -1,4 +1,3 @@
-import { PINATA_JWT } from "@const/config";
 import { useMutation } from "@tanstack/react-query";
 import apiConfig from "@utils/api";
 import axios from "axios";
@@ -7,9 +6,6 @@ import { QueryKeys } from "src/types";
 export const usePinataToken = () => {
   return useMutation<string | boolean>({
     mutationFn: async () => {
-      if (import.meta.env.MODE === "development") {
-        return PINATA_JWT;
-      }
       const { data } = await apiConfig<{ token: string }>(
         "/generate-pinata-token",
         "GET",
