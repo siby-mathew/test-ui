@@ -1,7 +1,7 @@
 import { useEncryptionKey } from "@hooks/useEncryptionKey";
 import { useGetInbox } from "@hooks/useGetInbox";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import {
   MailBoxLabels,
@@ -14,12 +14,20 @@ import { decryptData } from "@utils/string";
 import { PINATA_GATEWAY_URL } from "@const/config";
 import { isLegacyMail, isMailOriginMobile } from "@utils/legacy/isLegacyMail";
 
+type Meta = {
+  name: string;
+  size: number;
+  type: string;
+};
+
+type MailREsponseAttachment = {
+  name: string;
+  hash: string;
+  meta?: Meta;
+};
 type MailBodyResponse = {
   body: string;
-  attachments?: {
-    id: string;
-    files: string[];
-  };
+  attachments?: MailREsponseAttachment[];
   solanaPay?: PaymentConfig[];
   origin: string;
 };
@@ -52,6 +60,7 @@ export const useMailBody = (
   subject: string;
   hasSmartView: boolean;
   payments: PaymentConfig[];
+  attachmentRef: MailREsponseAttachment[];
 } => {
   const { mail: inbox } = useGetInbox(context);
 
@@ -62,16 +71,11 @@ export const useMailBody = (
 
   const { data } = useEncryptionKey(mail?.encKey ?? "");
   const getMailContent = async (body: string, version: StorageVersion) => {
-    console.log(body, version);
-    if (id === "B49em9dGYg8cPxj9DhL2Efan2nmXoJkZbRgQT9SZgTKs") {
-      console.log(body);
-    }
-
     if (isLegacyMail(version as StorageVersion)) {
       return "";
     }
 
-    const URL = `${PINATA_GATEWAY_URL}${body}${isMailOriginMobile(version as StorageVersion) ? `` : `body.txt`}`;
+    const URL = `${PINATA_GATEWAY_URL}${body}${isMailOriginMobile(version as StorageVersion) ? `` : `/body.txt`}`;
 
     const result: string = await fetchContent(URL);
     return result ?? "";
@@ -90,60 +94,64 @@ export const useMailBody = (
     enabled: !!(id && mail && mail.body),
   });
 
-  const [mailContent, attachments, textContent, payments] = useMemo((): [
-    string,
-    Attachment[],
-    string,
-    PaymentConfig[],
-  ] => {
-    if (!content || !content)
-      return [
-        "",
-        [],
-        isLegacyMail(mail?.version as StorageVersion)
-          ? "[deprecated content]" + mail?.version
-          : "",
-        [],
-      ];
+  const [mailContent, attachments, textContent, payments, attachmentRef] =
+    useMemo((): [
+      string,
+      Attachment[],
+      string,
+      PaymentConfig[],
+      MailREsponseAttachment[],
+    ] => {
+      if (!content || !content)
+        return [
+          "",
+          [],
+          isLegacyMail(mail?.version as StorageVersion)
+            ? "[deprecated content]" + mail?.version
+            : "",
+          [],
+          [],
+        ];
 
-    try {
-      const decryptedContent = JSON.parse(
-        decryptData(content ?? "", mail?.iv, data)
-      ) as unknown as MailBodyResponse;
+      try {
+        const decryptedContent = JSON.parse(
+          decryptData(content ?? "", mail?.iv, data)
+        ) as unknown as MailBodyResponse;
 
-      if (!decryptedContent) return ["", [], "", []];
+        if (!decryptedContent) return ["", [], "", [], []];
 
-      const div = document.createElement("div");
-      div.innerHTML = decryptedContent.body;
+        const div = document.createElement("div");
+        div.innerHTML = decryptedContent.body;
 
-      const attachments: Attachment[] = [];
+        const attachments: Attachment[] = [];
 
-      if (decryptedContent.attachments && decryptedContent.attachments.id) {
-        decryptedContent.attachments.files.forEach((file) => {
-          attachments.push({
-            path: `${PINATA_GATEWAY_URL}${decryptedContent.attachments?.id}/${file}`,
-            name: file,
+        if (decryptedContent.attachments && decryptedContent.attachments) {
+          decryptedContent.attachments.forEach((file) => {
+            attachments.push({
+              path: `${PINATA_GATEWAY_URL}${file.hash}${file.name ? `/${file.name}` : ""}`,
+              name: file.name ?? file?.meta?.name ?? "",
+            });
           });
-        });
-      }
+        }
 
-      const payments: PaymentConfig[] = [];
+        const payments: PaymentConfig[] = [];
 
-      if (decryptedContent.solanaPay && decryptedContent.solanaPay.length) {
-        decryptedContent.solanaPay.map((pay) => {
-          payments.push(pay);
-        });
+        if (decryptedContent.solanaPay && decryptedContent.solanaPay.length) {
+          decryptedContent.solanaPay.map((pay) => {
+            payments.push(pay);
+          });
+        }
+        return [
+          div.innerHTML,
+          attachments,
+          div.textContent?.trim() ?? "",
+          payments,
+          decryptedContent.attachments ?? [],
+        ];
+      } catch {
+        return ["", [], "", [], []];
       }
-      return [
-        div.innerHTML,
-        attachments,
-        div.textContent?.trim() ?? "",
-        payments,
-      ];
-    } catch {
-      return ["", [], "", []];
-    }
-  }, [content, mail, data]);
+    }, [content, mail, data]);
 
   const subject = useMemo(() => {
     if (mail && data) {
@@ -151,12 +159,6 @@ export const useMailBody = (
     }
     return "";
   }, [data, mail]);
-
-  useEffect(() => {
-    fetchContent(
-      `${import.meta.env.VITE_SOLMAIL_PINATA_BASE_URL}Qmbzd23TX18xE1YAfmGMVxyzsZAnR1TjCDnWthXAsh8PuW`
-    );
-  }, []);
 
   return {
     content: mailContent,
@@ -169,5 +171,6 @@ export const useMailBody = (
     hasSmartView:
       (attachments && attachments.length > 0) ||
       (payments && payments.length > 0),
+    attachmentRef,
   };
 };

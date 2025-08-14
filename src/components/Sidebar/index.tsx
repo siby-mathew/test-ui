@@ -208,6 +208,7 @@ export const Sidebar: React.FC = () => {
             </Flex>
           )}
         </Flex>
+
         <SidebarFooter />
       </Flex>
     </Flex>

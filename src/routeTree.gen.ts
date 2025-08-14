@@ -11,13 +11,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StatIndexRouteImport } from './routes/stat/index'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
 import { Route as ULayoutNotFoundRouteImport } from './routes/u/_layout/$not-found'
 import { Route as ULayoutFeatureIndexRouteImport } from './routes/u/_layout/feature/index'
 import { Route as ULayoutAccountIndexRouteImport } from './routes/u/_layout/account/index'
 import { Route as ULayoutWalletLayoutRouteImport } from './routes/u/_layout/wallet/_layout'
-import { Route as ULayoutSolsignDashboardIndexRouteImport } from './routes/u/_layout/solsign/dashboard/index'
 import { Route as ULayoutRewardsMilestonesIndexRouteImport } from './routes/u/_layout/rewards/milestones/index'
 import { Route as ULayoutRewardsDashboardIndexRouteImport } from './routes/u/_layout/rewards/dashboard/index'
 import { Route as ULayoutSolmailTrashIdRouteImport } from './routes/u/_layout/solmail/trash/$id'
@@ -33,6 +33,11 @@ const ULayoutWalletRouteImport = createFileRoute('/u/_layout/wallet')()
 const URoute = URouteImport.update({
   id: '/u',
   path: '/u',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatIndexRoute = StatIndexRouteImport.update({
+  id: '/stat/',
+  path: '/stat/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutIndexRoute = LayoutIndexRouteImport.update({
@@ -68,12 +73,6 @@ const ULayoutWalletLayoutRoute = ULayoutWalletLayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => ULayoutWalletRoute,
 } as any)
-const ULayoutSolsignDashboardIndexRoute =
-  ULayoutSolsignDashboardIndexRouteImport.update({
-    id: '/solsign/dashboard/',
-    path: '/solsign/dashboard/',
-    getParentRoute: () => ULayoutRoute,
-  } as any)
 const ULayoutRewardsMilestonesIndexRoute =
   ULayoutRewardsMilestonesIndexRouteImport.update({
     id: '/rewards/milestones/',
@@ -122,6 +121,7 @@ const ULayoutWalletLayoutActivityIndexRoute =
 export interface FileRoutesByFullPath {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/stat': typeof StatIndexRoute
   '/u/$not-found': typeof ULayoutNotFoundRoute
   '/u/wallet': typeof ULayoutWalletLayoutRouteWithChildren
   '/u/account': typeof ULayoutAccountIndexRoute
@@ -132,13 +132,13 @@ export interface FileRoutesByFullPath {
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/rewards/dashboard': typeof ULayoutRewardsDashboardIndexRoute
   '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
-  '/u/solsign/dashboard': typeof ULayoutSolsignDashboardIndexRoute
   '/u/wallet/activity': typeof ULayoutWalletLayoutActivityIndexRoute
   '/u/wallet/pay': typeof ULayoutWalletLayoutPayIndexRoute
 }
 export interface FileRoutesByTo {
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/stat': typeof StatIndexRoute
   '/u/$not-found': typeof ULayoutNotFoundRoute
   '/u/wallet': typeof ULayoutWalletLayoutRouteWithChildren
   '/u/account': typeof ULayoutAccountIndexRoute
@@ -149,7 +149,6 @@ export interface FileRoutesByTo {
   '/u/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/rewards/dashboard': typeof ULayoutRewardsDashboardIndexRoute
   '/u/rewards/milestones': typeof ULayoutRewardsMilestonesIndexRoute
-  '/u/solsign/dashboard': typeof ULayoutSolsignDashboardIndexRoute
   '/u/wallet/activity': typeof ULayoutWalletLayoutActivityIndexRoute
   '/u/wallet/pay': typeof ULayoutWalletLayoutPayIndexRoute
 }
@@ -158,6 +157,7 @@ export interface FileRoutesById {
   '/u': typeof URouteWithChildren
   '/u/_layout': typeof ULayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/stat/': typeof StatIndexRoute
   '/u/_layout/$not-found': typeof ULayoutNotFoundRoute
   '/u/_layout/wallet': typeof ULayoutWalletRouteWithChildren
   '/u/_layout/wallet/_layout': typeof ULayoutWalletLayoutRouteWithChildren
@@ -169,7 +169,6 @@ export interface FileRoutesById {
   '/u/_layout/solmail/trash/$id': typeof ULayoutSolmailTrashIdRoute
   '/u/_layout/rewards/dashboard/': typeof ULayoutRewardsDashboardIndexRoute
   '/u/_layout/rewards/milestones/': typeof ULayoutRewardsMilestonesIndexRoute
-  '/u/_layout/solsign/dashboard/': typeof ULayoutSolsignDashboardIndexRoute
   '/u/_layout/wallet/_layout/activity/': typeof ULayoutWalletLayoutActivityIndexRoute
   '/u/_layout/wallet/_layout/pay/': typeof ULayoutWalletLayoutPayIndexRoute
 }
@@ -178,6 +177,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/u'
     | '/'
+    | '/stat'
     | '/u/$not-found'
     | '/u/wallet'
     | '/u/account'
@@ -188,13 +188,13 @@ export interface FileRouteTypes {
     | '/u/solmail/trash/$id'
     | '/u/rewards/dashboard'
     | '/u/rewards/milestones'
-    | '/u/solsign/dashboard'
     | '/u/wallet/activity'
     | '/u/wallet/pay'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/u'
     | '/'
+    | '/stat'
     | '/u/$not-found'
     | '/u/wallet'
     | '/u/account'
@@ -205,7 +205,6 @@ export interface FileRouteTypes {
     | '/u/solmail/trash/$id'
     | '/u/rewards/dashboard'
     | '/u/rewards/milestones'
-    | '/u/solsign/dashboard'
     | '/u/wallet/activity'
     | '/u/wallet/pay'
   id:
@@ -213,6 +212,7 @@ export interface FileRouteTypes {
     | '/u'
     | '/u/_layout'
     | '/_layout/'
+    | '/stat/'
     | '/u/_layout/$not-found'
     | '/u/_layout/wallet'
     | '/u/_layout/wallet/_layout'
@@ -224,7 +224,6 @@ export interface FileRouteTypes {
     | '/u/_layout/solmail/trash/$id'
     | '/u/_layout/rewards/dashboard/'
     | '/u/_layout/rewards/milestones/'
-    | '/u/_layout/solsign/dashboard/'
     | '/u/_layout/wallet/_layout/activity/'
     | '/u/_layout/wallet/_layout/pay/'
   fileRoutesById: FileRoutesById
@@ -232,6 +231,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   URoute: typeof URouteWithChildren
   LayoutIndexRoute: typeof LayoutIndexRoute
+  StatIndexRoute: typeof StatIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -241,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/u'
       fullPath: '/u'
       preLoaderRoute: typeof URouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stat/': {
+      id: '/stat/'
+      path: '/stat'
+      fullPath: '/stat'
+      preLoaderRoute: typeof StatIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/': {
@@ -291,13 +298,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/u/wallet'
       preLoaderRoute: typeof ULayoutWalletLayoutRouteImport
       parentRoute: typeof ULayoutWalletRoute
-    }
-    '/u/_layout/solsign/dashboard/': {
-      id: '/u/_layout/solsign/dashboard/'
-      path: '/solsign/dashboard'
-      fullPath: '/u/solsign/dashboard'
-      preLoaderRoute: typeof ULayoutSolsignDashboardIndexRouteImport
-      parentRoute: typeof ULayoutRoute
     }
     '/u/_layout/rewards/milestones/': {
       id: '/u/_layout/rewards/milestones/'
@@ -394,7 +394,6 @@ interface ULayoutRouteChildren {
   ULayoutSolmailTrashIdRoute: typeof ULayoutSolmailTrashIdRoute
   ULayoutRewardsDashboardIndexRoute: typeof ULayoutRewardsDashboardIndexRoute
   ULayoutRewardsMilestonesIndexRoute: typeof ULayoutRewardsMilestonesIndexRoute
-  ULayoutSolsignDashboardIndexRoute: typeof ULayoutSolsignDashboardIndexRoute
 }
 
 const ULayoutRouteChildren: ULayoutRouteChildren = {
@@ -408,7 +407,6 @@ const ULayoutRouteChildren: ULayoutRouteChildren = {
   ULayoutSolmailTrashIdRoute: ULayoutSolmailTrashIdRoute,
   ULayoutRewardsDashboardIndexRoute: ULayoutRewardsDashboardIndexRoute,
   ULayoutRewardsMilestonesIndexRoute: ULayoutRewardsMilestonesIndexRoute,
-  ULayoutSolsignDashboardIndexRoute: ULayoutSolsignDashboardIndexRoute,
 }
 
 const ULayoutRouteWithChildren =
@@ -427,6 +425,7 @@ const URouteWithChildren = URoute._addFileChildren(URouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   URoute: URouteWithChildren,
   LayoutIndexRoute: LayoutIndexRoute,
+  StatIndexRoute: StatIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

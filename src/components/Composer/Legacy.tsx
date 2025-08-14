@@ -16,7 +16,7 @@ import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 
 import { Subject } from "./Subject";
 import { FieldWrapper } from "@components/Field";
-import { encryptData, getSaltIV } from "@utils/index";
+import { encryptData, getSaltIV, trim } from "@utils/index";
 import { web3 } from "@coral-xyz/anchor";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import {
@@ -26,6 +26,7 @@ import {
   useToast,
   useGetMailProgramInstance,
   useMailBody,
+  Attachment,
 } from "@hooks/index";
 
 import { useSendTransaction } from "@privy-io/react-auth/solana";
@@ -46,6 +47,8 @@ import { useEmailResolver } from "@hooks/useEmailResolver";
 import { usePinataUploader } from "@hooks/usePinataUploader";
 import { v4 as uuidv4 } from "uuid";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
+import { MailShareTypes } from "@state/index";
+import { MAXIMUM_MAIL_SUBJECT_LENGTH } from "@const/config";
 const initialValues = {
   to: "",
   subject: "",
@@ -58,16 +61,22 @@ export const ComposerLegacy: React.FC = () => {
   const { wallet } = usePrivyWallet();
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
-  const { thread, ref, onClose: closeComposer } = useComposer();
-  const { subject, isLoading: isMailLoading } = useMailBody(
-    ref,
-    MailBoxLabels.inbox
-  );
+  const { thread, action, ref, onClose: closeComposer } = useComposer();
+  const [sharedAttachments, setSharedAttachments] = useState<Attachment[]>([]);
+  const [isComposerReady, setComposerState] = useState<boolean>(!1);
+  const {
+    subject,
+    isLoading: isMailLoading,
+    content,
+    attachments,
+    attachmentRef,
+  } = useMailBody(ref, MailBoxLabels.inbox);
   const {
     account: _account,
     displayName,
     isLoading,
   } = useGetLinkedUsernameById(thread);
+
   const methods = useForm<ComposerFormInputs>({
     mode: "all",
     reValidateMode: "onSubmit",
@@ -79,17 +88,53 @@ export const ComposerLegacy: React.FC = () => {
   });
 
   useEffect(() => {
-    if (thread && !isLoading && !isMailLoading) {
-      methods.setValue("subject", subject ?? "");
-      methods.setValue(
-        "to",
-        _account && _account.publicKey ? displayName : thread,
-        {
-          shouldValidate: !0,
-        }
-      );
+    if (isComposerReady) {
+      return;
     }
-  }, [_account, displayName, isLoading, isMailLoading, methods, thread]);
+    if (thread && !isLoading && !isMailLoading) {
+      if (action === MailShareTypes.reply) {
+        methods.setValue(
+          "to",
+          _account && _account.publicKey ? displayName : thread,
+          {
+            shouldValidate: !0,
+          }
+        );
+        methods.setValue(
+          "subject",
+          trim(`Re : ${subject ?? ""}`, MAXIMUM_MAIL_SUBJECT_LENGTH)
+        );
+      }
+
+      if (action === MailShareTypes.forward) {
+        methods.setValue(
+          "subject",
+          trim(`Forward : ${subject ?? ""}`, MAXIMUM_MAIL_SUBJECT_LENGTH)
+        );
+        methods.setValue("body", content, {
+          shouldValidate: !0,
+        });
+
+        if (attachments && attachments.length > 0) {
+          setSharedAttachments(attachments);
+        }
+        set(new Date().getTime());
+      }
+      setComposerState(!0);
+    }
+  }, [
+    _account,
+    action,
+    attachments,
+    content,
+    displayName,
+    isComposerReady,
+    isLoading,
+    isMailLoading,
+    methods,
+    subject,
+    thread,
+  ]);
 
   const { mailAccountAddress, program, provider } = useGetMailProgramInstance();
   const { sendTransaction } = useSendTransaction();
@@ -97,7 +142,7 @@ export const ComposerLegacy: React.FC = () => {
   const { address } = usePrivyWallet();
   const { account } = useGetLinkedUsernameById(address);
   const { showToast } = useToast();
-  const [id] = useState(0);
+  const [id, set] = useState(0);
 
   const sleep = async (delay: number) => {
     return new Promise((r) => {
@@ -116,6 +161,8 @@ export const ComposerLegacy: React.FC = () => {
   } = useComposer();
 
   const { onOpen, isOpen, onClose } = useDisclosure();
+
+  const IS_FORWARDING = action === MailShareTypes.forward;
 
   const { mutateAsync: resolveRecepient } = useEmailResolver();
   const onSubmit: SubmitHandler<ComposerFormInputs> = async (values) => {
@@ -152,13 +199,18 @@ export const ComposerLegacy: React.FC = () => {
      */
     const uuid = uuidv4();
     const attachMentFormData = new FormData();
-    const attachmentFiles: any[] = [];
+    type _Attachment = { name: string; size: number; type: string };
+    const attachmentFiles: _Attachment[] = [];
 
     let attachmentHash: string = "";
     if (values.files && values.files.length) {
       values.files.forEach((file) => {
         attachMentFormData.append("file", file, `${uuid}/${file.name}`);
-        attachmentFiles.push(file.name);
+        attachmentFiles.push({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        });
       });
 
       const response = await uploadToPinata({
@@ -174,15 +226,22 @@ export const ComposerLegacy: React.FC = () => {
       body,
       origin: account?.publicKey?.toString() ?? "",
     };
+
     if (attachmentHash && attachmentFiles.length > 0) {
       json["attachments"] = attachmentFiles.map((name) => {
         return {
           hash: attachmentHash,
-          name,
+          name: name.name,
+          meta: {
+            ...name,
+          },
         };
       });
     }
 
+    if (IS_FORWARDING && attachmentRef && attachmentRef.length > 0) {
+      json["attachments"] = [...attachmentRef, ...(json["attachments"] ?? [])];
+    }
     if (values.solanaPay?.amount && values.solanaPay.tokenaddress) {
       json["solanaPay"] = [values.solanaPay];
     }
@@ -299,6 +358,12 @@ export const ComposerLegacy: React.FC = () => {
     return null;
   }
 
+  const onRemoveSharedAttachment = (index: number) => {
+    setSharedAttachments((prev) => {
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
   return (
     <FormProvider {...methods}>
       <Flex
@@ -378,7 +443,10 @@ export const ComposerLegacy: React.FC = () => {
                 <QuillEditor key={id} onChange={handleChange} />
               </Box>
               <Box w="100%">
-                <AttachmentsList />
+                <AttachmentsList
+                  sharedAttachments={sharedAttachments}
+                  onRemove={onRemoveSharedAttachment}
+                />
               </Box>
             </CustomScrollbarWrapper>
           </Flex>

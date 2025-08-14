@@ -6,13 +6,21 @@ export type AtomType = {
   thread: string;
   ref: string;
   updatingUsername: boolean;
+  action: MailShareTypes;
 };
+
+export enum MailShareTypes {
+  "reply",
+  "forward",
+  "none",
+}
 export const appState = atom<AtomType>({
   isComposerOpen: !1,
   composerCollapsed: !1,
   composerState: "",
   thread: "",
   ref: "",
+  action: MailShareTypes.none,
   updatingUsername: !1,
 });
 

@@ -15,7 +15,7 @@ import {
 import { SolmailSuffixInput } from "@components/SolmailSuffixInput";
 import { useClaimUserName } from "@hooks/useUsername";
 
-import { useId, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FormClaimUsername } from "src/types";
 
@@ -23,6 +23,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
   onClose,
   ...props
 }) => {
+  const [isValidating, setIsValidating] = useState<boolean>(!1);
   const methods = useForm<FormClaimUsername>({
     mode: "all",
     reValidateMode: "onSubmit",
@@ -50,6 +51,8 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
   };
 
   const id = useId();
+
+  const isClaimingUsername = isValidating || isPending || isPendingStatus;
 
   return (
     <Modal isCentered size={"xl"} {...props} onClose={onClose}>
@@ -84,7 +87,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
                 </Flex>
               </Flex>
               <Flex my={2}>
-                <SolmailSuffixInput />
+                <SolmailSuffixInput onValidate={setIsValidating} />
               </Flex>
               <Flex data-suggestions>
                 <Flex
@@ -106,11 +109,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         <ModalFooter gap={3}>
           <Button onClick={onClose}>Cancel</Button>
           <Button variant="green" type="submit" form={id}>
-            {isPending || isPendingStatus ? (
-              <Spinner size={"sm"} />
-            ) : (
-              "Make it yours"
-            )}
+            Make it yours {isClaimingUsername && <Spinner ml={1} size={"sm"} />}
           </Button>
         </ModalFooter>
       </ModalContent>

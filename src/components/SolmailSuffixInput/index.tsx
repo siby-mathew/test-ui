@@ -26,7 +26,9 @@ function debounceAsync<T extends (...args: any[]) => Promise<any>>(
   };
 }
 
-export const SolmailSuffixInput: React.FC = () => {
+export const SolmailSuffixInput: React.FC<{
+  onValidate: (s: boolean) => void;
+}> = ({ onValidate }) => {
   const {
     register,
     watch,
@@ -45,15 +47,19 @@ export const SolmailSuffixInput: React.FC = () => {
   const debouncedMutateRef = useRef(debounceAsync(mutateAsync, 1000));
 
   const checkUserName = async (value: string) => {
+    onValidate(!0);
     const commonValidation = validateUsername(value);
     if (typeof commonValidation === "string") {
+      onValidate(!1);
       return commonValidation;
     }
 
     const account = await debouncedMutateRef.current({ username: value });
     if (account && account.username) {
+      onValidate(!1);
       return "Username not available";
     }
+    onValidate(!1);
     return true;
   };
 

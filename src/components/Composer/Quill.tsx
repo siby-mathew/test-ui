@@ -34,6 +34,15 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
         }
       });
 
+      quillRef.current.clipboard.addMatcher(Node.ELEMENT_NODE, (_, delta) => {
+        delta.ops.forEach((op) => {
+          if (op.attributes) {
+            delete op.attributes.background;
+          }
+        });
+        return delta;
+      });
+
       quillRef.current.clipboard.addMatcher(
         Node.ELEMENT_NODE,
         (node: Node, delta: Delta): Delta => {

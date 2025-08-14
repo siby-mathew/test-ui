@@ -7,6 +7,7 @@ import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useLabelIndexUpdate } from "@hooks/useMailIndexUpdate";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
+import { MailShareTypes } from "@state/index";
 import { shortenPrincipalId } from "@utils/string";
 import { format } from "@utils/time";
 
@@ -30,11 +31,23 @@ export const MailPreviewHeader: React.FC = () => {
   const onStatusUpdate = async (status: MailLabelIndex) => {
     await mutateAsync({ index: status });
   };
-
-  const onReplay = () => {
-    onOpen({
+  const mailConfig = () => {
+    return {
       thread: mail?.from?.toString() ?? "",
       ref: mail?.id?.toString() ?? "",
+    };
+  };
+  const onReplay = () => {
+    onOpen({
+      ...mailConfig(),
+      action: MailShareTypes.reply,
+    });
+  };
+
+  const onForward = () => {
+    onOpen({
+      ...mailConfig(),
+      action: MailShareTypes.forward,
     });
   };
   return (
@@ -76,7 +89,7 @@ export const MailPreviewHeader: React.FC = () => {
                 size={"sm"}
                 aria-label="Forward"
                 icon={<IoIosShareAlt />}
-                onClick={onReplay}
+                onClick={onForward}
               />
             </Tooltip>
           </>
