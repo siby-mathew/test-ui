@@ -27,10 +27,16 @@ export const MailCard: React.FC<FormattedMailBox> = ({
   const { data, isLoading } = useEncryptionKey(encKey);
   const decodedSubject = !isLoading ? decryptData(subject, iv, data) : "";
   const { context, id: contextId } = useMailBoxContext();
-  const { textContent, hasSmartView } = useMailBody(id, context);
+  const {
+    textContent,
+    hasSmartView,
+    isLoading: isMailBoxLoading,
+  } = useMailBody(id, context);
   const addres =
     context !== MailBoxLabels.outbox ? from?.toString() : to?.toString();
   const isActive = contextId && contextId === id;
+
+  const hasPendingState = isMailBoxLoading || isLoading;
   return (
     <Box
       p={2}
@@ -76,7 +82,7 @@ export const MailCard: React.FC<FormattedMailBox> = ({
         </CustomSkeleton>
       </Box>
       <Box fontSize={12}>
-        <CustomSkeleton isLoading={isLoading}>
+        <CustomSkeleton isLoading={hasPendingState}>
           <chakra.span
             textOverflow={"ellipsis"}
             overflow={"hidden"}

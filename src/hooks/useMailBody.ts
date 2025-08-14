@@ -90,7 +90,13 @@ export const useMailBody = (
     string,
     PaymentConfig[],
   ] => {
-    if (!content || !content) return ["", [], "[deprecated content]", []];
+    if (!content || !content)
+      return [
+        "",
+        [],
+        StorageVersion.pinata !== mail?.version ? "[deprecated content]" : "",
+        [],
+      ];
 
     try {
       const decryptedContent = JSON.parse(
