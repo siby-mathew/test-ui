@@ -4,8 +4,7 @@ import { FancyBox } from "@components/FancyBox";
 import { useComposer } from "@hooks/useComposer";
 
 export const Composer: React.FC = () => {
-  const { onClose } = useComposer();
-  const { isOpen, composerCollapsed } = useComposer();
+  const { isOpen, composerCollapsed, onClose } = useComposer();
   return (
     <>
       {isOpen && (

@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { mode, StyleFunctionProps } from "@chakra-ui/theme-tools";
 import { colors, semanticTokens } from "./semanticTokens";
 import { Skeleton } from "./components/Skeleton";
 import { Modal } from "./components/Modal";
@@ -15,11 +16,11 @@ export const AppTheme = extendTheme({
   semanticTokens,
   colors,
   styles: {
-    global: () => ({
+    global: (props: StyleFunctionProps) => ({
       body: {
         bg: "surface.100",
         fontSize: 15,
-        color: "#b6b6b6",
+        color: mode("dark.100", "#b6b6b6")(props),
       },
       ".Toastify__toast-theme--dark": {
         background: "#101527ab",

@@ -9,6 +9,8 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  useColorMode,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -37,11 +39,20 @@ import { LuWalletMinimal } from "react-icons/lu";
 import { useMyUsername } from "@hooks/useMyUsername";
 import { IoIosArrowDown } from "react-icons/io";
 import { getWalletIcon } from "@utils/wallet";
+import { MdDarkMode } from "react-icons/md";
+import { MdLightMode } from "react-icons/md";
+
 export const UserProfileCard: React.FC = () => {
   const { formattedBalance } = useBalance();
   const { username, address } = useMyUsername();
+  const isLightTheme = useColorModeValue(!0, !1);
+  const { toggleColorMode } = useColorMode();
   return (
-    <Flex direction={"row"} alignItems={"center"} gap={3}>
+    <Flex direction={"row"} alignItems={"center"} gap={2}>
+      <Flex fontSize={20} cursor={"pointer"} onClick={toggleColorMode}>
+        {isLightTheme && <Icon as={MdDarkMode} />}
+        {!isLightTheme && <Icon as={MdLightMode} />}
+      </Flex>
       <Flex
         bg="rgba(255,255,255,.1)"
         alignItems={"center"}

@@ -1,8 +1,16 @@
-import { chakra, Flex, Icon, Image, useDisclosure } from "@chakra-ui/react";
+import {
+  chakra,
+  Flex,
+  Icon,
+  Image,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { MenuConfig } from "src/types";
 import SolmailLogoText from "@assets/logo.light.text.svg";
+import SomailLogoTextDark from "@assets/logo.darker.text.svg";
 import { BiSolidDownArrow } from "react-icons/bi";
 
 import { LinkUserName } from "@components/LinkUsername";
@@ -10,6 +18,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   const { wallet } = usePrivyWallet();
   const { username, displayName } = useGetLinkedUsernameById(wallet?.address);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const logo = useColorModeValue(SomailLogoTextDark, SolmailLogoText);
   return (
     <Flex direction={"column"} mb={2}>
       <Flex fontWeight={"bold"} fontSize={18} px={1} mb={"2px"}>
@@ -17,7 +26,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
           <Image
             h="18px"
             data-block={name}
-            src={SolmailLogoText}
+            src={logo}
             alt="Solmail"
             position={"relative"}
             left={"-3px"}
