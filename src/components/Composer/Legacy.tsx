@@ -7,6 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {
+  MailBoxLabels,
   StorageVersion,
   type ComposerFormInputs,
   type SolanaPayPayload,
@@ -24,6 +25,7 @@ import {
   useGenerateEncryptionKey,
   useToast,
   useGetMailProgramInstance,
+  useMailBody,
 } from "@hooks/index";
 
 import { useSendTransaction } from "@privy-io/react-auth/solana";
@@ -57,6 +59,10 @@ export const ComposerLegacy: React.FC = () => {
   const from = wallet?.address;
   const { mutateAsync } = useGenerateEncryptionKey();
   const { thread, ref, onClose: closeComposer } = useComposer();
+  const { subject, isLoading: isMailLoading } = useMailBody(
+    ref,
+    MailBoxLabels.inbox
+  );
   const {
     account: _account,
     displayName,
@@ -73,7 +79,8 @@ export const ComposerLegacy: React.FC = () => {
   });
 
   useEffect(() => {
-    if (thread && !isLoading) {
+    if (thread && !isLoading && !isMailLoading) {
+      methods.setValue("subject", subject ?? "");
       methods.setValue(
         "to",
         _account && _account.publicKey ? displayName : thread,
@@ -82,7 +89,7 @@ export const ComposerLegacy: React.FC = () => {
         }
       );
     }
-  }, [_account, displayName, isLoading, methods, thread]);
+  }, [_account, displayName, isLoading, isMailLoading, methods, thread]);
 
   const { mailAccountAddress, program, provider } = useGetMailProgramInstance();
   const { sendTransaction } = useSendTransaction();
@@ -167,12 +174,15 @@ export const ComposerLegacy: React.FC = () => {
       body,
       origin: account?.publicKey?.toString() ?? "",
     };
-    if (attachmentHash) {
-      json["attachments"] = {
-        id: attachmentHash,
-        files: attachmentFiles,
-      };
+    if (attachmentHash && attachmentFiles.length > 0) {
+      json["attachments"] = attachmentFiles.map((name) => {
+        return {
+          hash: attachmentHash,
+          name,
+        };
+      });
     }
+
     if (values.solanaPay?.amount && values.solanaPay.tokenaddress) {
       json["solanaPay"] = [values.solanaPay];
     }

@@ -101,6 +101,7 @@ export type ComposerFormInputs = {
 export enum StorageVersion {
   "pinata" = "1.0.0",
   "arweave" = "0.0.4",
+  "pinataMobile" = "2.0.0",
 }
 
 export type FormClaimUsername = {

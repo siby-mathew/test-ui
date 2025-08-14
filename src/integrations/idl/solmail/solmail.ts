@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solmail.json`.
  */
 export type Solmail = {
-  "address": "3guus8b2ELcHCU5yT39RCsnKGfg3W43TdLAvTvaWTSw5",
+  "address": "7JkcFC4fcLHAHhguayWKHAssYaLJSkhPLw8VgBuSxNcH",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -14,19 +14,19 @@ export type Solmail = {
   },
   "instructions": [
     {
-      "name": "cancelBid",
+      "name": "cancelBidWithMail",
       "docs": [
-        "Cancel a bid and get refund"
+        "Cancel a MAIL token bid and get refund"
       ],
       "discriminator": [
-        40,
-        243,
-        190,
-        217,
-        208,
-        253,
-        86,
-        206
+        171,
+        116,
+        147,
+        153,
+        84,
+        8,
+        238,
+        125
       ],
       "accounts": [
         {
@@ -60,13 +60,199 @@ export type Solmail = {
           }
         },
         {
+          "name": "bidderTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "bidEscrowAccount",
+          "writable": true
+        },
+        {
           "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimRefund",
+      "discriminator": [
+        15,
+        16,
+        30,
+        161,
+        255,
+        228,
+        97,
+        60
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount"
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "claimer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "refundTreasury",
+          "docs": [
+            "This could be a PDA controlled by the program or admin"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  102,
+                  117,
+                  110,
+                  100,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "claimer",
           "writable": true,
           "signer": true
         },
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimRefundWithMail",
+      "docs": [
+        "Claim refund for non-winning MAIL token bids"
+      ],
+      "discriminator": [
+        89,
+        241,
+        87,
+        253,
+        26,
+        125,
+        128,
+        173
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount"
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "claimer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "claimerTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "refundTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  102,
+                  117,
+                  110,
+                  100,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "refundTreasuryTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "claimer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
         }
       ],
       "args": []
@@ -176,9 +362,146 @@ export type Solmail = {
           }
         },
         {
+          "name": "marketplaceTreasury",
+          "writable": true,
+          "optional": true
+        },
+        {
           "name": "winner",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimUsernameFromBidWithMail",
+      "docs": [
+        "Claim username after winning a MAIL token bid"
+      ],
+      "discriminator": [
+        132,
+        176,
+        143,
+        64,
+        191,
+        97,
+        50,
+        62
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount",
+          "writable": true
+        },
+        {
+          "name": "usernameAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.username",
+                "account": "bidAccount"
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.domain",
+                "account": "bidAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rateLimit",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  116,
+                  101,
+                  95,
+                  108,
+                  105,
+                  109,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "winner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "winner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bidEscrowAccount",
+          "writable": true
+        },
+        {
+          "name": "marketplaceTreasuryTokenAccount",
+          "docs": [
+            "Treasury token account to receive winning bid tokens - must be owned by official treasury PDA"
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "winner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
         },
         {
           "name": "systemProgram",
@@ -347,6 +670,190 @@ export type Solmail = {
           "name": "bidder",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "bidAmount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "createBidWithMail",
+      "discriminator": [
+        74,
+        200,
+        134,
+        69,
+        28,
+        110,
+        212,
+        37
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  105,
+                  100
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  46,
+                  109,
+                  97,
+                  105,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "usernameAccountCheck"
+        },
+        {
+          "name": "bidderTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "bidEscrowAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  105,
+                  108,
+                  95,
+                  98,
+                  105,
+                  100,
+                  95,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "username"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  111,
+                  108,
+                  46,
+                  109,
+                  97,
+                  105,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mailTokenMint"
+        },
+        {
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
         },
         {
           "name": "systemProgram",
@@ -1347,6 +1854,381 @@ export type Solmail = {
       "args": []
     },
     {
+      "name": "initializeMarketplaceTreasury",
+      "docs": [
+        "Initialize marketplace treasury for SOL payments (admin only)"
+      ],
+      "discriminator": [
+        56,
+        124,
+        253,
+        200,
+        202,
+        225,
+        186,
+        245
+      ],
+      "accounts": [
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplaceTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeMarketplaceTreasuryToken",
+      "docs": [
+        "Initialize marketplace treasury for MAIL token payments (admin only)"
+      ],
+      "discriminator": [
+        178,
+        121,
+        68,
+        70,
+        18,
+        94,
+        25,
+        47
+      ],
+      "accounts": [
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplaceTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "marketplaceTreasuryTokenAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "marketplaceTreasury"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mailTokenMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mailTokenMint"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeRefundTreasury",
+      "docs": [
+        "Initialize refund treasury (admin only) - SECURITY FIX"
+      ],
+      "discriminator": [
+        123,
+        162,
+        82,
+        139,
+        115,
+        20,
+        94,
+        103
+      ],
+      "accounts": [
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "refundTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  102,
+                  117,
+                  110,
+                  100,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "linkMailboxToUsername",
       "docs": [
         "Link a mailbox to an existing username"
@@ -2065,6 +2947,141 @@ export type Solmail = {
       ]
     },
     {
+      "name": "updateBidWithMail",
+      "docs": [
+        "Update an existing MAIL token bid with a higher amount"
+      ],
+      "discriminator": [
+        124,
+        21,
+        97,
+        223,
+        113,
+        135,
+        244,
+        28
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount",
+          "writable": true
+        },
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "newUserBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "newBidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "newBidderTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "bidEscrowAccount",
+          "writable": true
+        },
+        {
+          "name": "newBidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "previousUserBids",
+          "writable": true,
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bid_account.current_highest_bidder",
+                "account": "bidAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "newBidAmount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "updateMarketplaceSettings",
       "docs": [
         "Update existing marketplace settings (admin only)"
@@ -2416,6 +3433,19 @@ export type Solmail = {
         75,
         86,
         16
+      ]
+    },
+    {
+      "name": "marketplaceTreasury",
+      "discriminator": [
+        2,
+        62,
+        171,
+        100,
+        3,
+        18,
+        90,
+        227
       ]
     },
     {
@@ -3282,173 +4312,183 @@ export type Solmail = {
     },
     {
       "code": 6052,
+      "name": "highestBidder",
+      "msg": "You the current highest bidder, Cannot claim refund."
+    },
+    {
+      "code": 6053,
       "name": "marketplaceNotInitialized",
       "msg": "Marketplace settings not initialized"
     },
     {
-      "code": 6053,
+      "code": 6054,
       "name": "invalidMarketplaceSettings",
       "msg": "Invalid marketplace settings"
     },
     {
-      "code": 6054,
+      "code": 6055,
       "name": "bidAccountNotFound",
       "msg": "Bid account not found"
     },
     {
-      "code": 6055,
+      "code": 6056,
       "name": "bidAccountNotActive",
       "msg": "Bid account is not active"
     },
     {
-      "code": 6056,
+      "code": 6057,
       "name": "cannotBidOnOwnBid",
       "msg": "Cannot bid on your own bid"
     },
     {
-      "code": 6057,
+      "code": 6058,
       "name": "bidAlreadyExpired",
       "msg": "Bid has already expired"
     },
     {
-      "code": 6058,
+      "code": 6059,
       "name": "usernameAlreadyHasBid",
       "msg": "Username already has an active bid"
     },
     {
-      "code": 6059,
+      "code": 6060,
       "name": "cannotCancelBid",
       "msg": "Cannot cancel bid - you are not the bidder"
     },
     {
-      "code": 6060,
+      "code": 6061,
       "name": "insufficientFundsForBid",
       "msg": "Insufficient funds for bid"
     },
     {
-      "code": 6061,
+      "code": 6062,
       "name": "invalidBidDuration",
       "msg": "Invalid bid duration"
     },
     {
-      "code": 6062,
+      "code": 6063,
       "name": "marketplaceAuthorityMismatch",
       "msg": "Marketplace authority mismatch"
     },
     {
-      "code": 6063,
+      "code": 6064,
       "name": "usernameHasActiveBid",
       "msg": "Username has active bid - cannot create directly"
     },
     {
-      "code": 6064,
+      "code": 6065,
       "name": "paymentRequired",
       "msg": "Payment required - marketplace has payment gating enabled"
     },
     {
-      "code": 6065,
+      "code": 6066,
       "name": "invalidPreviousBidder",
       "msg": "Invalid previous bidder"
     },
     {
-      "code": 6066,
+      "code": 6067,
       "name": "arithmeticOverflow",
       "msg": "Arithmetic overflow"
     },
     {
-      "code": 6067,
+      "code": 6068,
       "name": "invalidBidAccountState",
       "msg": "Invalid bid account state"
     },
     {
-      "code": 6068,
+      "code": 6069,
       "name": "insufficientAccountBalance",
       "msg": "Insufficient account balance"
     },
     {
-      "code": 6069,
+      "code": 6070,
       "name": "bidAmountTooHigh",
       "msg": "Bid amount exceeds maximum allowed"
     },
     {
-      "code": 6070,
+      "code": 6071,
       "name": "invalidDomainAccount",
       "msg": "Invalid domain account"
     },
     {
-      "code": 6071,
+      "code": 6072,
       "name": "invalidUsernameCharacters",
       "msg": "Username contains invalid characters"
     },
     {
-      "code": 6072,
+      "code": 6073,
       "name": "usernameReserved",
       "msg": "Username is reserved and cannot be used"
     },
     {
-      "code": 6073,
+      "code": 6074,
       "name": "accountSpaceError",
       "msg": "Account space calculation error"
     },
     {
-      "code": 6074,
+      "code": 6075,
       "name": "invalidBumpSeed",
       "msg": "Invalid account bump seed"
     },
     {
-      "code": 6075,
+      "code": 6076,
       "name": "accountDeserializationFailed",
       "msg": "Account deserialization failed"
     },
     {
-      "code": 6076,
+      "code": 6077,
       "name": "invalidAccountDiscriminator",
       "msg": "Invalid account discriminator"
     },
     {
-      "code": 6077,
+      "code": 6078,
       "name": "invalidTimestamp",
       "msg": "Clock drift detected - invalid timestamp"
     },
     {
-      "code": 6078,
+      "code": 6079,
       "name": "rentCalculationFailed",
       "msg": "Rent calculation failed"
     },
     {
-      "code": 6079,
+      "code": 6080,
       "name": "invalidInstructionData",
       "msg": "Invalid instruction data"
     },
     {
-      "code": 6080,
+      "code": 6081,
       "name": "securityViolation",
       "msg": "Security violation detected"
     },
     {
-      "code": 6081,
+      "code": 6082,
       "name": "invalidAccountOwner",
       "msg": "Invalid account owner"
     },
     {
-      "code": 6082,
+      "code": 6083,
       "name": "accountClosureNotPermitted",
       "msg": "Account closure not permitted"
     },
     {
-      "code": 6083,
+      "code": 6084,
       "name": "invalidAccountState",
       "msg": "Invalid account state or data"
     },
     {
-      "code": 6084,
+      "code": 6085,
       "name": "mailboxAlreadyLinked",
       "msg": "This mailbox is already linked to another username"
     },
     {
-      "code": 6085,
+      "code": 6086,
       "name": "mailboxLinkMismatch",
       "msg": "Mailbox link mismatch - username not linked to this mailbox"
+    },
+    {
+      "code": 6087,
+      "name": "refundGracePeriodNotMet",
+      "msg": "Refund grace period not met - must wait 24 hours after bid expiration"
     }
   ],
   "types": [
@@ -3525,19 +4565,12 @@ export type Solmail = {
     {
       "name": "bidAccount",
       "docs": [
-        "Bid Account - Holds active bid information for a specific username"
+        "OPTIMIZED Bid Account - Holds active bid information for a specific username",
+        "Fixed-size fields first for efficient querying"
       ],
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "domain",
-            "type": "string"
-          },
           {
             "name": "currentHighestBidder",
             "type": "pubkey"
@@ -3561,6 +4594,14 @@ export type Solmail = {
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
           }
         ]
       }
@@ -4218,6 +5259,25 @@ export type Solmail = {
       }
     },
     {
+      "name": "marketplaceTreasury",
+      "docs": [
+        "Simple PDA account for treasury"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
       "name": "paymentGatingStatusChangeEvent",
       "type": {
         "kind": "struct",
@@ -4616,14 +5676,6 @@ export type Solmail = {
             "type": "pubkey"
           },
           {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "domain",
-            "type": "string"
-          },
-          {
             "name": "bidAmount",
             "type": "u64"
           },
@@ -4658,6 +5710,14 @@ export type Solmail = {
                 "name": "bidMethod"
               }
             }
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
           }
         ]
       }
@@ -4755,17 +5815,14 @@ export type Solmail = {
     {
       "name": "usernameAccount",
       "docs": [
-        "Username Account structure PDA"
+        "OPTIMIZED Username Account structure PDA",
+        "Fixed-size fields first for efficient memcmp filtering with predictable offsets"
       ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "authority",
-            "type": "pubkey"
-          },
-          {
-            "name": "domainAccount",
             "type": "pubkey"
           },
           {
@@ -4777,10 +5834,18 @@ export type Solmail = {
             "type": "u32"
           },
           {
+            "name": "domainAccount",
+            "type": "pubkey"
+          },
+          {
             "name": "mailbox",
             "type": {
               "option": "pubkey"
             }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           },
           {
             "name": "domain",
@@ -4789,10 +5854,6 @@ export type Solmail = {
           {
             "name": "username",
             "type": "string"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
@@ -5160,7 +6221,8 @@ export type Solmail = {
     {
       "name": "usernameWrapper",
       "docs": [
-        "Username Wrapper - PDA that holds username authority during tokenization"
+        "OPTIMIZED Username Wrapper - PDA that holds username authority during tokenization",
+        "Fixed-size fields first for efficient querying"
       ],
       "type": {
         "kind": "struct",
@@ -5194,14 +6256,6 @@ export type Solmail = {
             "type": "pubkey"
           },
           {
-            "name": "username",
-            "type": "string"
-          },
-          {
-            "name": "domain",
-            "type": "string"
-          },
-          {
             "name": "createdAt",
             "type": "u32"
           },
@@ -5212,6 +6266,14 @@ export type Solmail = {
           {
             "name": "transferAllowed",
             "type": "bool"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "domain",
+            "type": "string"
           }
         ]
       }

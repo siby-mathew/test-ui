@@ -12,6 +12,7 @@ import {
 } from "src/types";
 import { decryptData } from "@utils/string";
 import { PINATA_GATEWAY_URL } from "@const/config";
+import { isLegacyMail, isMailOriginMobile } from "@utils/legacy/isLegacyMail";
 
 type MailBodyResponse = {
   body: string;
@@ -61,11 +62,16 @@ export const useMailBody = (
 
   const { data } = useEncryptionKey(mail?.encKey ?? "");
   const getMailContent = async (body: string, version: StorageVersion) => {
-    if (version !== StorageVersion.pinata) {
+    console.log(body, version);
+    if (id === "B49em9dGYg8cPxj9DhL2Efan2nmXoJkZbRgQT9SZgTKs") {
+      console.log(body);
+    }
+
+    if (isLegacyMail(version as StorageVersion)) {
       return "";
     }
 
-    const URL = `${PINATA_GATEWAY_URL}${body}/body.txt`;
+    const URL = `${PINATA_GATEWAY_URL}${body}${isMailOriginMobile(version as StorageVersion) ? `` : `body.txt`}`;
 
     const result: string = await fetchContent(URL);
     return result ?? "";
@@ -94,7 +100,9 @@ export const useMailBody = (
       return [
         "",
         [],
-        StorageVersion.pinata !== mail?.version ? "[deprecated content]" : "",
+        isLegacyMail(mail?.version as StorageVersion)
+          ? "[deprecated content]" + mail?.version
+          : "",
         [],
       ];
 
