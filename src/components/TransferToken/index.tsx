@@ -3,7 +3,7 @@ import { FieldWrapper } from "@components/Field";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { TokenTransferForm } from "src/types/token";
 import { PaymentAmount } from "./Amount";
-import { isValidAddress } from "@utils/string";
+
 import { TokenSelector } from "./TokenSelector";
 
 import { useEmailResolver } from "@hooks/useEmailResolver";
@@ -33,21 +33,6 @@ export const TransferToken: React.FC = () => {
   const { fee } = useEstimatedFee();
   const { data: walletBalance } = useBalance();
   const amount = methods.getValues().amount;
-  const onFocusHandler = async () => {
-    const { getValues, setValue } = methods;
-    try {
-      const text = await navigator.clipboard.readText();
-      if (text && isValidAddress(text)) {
-        const value = getValues().to;
-        if (value.trim()) {
-          return;
-        }
-        setValue("to", text.trim());
-      }
-    } catch {
-      return null;
-    }
-  };
 
   const { token } = useTokenMeta(methods.getValues().token);
   const { mutateAsync, isPending } = usePaymentTransfer();
@@ -132,7 +117,6 @@ export const TransferToken: React.FC = () => {
                 })}
                 variant={"payment"}
                 placeholder="Wallet address or .sol domain"
-                onFocus={onFocusHandler}
               />
             </FieldWrapper>
             <TokenSelector />

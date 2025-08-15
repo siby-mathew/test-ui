@@ -1,3 +1,4 @@
+import { RPC_ENDPOINT } from "@const/config";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { QueryKeys } from "src/types";
@@ -17,7 +18,7 @@ export const useHeliusApi = <T>({ method, params }: PayLoad) => {
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          import.meta.env.VITE_SOLMAIL_RPC_ENDPOINT,
+          RPC_ENDPOINT,
           {
             jsonrpc: "2.0",
             id: "1",

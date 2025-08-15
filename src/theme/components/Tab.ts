@@ -18,8 +18,23 @@ const primary = definePartsStyle({
   tabpanel: {},
 });
 
+const wallet = definePartsStyle({
+  tab: {
+    borderBottom: "solid 1px",
+    borderBottomColor: "dark.800",
+    fontWeight: "normal",
+    _selected: {
+      color: "green.500",
+      borderBottomColor: "green.500",
+      borderBottomWidth: 1,
+    },
+  },
+  tablist: {},
+  tabpanel: {},
+});
+
 export const Tabs = defineMultiStyleConfig({
-  variants: { primary },
+  variants: { primary, wallet },
   defaultProps: {
     variant: "primary",
   },

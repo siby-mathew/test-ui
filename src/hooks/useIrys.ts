@@ -9,13 +9,14 @@ import { useSendTransaction } from "@privy-io/react-auth/solana";
 import { useSolanaConnection } from "./useConnection";
 import { useGetMailProgramInstance } from "./useMailProgramInstance";
 import { awaitTransactionSignatureConfirmation } from "@utils/transaction";
+import { RPC_ENDPOINT } from "@const/config";
 
 export const useWebIrys = () => {
   const { wallet } = usePrivyWallet();
   const { provider } = useGetMailProgramInstance();
   const { signMessage } = useSignMessage();
   const { sendTransaction } = useSendTransaction();
-  const rpcUrl = import.meta.env.VITE_SOLMAIL_RPC_ENDPOINT;
+  const rpcUrl = RPC_ENDPOINT;
 
   const irysQuery = new Query({
     network: "devnet",

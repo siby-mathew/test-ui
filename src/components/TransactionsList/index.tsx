@@ -1,8 +1,16 @@
-import { Flex } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
+import { ActivityCard } from "@components/ActivityCard";
 import { useGetTransactions } from "@hooks/useGetTransactions";
 
 export const TransactionsList: React.FC = () => {
   const { data } = useGetTransactions();
 
-  return <Flex>Hello</Flex>;
+  return (
+    <VStack w="100%">
+      {data &&
+        data.map((item: any) => {
+          return <ActivityCard transaction={item} />;
+        })}
+    </VStack>
+  );
 };

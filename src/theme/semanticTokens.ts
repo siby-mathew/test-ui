@@ -54,7 +54,7 @@ export const colors = {
     400: "#a806deff",
     300: "#ebebeb",
     200: "#0dc916ff",
-    100: "#5c0303ff",
+    100: "#fff", //#5c0303ff
   },
   solana: {
     start: "#f087ff",

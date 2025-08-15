@@ -9,7 +9,7 @@ const ICONS: Record<string, string> = {
 };
 export const getWalletIcon = (name: string) => {
   const mailExtension = name.split("@")[1];
-  console.log(mailExtension, "oooos");
+
   if (Object.prototype.hasOwnProperty.call(ICONS, mailExtension)) {
     return ICONS[mailExtension];
   }

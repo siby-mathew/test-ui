@@ -41,6 +41,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { getWalletIcon } from "@utils/wallet";
 import { MdDarkMode } from "react-icons/md";
 import { MdLightMode } from "react-icons/md";
+import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 
 export const UserProfileCard: React.FC = () => {
   const { formattedBalance } = useBalance();
@@ -48,8 +49,8 @@ export const UserProfileCard: React.FC = () => {
   const isLightTheme = useColorModeValue(!0, !1);
   const { toggleColorMode } = useColorMode();
   return (
-    <Flex direction={"row"} alignItems={"center"} gap={2}>
-      <Flex fontSize={20} cursor={"pointer"} onClick={toggleColorMode}>
+    <Flex direction={"row"} alignItems={"center"} gap={3}>
+      <Flex fontSize={20} cursor={"pointer"} onClick={toggleColorMode} hidden>
         {isLightTheme && <Icon as={MdDarkMode} />}
         {!isLightTheme && <Icon as={MdLightMode} />}
       </Flex>
@@ -116,7 +117,8 @@ export const UserProfileCard: React.FC = () => {
 
 const Profile: React.FC = () => {
   const { user } = usePrivy();
-
+  const { address } = usePrivyWallet();
+  const { displayName, isWalletAddress } = useGetLinkedUsernameById(address);
   return (
     <Flex
       mt={2}
@@ -131,7 +133,20 @@ const Profile: React.FC = () => {
       w="300px"
     >
       <ProfileHeader />
+      {!isWalletAddress && (
+        <Flex
+          fontSize={13}
+          textAlign={"center"}
+          p={"2px"}
+          wordBreak={"break-all"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          {displayName}
+        </Flex>
+      )}
       <Divider my={3} opacity={0.3} />
+
       <ProfileBalance />
       <Divider my={3} opacity={0.3} />
       <ProfileMenu />

@@ -2,8 +2,6 @@ import { Flex, Image } from "@chakra-ui/react";
 import { useTokenMeta } from "@hooks/useTokensOwned";
 import { formatTokenBalance } from "@utils/formating";
 
-import { shortenPrincipalId } from "@utils/string";
-
 import { TokenAccount } from "src/types/token";
 
 export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
@@ -32,29 +30,21 @@ export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
           }}
         />
       </Flex>
-      <Flex direction={"column"} flex={"auto"}>
+
+      <Flex flex={"auto"} direction={"column"}>
         <Flex direction={"row"} justifyContent={"space-between"}>
           <Flex fontWeight={"bold"}>{token?.symbol}</Flex>
-          <Flex>
+          <Flex fontWeight={"bold"}>
             {formatTokenBalance({
               rawAmount: amount,
               mintDecimals: token?.decimals ?? 9,
-              suffix: "",
-              decimals: 2,
             })}
           </Flex>
         </Flex>
-
-        <Flex
-          fontWeight={"medium"}
-          opacity={0.5}
-          fontSize={13}
-          justifyContent={"space-between"}
-        >
-          <Flex>{shortenPrincipalId(token?.name, 5, 5)}</Flex>
+        <Flex direction={"row"} justifyContent={"space-between"}>
+          <Flex opacity={0.5}>{token?.name ?? ""}</Flex>
         </Flex>
       </Flex>
-      <Flex fontWeight={"bold"} fontSize={13} alignItems={"center"}></Flex>
     </Flex>
   );
 };

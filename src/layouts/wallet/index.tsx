@@ -17,7 +17,9 @@ import { ShareAddress } from "@components/ShareAddress";
 import { Link, Outlet } from "@tanstack/react-router";
 import { isFunction } from "lodash";
 import { WithSolPrice } from "@components/WithSolPrice";
+import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 
+import { TiThListOutline } from "react-icons/ti";
 const MenuButton: React.FC<{
   name: string;
   icon: IconType;
@@ -59,39 +61,46 @@ export const WalletLayout: React.FC = () => {
   const { formattedBalance } = useBalance();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Container>
-      <ShareAddress isOpen={isOpen} onClose={onClose} />
-      <Flex
-        direction={"column"}
-        alignItems={"center"}
-        w="100%"
-        py={5}
-        textAlign={"center"}
-      >
-        <Flex>
-          <chakra.span fontWeight={"bold"} fontSize={25}>
-            {formattedBalance}
-          </chakra.span>
+    <Flex as={Container} maxW={"100%"} py={5} w="100%">
+      <CustomScrollbarWrapper>
+        <ShareAddress isOpen={isOpen} onClose={onClose} />
+        <Flex
+          direction={"column"}
+          alignItems={"center"}
+          w="100%"
+          py={5}
+          textAlign={"center"}
+        >
+          <Flex>
+            <chakra.span fontWeight={"bold"} fontSize={25}>
+              {formattedBalance}
+            </chakra.span>
+          </Flex>
+          <Flex color={"green.500"}>
+            <WithSolPrice amount={formattedBalance} />
+          </Flex>
         </Flex>
-        <Flex color={"green.500"}>
-          <WithSolPrice amount={formattedBalance} />
-        </Flex>
-      </Flex>
 
-      <Box w="100%">
-        <HStack align={"center"} justifyContent={"center"}>
-          <MenuButton
-            name="Receive"
-            icon={LuQrCode}
-            onClick={onOpen}
-            link="/u/wallet/activity"
-          />
-          <MenuButton name="Send" icon={FiArrowUpRight} link="/u/wallet/pay" />
-        </HStack>
-      </Box>
-      <Box p={5}>
-        <Outlet />
-      </Box>
-    </Container>
+        <Box w="100%">
+          <HStack align={"center"} justifyContent={"center"}>
+            <MenuButton
+              name="Overview"
+              icon={TiThListOutline}
+              link="/u/wallet/activity"
+            />
+
+            <MenuButton name="Receive" icon={LuQrCode} onClick={onOpen} />
+            <MenuButton
+              name="Send"
+              icon={FiArrowUpRight}
+              link="/u/wallet/pay"
+            />
+          </HStack>
+        </Box>
+        <Box p={5}>
+          <Outlet />
+        </Box>
+      </CustomScrollbarWrapper>
+    </Flex>
   );
 };

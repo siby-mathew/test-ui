@@ -19,29 +19,17 @@ export const Holdings: React.FC = () => {
 
   return (
     <Box w="100%" borderRadius={5}>
-      <Tabs>
+      <Tabs variant={"wallet"}>
         <TabList>
-          <Tab fontWeight={"bold"} py={4} flex={"auto"}>
+          <Tab py={4} flex={"auto"}>
             Tokens
           </Tab>
-          <Tab fontWeight={"bold"} py={4} flex={"auto"}>
+          <Tab py={4} flex={"auto"}>
             Activity
           </Tab>
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            <Flex
-              opacity={0.5}
-              minH={100}
-              alignItems={"center"}
-              justifyContent={"center"}
-              userSelect={"none"}
-            >
-              <TransactionsList />
-            </Flex>
-          </TabPanel>
-
           <TabPanel>
             <VStack gap={0} w="100%">
               {isLoading && (
@@ -67,6 +55,18 @@ export const Holdings: React.FC = () => {
                   );
                 })}
             </VStack>
+          </TabPanel>
+
+          <TabPanel>
+            <Flex
+              opacity={0.5}
+              minH={100}
+              alignItems={"center"}
+              justifyContent={"center"}
+              userSelect={"none"}
+            >
+              <TransactionsList />
+            </Flex>
           </TabPanel>
         </TabPanels>
       </Tabs>
