@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
+
 export type AtomType = {
   isComposerOpen: boolean;
   composerState: string;
@@ -15,6 +15,7 @@ export enum MailShareTypes {
   "forward",
   "none",
 }
+
 export const appState = atom<AtomType>({
   isComposerOpen: !1,
   composerCollapsed: !1,
@@ -27,10 +28,13 @@ export const appState = atom<AtomType>({
 
 appState.debugLabel = "AppState";
 
-export const useNameState = atomWithStorage<{
+export type UsernameState = {
   isOpen: boolean;
-  forceClosed: boolean;
-}>("_U_", {
-  isOpen: !0,
-  forceClosed: false,
+  requestUsernameLink: boolean;
+};
+export const useNameState = atom<UsernameState>({
+  isOpen: !1,
+  requestUsernameLink: !1,
 });
+
+useNameState.debugLabel = "UsernameModal";

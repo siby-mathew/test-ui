@@ -7,7 +7,6 @@ import {
   Image,
   VStack,
   Link,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { useSessionHandler } from "@hooks/useSessionHandler";
@@ -24,7 +23,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { UsernameLinkBox } from "@components/LinkUsername";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
-import { ClaimUserName } from "@components/ClaimUsername";
+
 import { USERNAME_SWITCH_INFO } from "@const/info";
 import { useUsernamePopup } from "@hooks/useUsernamePopup";
 

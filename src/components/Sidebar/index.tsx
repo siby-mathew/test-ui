@@ -12,7 +12,6 @@ import {
   chakra,
   Link as ChakraLink,
   Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { config } from "@const/config";
 import { MENU } from "@const/menu";
@@ -31,7 +30,7 @@ import { getSolscanAddress } from "@utils/string/getSolscanUrl";
 import { useMemo } from "react";
 import { MenuHeader } from "@components/MenuHeader";
 import { noop } from "lodash";
-import { ClaimUserName } from "@components/ClaimUsername";
+
 import { DOMAINS } from "@const/domain";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";

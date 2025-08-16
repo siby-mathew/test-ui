@@ -5,7 +5,7 @@ import { Sidebar } from "@components/Sidebar";
 
 import { useSigner } from "@hooks/useSigner";
 import { Outlet } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
 import { noop } from "lodash";
@@ -22,7 +22,16 @@ import { LinkUserName } from "@components/LinkUsername";
 import { useUsernamePopup } from "@hooks/useUsernamePopup";
 
 export const UserLayout: React.FC = () => {
-  const { isOpen, onClose, onOpen } = useUsernamePopup();
+  const { address } = usePrivyWallet();
+  const STORAGE_NAME = `_u_${address}`;
+  const setStatus = (s: boolean) => {
+    sessionStorage.setItem(STORAGE_NAME, s.toString());
+  };
+  const getStatus = () => {
+    const value = sessionStorage.getItem(STORAGE_NAME);
+    return value && value.trim() && value.trim() === "true" ? !0 : !1;
+  };
+  const { isOpen, onOpen, requestUsernameLink, onUpdate } = useUsernamePopup();
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
   const { isModalOpen, authenticated } = usePrivy();
   const { requestProfileCreation, refetch: refetchProfile } = useProfile();
@@ -31,7 +40,6 @@ export const UserLayout: React.FC = () => {
   const { hasAccount, isLoading, refetch, isRefetching, isFetched } =
     useMailAccount();
 
-  const { address } = usePrivyWallet();
   const { hasUserNames, account } = useGetLinkedUsernameById(address);
 
   const [isUserReady, setIsUserReady] = useState<boolean>(!1);
@@ -77,12 +85,56 @@ export const UserLayout: React.FC = () => {
     };
   }, [authenticated, requestProfileCreation, requestWalletCreation]);
 
-  const CAN_REQUEST_USERNAME =
-    isUserReady &&
-    isAuthenticated &&
-    !requestProfileCreation &&
-    !requestWalletCreation;
-  console.log(isOpen);
+  const CAN_REQUEST_USERNAME = useMemo(
+    () =>
+      isUserReady &&
+      isAuthenticated &&
+      !requestProfileCreation &&
+      !requestWalletCreation,
+    [
+      isAuthenticated,
+      isUserReady,
+      requestProfileCreation,
+      requestWalletCreation,
+    ]
+  );
+
+  const autoRequestExecuted = useRef<boolean>(getStatus());
+  const _onClose = () => {
+    if (autoRequestExecuted.current) {
+      setStatus(!0);
+    }
+    onUpdate({
+      requestUsernameLink: !1,
+      isOpen: !1,
+    });
+  };
+  useEffect(() => {
+    if (autoRequestExecuted.current || isOpen || requestUsernameLink) {
+      return;
+    }
+
+    if (CAN_REQUEST_USERNAME) {
+      autoRequestExecuted.current = !0;
+      if (!hasUserNames) {
+        onOpen();
+      }
+      if (hasUserNames && account) {
+        onUpdate({
+          requestUsernameLink: !0,
+        });
+      }
+    }
+  }, [
+    CAN_REQUEST_USERNAME,
+    account,
+    hasUserNames,
+    isOpen,
+    onOpen,
+    onUpdate,
+    requestUsernameLink,
+  ]);
+
   return (
     <Flex w="100%" direction={"row"}>
       <ReferalCodeClaim
@@ -95,13 +147,9 @@ export const UserLayout: React.FC = () => {
         onClose={onCloseHandler}
       />
 
-      {/* {CAN_REQUEST_USERNAME && !hasUserNames && !walletPrompt && ( */}
-      <ClaimUserName isOpen={isOpen} onClose={onClose} />
-      {/* )} */}
+      <ClaimUserName isOpen={isOpen} onClose={_onClose} />
 
-      {/* {CAN_REQUEST_USERNAME && hasUserNames && !walletPrompt && !account && ( */}
-      <LinkUserName isOpen={isOpen} onClose={onClose} />
-      {/* )} */}
+      <LinkUserName isOpen={requestUsernameLink} onClose={_onClose} />
 
       <Flex as={"aside"}>
         <Sidebar />
