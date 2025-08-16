@@ -19,8 +19,10 @@ import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { ClaimUserName } from "@components/ClaimUsername";
 import { LinkUserName } from "@components/LinkUsername";
+import { useUsernamePopup } from "@hooks/useUsernamePopup";
 
 export const UserLayout: React.FC = () => {
+  const { isOpen, onClose, onOpen } = useUsernamePopup();
   const { isAuthenticating, isAuthenticated, requestSignIn } = useSigner();
   const { isModalOpen, authenticated } = usePrivy();
   const { requestProfileCreation, refetch: refetchProfile } = useProfile();
@@ -31,24 +33,8 @@ export const UserLayout: React.FC = () => {
 
   const { address } = usePrivyWallet();
   const { hasUserNames, account } = useGetLinkedUsernameById(address);
-  const META = `meta:${address}`;
-  const [walletPrompt, set] = useState<string>(
-    sessionStorage.getItem(META) ?? ""
-  );
 
   const [isUserReady, setIsUserReady] = useState<boolean>(!1);
-
-  const onWalletPromptClose = () => {
-    const id = new Date().getTime().toString();
-    sessionStorage.setItem(
-      META,
-      JSON.stringify({
-        rejectionTime: new Date().getTime(),
-        address,
-      })
-    );
-    set(id);
-  };
 
   useEffect(() => {
     if (
@@ -96,7 +82,7 @@ export const UserLayout: React.FC = () => {
     isAuthenticated &&
     !requestProfileCreation &&
     !requestWalletCreation;
-
+  console.log(isOpen);
   return (
     <Flex w="100%" direction={"row"}>
       <ReferalCodeClaim
@@ -109,13 +95,13 @@ export const UserLayout: React.FC = () => {
         onClose={onCloseHandler}
       />
 
-      {CAN_REQUEST_USERNAME && !hasUserNames && !walletPrompt && (
-        <ClaimUserName isOpen onClose={onWalletPromptClose} />
-      )}
+      {/* {CAN_REQUEST_USERNAME && !hasUserNames && !walletPrompt && ( */}
+      <ClaimUserName isOpen={isOpen} onClose={onClose} />
+      {/* )} */}
 
-      {CAN_REQUEST_USERNAME && hasUserNames && !walletPrompt && !account && (
-        <LinkUserName isOpen onClose={onWalletPromptClose} />
-      )}
+      {/* {CAN_REQUEST_USERNAME && hasUserNames && !walletPrompt && !account && ( */}
+      <LinkUserName isOpen={isOpen} onClose={onClose} />
+      {/* )} */}
 
       <Flex as={"aside"}>
         <Sidebar />

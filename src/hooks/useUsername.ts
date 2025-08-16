@@ -71,7 +71,7 @@ export const useClaimUserName = () => {
           );
 
           await program.methods
-            .createUsername(username)
+            .createUsernameTemprorary(username)
             .accounts({
               usernameAccount: usernameAccountPDA,
               rateLimit: rateLimitPDA,
@@ -79,8 +79,17 @@ export const useClaimUserName = () => {
               authority: provider.publicKey,
               systemProgram: SystemProgram.programId,
             } as any)
-
             .rpc();
+          // .createUsername(username)
+          // .accounts({
+          //   usernameAccount: usernameAccountPDA,
+          //   rateLimit: rateLimitPDA,
+          //   marketplaceSettings: marketplaceSettingsPDA,
+          //   authority: provider.publicKey,
+          //   systemProgram: SystemProgram.programId,
+          // } as any)
+
+          // .rpc();
 
           if (!account || !account.account) {
             const [mailAccountPDA] = PublicKey.findProgramAddressSync(

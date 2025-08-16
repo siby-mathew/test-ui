@@ -35,6 +35,7 @@ import { ClaimUserName } from "@components/ClaimUsername";
 import { DOMAINS } from "@const/domain";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
+import { useUsernamePopup } from "@hooks/useUsernamePopup";
 
 export const AppSwitch: React.FC = () => {
   return (
@@ -93,7 +94,7 @@ export const AppSwitch: React.FC = () => {
 };
 
 export const Sidebar: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useUsernamePopup();
   const { pathname } = useLocation();
   const selectedmenu = useMemo(() => {
     const menu = MENU.find((menu) => pathname.indexOf(menu.id) > -1);
@@ -200,7 +201,6 @@ export const Sidebar: React.FC = () => {
                   fontWeight={"bold"}
                   color={"solana.middle"}
                 >
-                  <ClaimUserName isOpen={isOpen} onClose={onClose} />
                   {DOMAINS.DEFAULT}
                   <Icon fontSize={12} ml={2} as={BsPlusCircleFill} />
                 </Flex>

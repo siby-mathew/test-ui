@@ -26,6 +26,7 @@ import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { shortenPrincipalId } from "@utils/string";
 import { ClaimUserName } from "@components/ClaimUsername";
 import { USERNAME_SWITCH_INFO } from "@const/info";
+import { useUsernamePopup } from "@hooks/useUsernamePopup";
 
 const ExportKeySettings: React.FC = () => {
   const { exportWallet } = usePrivyWallet();
@@ -44,15 +45,13 @@ const ExportKeySettings: React.FC = () => {
 };
 
 export const UsernameSwitch: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: !1 });
+  const { onOpen } = useUsernamePopup();
   const { address } = usePrivyWallet();
   const { displayName, isWalletAddress, hasUserNames } =
     useGetLinkedUsernameById(address);
 
   return (
     <Flex w="100%" direction={"column"}>
-      {!hasUserNames && <ClaimUserName isOpen={isOpen} onClose={onClose} />}
-
       <Flex w="100%" direction={"column"}>
         <Setting title="Username" info={USERNAME_SWITCH_INFO}>
           {!hasUserNames && (

@@ -169,15 +169,18 @@ export const useGetInbox = (type: MailBoxLabels = MailBoxLabels.inbox) => {
   useEffect(() => {
     let listener: number;
     if (program) {
-      listener = program.addEventListener("mailV2SendEvent", (event) => {
-        if (
-          address &&
-          event.to &&
-          event.to?.toString() === address.toString()
-        ) {
-          refetch();
+      listener = (program as any).addEventListener(
+        "mailV2SendEvent",
+        (event: any) => {
+          if (
+            address &&
+            event.to &&
+            event.to?.toString() === address.toString()
+          ) {
+            refetch();
+          }
         }
-      });
+      );
     }
     return () => {
       if (program) {

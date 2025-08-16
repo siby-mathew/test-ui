@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 export type AtomType = {
   isComposerOpen: boolean;
   composerState: string;
@@ -25,3 +26,11 @@ export const appState = atom<AtomType>({
 });
 
 appState.debugLabel = "AppState";
+
+export const useNameState = atomWithStorage<{
+  isOpen: boolean;
+  forceClosed: boolean;
+}>("_U_", {
+  isOpen: !0,
+  forceClosed: false,
+});

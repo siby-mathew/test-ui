@@ -107,7 +107,7 @@ export const useMailBody = (
           "",
           [],
           isLegacyMail(mail?.version as StorageVersion)
-            ? "[deprecated content]" + mail?.version
+            ? "[deprecated content]"
             : "",
           [],
           [],
