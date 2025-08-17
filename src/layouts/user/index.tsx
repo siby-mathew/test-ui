@@ -119,7 +119,8 @@ export const UserLayout: React.FC = () => {
       if (!hasUserNames) {
         onOpen();
       }
-      if (hasUserNames && account) {
+
+      if (hasUserNames && !account) {
         onUpdate({
           requestUsernameLink: !0,
         });

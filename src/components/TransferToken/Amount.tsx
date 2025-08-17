@@ -4,7 +4,7 @@ import { BASE_TOKEN } from "@const/tokens";
 
 import { useEstimatedFee } from "@hooks/useEstimatedFee";
 import { useGetTokenById, useTokenMeta } from "@hooks/useTokensOwned";
-import { formatTokenBalance } from "@utils/formating";
+import { formatTokenBalance, fromRawAmount } from "@utils/formating";
 import BigNumber from "bignumber.js";
 import { useFormContext } from "react-hook-form";
 import { TokenTransferForm } from "src/types/token";
@@ -23,12 +23,10 @@ export const PaymentAmount: React.FC = () => {
     const rawBalance = new BigNumber(tokenBalance?.amount ?? 0);
     const spendable = isBaseToken ? rawBalance.minus(fee ?? 0) : rawBalance;
 
-    return formatTokenBalance({
-      rawAmount: spendable.toNumber(),
-      mintDecimals: tokenMeta?.decimals ?? 9,
-      suffix: "",
-      decimals: tokenMeta?.decimals,
-    });
+    return fromRawAmount(
+      spendable.toNumber().toString(),
+      tokenMeta?.decimals ?? 9
+    ).toString();
   };
 
   const handleMaxClick = () => {

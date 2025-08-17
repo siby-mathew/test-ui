@@ -1,5 +1,6 @@
 import { Container, Flex } from "@chakra-ui/react";
 import IDL from "@integrations/idl/solmail/solmail.json";
+
 export const Status: React.FC = () => {
   return (
     <Container py={15}>
@@ -10,6 +11,7 @@ export const Status: React.FC = () => {
           Mail program ID
         </Flex>
         <Flex>{IDL.address}</Flex>
+        <Flex></Flex>
       </Flex>
     </Container>
   );

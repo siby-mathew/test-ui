@@ -79,3 +79,10 @@ export function toRawAmount(
 ): BigNumber {
   return new BigNumber(amount).multipliedBy(new BigNumber(10).pow(decimals));
 }
+
+export const fromRawAmount = (
+  rawAmount: string | number,
+  decimals: number
+): BigNumber => {
+  return new BigNumber(rawAmount).dividedBy(new BigNumber(10).pow(decimals));
+};
