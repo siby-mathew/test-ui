@@ -61,7 +61,6 @@ export const ActivityPage: React.FC = () => {
 
             <TabPanel>
               <Flex
-                opacity={0.5}
                 minH={100}
                 alignItems={"center"}
                 justifyContent={"center"}

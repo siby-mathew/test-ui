@@ -61,7 +61,7 @@ export const WalletLayout: React.FC = () => {
   const { formattedBalance } = useBalance();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Flex as={Container} maxW={"100%"} py={5} w="100%">
+    <Flex as={Container} maxW={"100%"} py={5} w="100%" color={"light.100"}>
       <CustomScrollbarWrapper>
         <ShareAddress isOpen={isOpen} onClose={onClose} />
         <Flex
