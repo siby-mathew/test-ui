@@ -4,12 +4,12 @@ import { Avatar } from "@components/Avatar";
 import { CustomSkeleton } from "@components/CustomSkeleton";
 import { SolanaPayRequest } from "@components/SolanaPayRequest";
 import { UserDisplayName } from "@components/UserDisplayName";
-import { useEncryptionKey } from "@hooks/useEncryptionKey";
+
 import { useMailBody } from "@hooks/useMailBody";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useMailStatus } from "@hooks/useMailStatus";
 import { Link } from "@tanstack/react-router";
-import { decryptData, trim } from "@utils/string";
+import { trim } from "@utils/string";
 import { formatTime } from "@utils/time";
 
 import { MailBoxLabels, type FormattedMailBox } from "src/types";
@@ -17,26 +17,23 @@ import { MailBoxLabels, type FormattedMailBox } from "src/types";
 export const MailCard: React.FC<FormattedMailBox> = ({
   from,
   subject,
-  iv,
   createdAt,
-  encKey,
   id,
   to,
 }) => {
   const { isRead } = useMailStatus(id, Number(createdAt) * 1000);
-  const { data, isLoading } = useEncryptionKey(encKey);
-  const decodedSubject = !isLoading ? decryptData(subject, iv, data) : "";
   const { context, id: contextId } = useMailBoxContext();
   const {
     textContent,
     hasSmartView,
     isLoading: isMailBoxLoading,
+    isInternalMail,
   } = useMailBody(id, context);
   const addres =
     context !== MailBoxLabels.outbox ? from?.toString() : to?.toString();
   const isActive = contextId && contextId === id;
 
-  const hasPendingState = isMailBoxLoading || isLoading;
+  const hasPendingState = isMailBoxLoading;
   return (
     <Box
       p={2}
@@ -56,11 +53,15 @@ export const MailCard: React.FC<FormattedMailBox> = ({
         bg: "surface.800",
       }}
     >
-      <Avatar top={2} left={"10px"} name={addres} />
+      <Avatar
+        top={2}
+        left={"10px"}
+        name={addres}
+        isInternalMail={isInternalMail}
+      />
       <Flex mb={"2px"} justifyContent={"space-between"}>
         <Flex>
           <UserDisplayName address={addres} />
-          {/* {shortenPrincipalId(addres)} */}
         </Flex>
         <Flex fontSize={12}>{formatTime(Number(createdAt) * 1000)}</Flex>
       </Flex>
@@ -70,14 +71,14 @@ export const MailCard: React.FC<FormattedMailBox> = ({
         overflow={"hidden"}
         textOverflow={"ellipsis"}
       >
-        <CustomSkeleton isLoading={isLoading}>
+        <CustomSkeleton isLoading={isMailBoxLoading}>
           <chakra.span
             textOverflow={"ellipsis"}
             overflow={"hidden"}
             w={"100%"}
             whiteSpace={"nowrap"}
           >
-            {decodedSubject}
+            {subject}
           </chakra.span>
         </CustomSkeleton>
       </Box>

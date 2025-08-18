@@ -6,6 +6,10 @@ export const isLegacyMail = (version: StorageVersion) => {
   );
 };
 
+export const isInternalMail = (version: StorageVersion) => {
+  return [StorageVersion.internal].indexOf(version) > -1;
+};
+
 export const isMailOriginMobile = (version: StorageVersion) => {
   return version === StorageVersion.pinataMobile;
 };

@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solmail.json`.
  */
 export type Solmail = {
-  "address": "Hxf1WWTFHw1NUsBLBVsA48HkY3fRGCYVxqMHtXroMPXt",
+  "address": "MAiLX6A4AC9HUaet45d7uT8LPaAAgzqu7auSw2YJBjQ",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -107,6 +107,93 @@ export type Solmail = {
         {
           "name": "tokenProgram",
           "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelSolBid",
+      "discriminator": [
+        95,
+        87,
+        55,
+        4,
+        23,
+        162,
+        228,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount",
+          "writable": true
+        },
+        {
+          "name": "marketplaceSettings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "userBids",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  98,
+                  105,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bidder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bidder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": []
@@ -994,7 +1081,7 @@ export type Solmail = {
     {
       "name": "createMailBid",
       "docs": [
-        "Create a new MAIL token bid for a username with fee collection"
+        "Create a new MAIL token bid for a username with fixed fee collection"
       ],
       "discriminator": [
         85,
@@ -1185,7 +1272,7 @@ export type Solmail = {
     {
       "name": "createMarketplaceSettings",
       "docs": [
-        "Create or initialize enhanced marketplace settings (admin only)"
+        "Create or initialize enhanced marketplace settings with fixed fee structure (admin only)"
       ],
       "discriminator": [
         174,
@@ -1259,9 +1346,15 @@ export type Solmail = {
           "type": "u32"
         },
         {
-          "name": "feeRateBasisPoints",
+          "name": "solFeeLamports",
           "type": {
-            "option": "u16"
+            "option": "u64"
+          }
+        },
+        {
+          "name": "mailFeeTokens",
+          "type": {
+            "option": "u64"
           }
         },
         {
@@ -1317,7 +1410,7 @@ export type Solmail = {
     {
       "name": "createSolBid",
       "docs": [
-        "Create a new SOL bid for a username with fee collection"
+        "Create a new SOL bid for a username with fixed fee collection"
       ],
       "discriminator": [
         84,
@@ -3234,7 +3327,7 @@ export type Solmail = {
     {
       "name": "updateMarketplaceSettings",
       "docs": [
-        "Update existing enhanced marketplace settings (admin only)"
+        "Update existing enhanced marketplace settings with fixed fee structure (admin only)"
       ],
       "discriminator": [
         121,
@@ -3303,9 +3396,15 @@ export type Solmail = {
           "type": "u32"
         },
         {
-          "name": "feeRateBasisPoints",
+          "name": "solFeeLamports",
           "type": {
-            "option": "u16"
+            "option": "u64"
+          }
+        },
+        {
+          "name": "mailFeeTokens",
+          "type": {
+            "option": "u64"
           }
         },
         {
@@ -6010,7 +6109,7 @@ export type Solmail = {
     {
       "name": "marketplaceSettings",
       "docs": [
-        "ENHANCED Marketplace Settings - Global configuration for bidding system with production controls"
+        "ENHANCED Marketplace Settings - Global configuration for bidding system with fixed fee structure"
       ],
       "type": {
         "kind": "struct",
@@ -6040,8 +6139,12 @@ export type Solmail = {
             "type": "u8"
           },
           {
-            "name": "feeRateBasisPoints",
-            "type": "u16"
+            "name": "solFeeLamports",
+            "type": "u64"
+          },
+          {
+            "name": "mailFeeTokens",
+            "type": "u64"
           },
           {
             "name": "minBidIncreasePercentage",

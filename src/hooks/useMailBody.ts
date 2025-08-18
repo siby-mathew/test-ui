@@ -12,7 +12,11 @@ import {
 } from "src/types";
 import { decryptData } from "@utils/string";
 import { PINATA_GATEWAY_URL } from "@const/config";
-import { isLegacyMail, isMailOriginMobile } from "@utils/legacy/isLegacyMail";
+import {
+  isInternalMail,
+  isLegacyMail,
+  isMailOriginMobile,
+} from "@utils/legacy/isLegacyMail";
 
 type Meta = {
   name: string;
@@ -61,6 +65,7 @@ export const useMailBody = (
   hasSmartView: boolean;
   payments: PaymentConfig[];
   attachmentRef: MailREsponseAttachment[];
+  isInternalMail: boolean;
 } => {
   const { mail: inbox } = useGetInbox(context);
 
@@ -102,6 +107,9 @@ export const useMailBody = (
       PaymentConfig[],
       MailREsponseAttachment[],
     ] => {
+      if (isInternalMail(mail?.version as StorageVersion)) {
+        return [mail?.body ?? "", [], mail?.body ?? "", [], []];
+      }
       if (!content || !content)
         return [
           "",
@@ -154,6 +162,9 @@ export const useMailBody = (
     }, [content, mail, data]);
 
   const subject = useMemo(() => {
+    if (mail && isInternalMail(mail?.version as StorageVersion)) {
+      return mail?.subject;
+    }
     if (mail && data) {
       return decryptData(mail.subject, mail.iv, data);
     }
@@ -172,5 +183,6 @@ export const useMailBody = (
       (attachments && attachments.length > 0) ||
       (payments && payments.length > 0),
     attachmentRef,
+    isInternalMail: isInternalMail(mail?.version as StorageVersion),
   };
 };

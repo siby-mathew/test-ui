@@ -1,11 +1,10 @@
-import { chakra, Flex, type BoxProps } from "@chakra-ui/react";
+import { chakra, Flex, Image, type BoxProps } from "@chakra-ui/react";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { getAvatarColor } from "@utils/string";
-
-export const Avatar: React.FC<{ name: string } & BoxProps> = ({
-  name = "",
-  ...boxProps
-}) => {
+import Piegion from "@assets/piegion.png";
+export const Avatar: React.FC<
+  { name: string; isInternalMail: boolean } & BoxProps
+> = ({ name = "", isInternalMail, ...boxProps }) => {
   const { displayName } = useGetLinkedUsernameById(name);
   const bg = getAvatarColor(displayName ?? "");
   return (
@@ -22,7 +21,11 @@ export const Avatar: React.FC<{ name: string } & BoxProps> = ({
       alignItems={"center"}
       justifyContent={"center"}
     >
-      <chakra.span opacity={0.8}>{displayName[0].toUpperCase()}</chakra.span>
+      {!isInternalMail && (
+        <chakra.span opacity={0.8}>{displayName[0].toUpperCase()}</chakra.span>
+      )}
+
+      {isInternalMail && <Image src={Piegion} borderRadius={"inherit"} />}
     </Flex>
   );
 };
