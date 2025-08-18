@@ -143,8 +143,9 @@ export const ComposerLegacy: React.FC = () => {
   const { address } = usePrivyWallet();
   const { account } = useGetLinkedUsernameById(address);
   const { showToast } = useToast();
+
   const [id, set] = useState(0);
-  const { hasEnoughBalance } = useBalance();
+  const { hasEnoughBalance, refetch } = useBalance();
 
   const sleep = async (delay: number) => {
     return new Promise((r) => {
@@ -327,7 +328,9 @@ export const ComposerLegacy: React.FC = () => {
         type: "success",
       });
       close();
+      refetch();
     } catch {
+      refetch();
       expandComposer();
       showToast("Failed to send mail", {
         type: "error",

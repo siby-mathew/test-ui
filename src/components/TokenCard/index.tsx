@@ -38,6 +38,7 @@ export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
             {formatTokenBalance({
               rawAmount: amount,
               mintDecimals: token?.decimals ?? 9,
+              decimals: 2,
             })}
           </Flex>
         </Flex>

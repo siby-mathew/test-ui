@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 /**
  * Formats a token balance from raw units (e.g., lamports) to human-readable form.
  * @param rawAmount raw amount in base units (e.g., lamports or smallest token unit)
@@ -11,15 +12,16 @@ type Options = {
   rawAmount: number | bigint;
   mintDecimals?: number;
   suffix?: string;
-  decimals?: number;
+  decimals?: number | "auto"; // allow "auto"
   compact?: boolean;
   prefix?: string;
 };
+
 export function formatTokenBalance({
   rawAmount,
   mintDecimals = 9,
   suffix = "",
-  decimals = 2,
+  decimals = "auto",
   compact = true,
   prefix = "",
 }: Options): string {
@@ -38,32 +40,40 @@ export function formatTokenBalance({
     for (const unit of units) {
       if (absBalance >= unit.value) {
         const val = balance / unit.value;
-        const hasDecimals = val % 1 !== 0;
 
-        return `${
-          hasDecimals && decimals > 0
-            ? val.toLocaleString(undefined, {
-                minimumFractionDigits: 1,
-                maximumFractionDigits: decimals,
-              })
-            : Math.trunc(val).toLocaleString()
-        }${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
+        if (decimals === "auto") {
+          return `${val.toString()}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
+        }
+
+        return `${val.toLocaleString(undefined, {
+          minimumFractionDigits: decimals > 0 ? 1 : 0,
+          maximumFractionDigits: decimals,
+        })}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
       }
     }
   }
 
-  const hasDecimals = balance % 1 !== 0;
-  const formatted =
-    decimals === 0
-      ? Math.trunc(balance).toLocaleString() // avoid rounding
-      : balance.toLocaleString(undefined, {
-          minimumFractionDigits: hasDecimals ? 1 : 0,
-          maximumFractionDigits: decimals,
-        });
+  // 🔹 handle non-compact formatting
+  if (decimals === "auto") {
+    // Show all decimals but trim trailing zeros
+    return `${prefix ? `${prefix} ` : ""}${balance
+      .toString()
+      .replace(/(\.\d*?[1-9])0+$/, "$1")}${suffix ? ` ${suffix}` : ""}`;
+  } else {
+    const hasDecimals = balance % 1 !== 0;
+    const formatted =
+      decimals === 0
+        ? Math.trunc(balance).toLocaleString() // avoid rounding
+        : balance.toLocaleString(undefined, {
+            minimumFractionDigits: hasDecimals ? 1 : 0,
+            maximumFractionDigits: decimals,
+          });
 
-  return `${prefix ? `${prefix} ` : ""}${formatted}${suffix ? ` ${suffix}` : ""}`;
+    return `${prefix ? `${prefix} ` : ""}${formatted}${
+      suffix ? ` ${suffix}` : ""
+    }`;
+  }
 }
-import BigNumber from "bignumber.js";
 
 /**
  * Converts a human-readable amount to a BigNumber in base units.

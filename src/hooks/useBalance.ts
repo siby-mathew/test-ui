@@ -47,9 +47,16 @@ export const useBalance = (
 
   const hasEnoughBalance = useMemo(() => {
     if (!data) return !1;
-    const amount = toRawAmount(requestedAmount, decimals);
-    const balance = new BigNumber(data).minus(toRawAmount(fee, decimals));
-    return balance.gt(new BigNumber(0)) && balance.gt(amount);
+    const amount = requestedAmount
+      ? toRawAmount(requestedAmount, decimals)
+      : fee;
+    const balance = new BigNumber(data);
+
+    if (balance.lt(amount)) {
+      return !1;
+    }
+
+    return !0;
   }, [data, decimals, fee, requestedAmount]);
 
   return {
@@ -65,7 +72,6 @@ export const useBalance = (
       rawAmount: data ?? 0,
       mintDecimals: decimals,
       suffix: symbol,
-      decimals: 2,
     }),
   };
 };

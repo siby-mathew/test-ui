@@ -35,6 +35,7 @@ import { DOMAINS } from "@const/domain";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { useUsernamePopup } from "@hooks/useUsernamePopup";
+import { SocialShare } from "@components/SocialShare";
 
 export const AppSwitch: React.FC = () => {
   return (
@@ -222,6 +223,7 @@ const SidebarFooter: React.FC = () => {
       pt={3}
       borderTopColor={"surface.300"}
     >
+      <SocialShare />
       <Flex alignItems={"center"} fontSize={13} gap={2}>
         <ChakraLink
           as={Link}

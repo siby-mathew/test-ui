@@ -111,7 +111,6 @@ export const useMailBody = (
         return [mail?.body ?? "", [], mail?.body ?? "", [], []];
       }
       if (!content || !content) {
-        console.log("yepie");
         return [
           "",
           [],
