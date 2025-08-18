@@ -67,11 +67,22 @@ export const MailPreview: React.FC = () => {
                               my: 1,
                             },
                           }}
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              content && content.length ? content : textContent,
-                          }}
-                        />
+                        >
+                          <pre
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                content && content.length
+                                  ? content
+                                  : textContent,
+                            }}
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              fontFamily: "Arial, sans-serif",
+
+                              lineHeight: "1.6",
+                            }}
+                          ></pre>
+                        </Box>
                       )}
                       {payments && payments.length > 0 && <PaymentRequests />}
                       {attachments && attachments.length > 0 && (
