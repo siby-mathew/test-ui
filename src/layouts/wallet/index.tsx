@@ -20,6 +20,7 @@ import { WithSolPrice } from "@components/WithSolPrice";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 
 import { TiThListOutline } from "react-icons/ti";
+
 const MenuButton: React.FC<{
   name: string;
   icon: IconType;
@@ -31,6 +32,7 @@ const MenuButton: React.FC<{
       onClick();
     }
   };
+
   return (
     <Flex
       direction={"column"}

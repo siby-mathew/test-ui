@@ -1,6 +1,7 @@
-import { Container, Flex } from "@chakra-ui/react";
+import { Container, Flex, Link as ChakraLink, Icon } from "@chakra-ui/react";
 import IDL from "@integrations/idl/solmail/solmail.json";
-
+import { Link } from "@tanstack/react-router";
+import { TbExternalLink } from "react-icons/tb";
 export const Status: React.FC = () => {
   return (
     <Container py={15}>
@@ -11,7 +12,20 @@ export const Status: React.FC = () => {
           Mail program ID
         </Flex>
         <Flex>{IDL.address}</Flex>
-        <Flex></Flex>
+        <Flex my={8}>
+          <ChakraLink
+            alignItems={"center"}
+            as={Link}
+            to={"/"}
+            textDecoration={"underline"}
+            display={"inline-flex"}
+            _hover={{
+              opacity: 0.8,
+            }}
+          >
+            Continue application <Icon ml={2} as={TbExternalLink} />
+          </ChakraLink>
+        </Flex>
       </Flex>
     </Container>
   );

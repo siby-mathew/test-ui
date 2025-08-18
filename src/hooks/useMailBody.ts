@@ -76,11 +76,14 @@ export const useMailBody = (
 
   const { data } = useEncryptionKey(mail?.encKey ?? "");
   const getMailContent = async (body: string, version: StorageVersion) => {
-    if (isLegacyMail(version as StorageVersion)) {
+    if (
+      isLegacyMail(version as StorageVersion) &&
+      !isInternalMail(version as StorageVersion)
+    ) {
       return "";
     }
 
-    const URL = `${PINATA_GATEWAY_URL}${body}${isMailOriginMobile(version as StorageVersion) ? `` : `/body.txt`}`;
+    const URL = `${PINATA_GATEWAY_URL}${body}${isMailOriginMobile(version as StorageVersion) || isInternalMail(version as StorageVersion) ? `` : `/body.txt`}`;
 
     const result: string = await fetchContent(URL);
     return result ?? "";
@@ -108,8 +111,9 @@ export const useMailBody = (
       MailREsponseAttachment[],
     ] => {
       if (isInternalMail(mail?.version as StorageVersion)) {
-        return [mail?.body ?? "", [], mail?.body ?? "", [], []];
+        return [content ?? "", [], content ?? "", [], []];
       }
+
       if (!content || !content) {
         return [
           "",

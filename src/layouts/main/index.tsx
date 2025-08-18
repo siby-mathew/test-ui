@@ -38,12 +38,14 @@ export const AppMainLayout: React.FC = () => {
     );
   }
 
-  if (ready && status && authenticated && location.pathname === "/") {
-    navigate({ to: `/u/solmail/inbox/all${query ? `?${query}` : ""}` });
-  }
+  if (location.pathname !== "/stat") {
+    if (ready && status && authenticated && location.pathname === "/") {
+      navigate({ to: `/u/solmail/inbox/all${query ? `?${query}` : ""}` });
+    }
 
-  if (ready && !authenticated && location.pathname !== "/") {
-    navigate({ to: `/${query ? `?${query}` : ``}` });
+    if (ready && !authenticated && location.pathname !== "/") {
+      navigate({ to: `/${query ? `?${query}` : ``}` });
+    }
   }
   return (
     <Flex minH={"100vh"} w="full" direction={"column"}>

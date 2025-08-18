@@ -14,7 +14,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   const logo = useColorModeValue(SomailLogoTextDark, SolmailLogoText);
   return (
     <Flex direction={"column"} mb={2}>
-      <Flex fontWeight={"bold"} fontSize={18} px={1} mb={"2px"}>
+      <Flex fontWeight={"bold"} fontSize={18} px={1} mb={"5px"}>
         <chakra.span>
           <Image
             h="18px"
@@ -28,7 +28,6 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
       </Flex>
       {username && displayName && (
         <Flex
-          mb={2}
           mt={1}
           onClick={() =>
             onUpdate({
