@@ -1,5 +1,3 @@
-// Constants
-const ALLOWED_SPECIAL_CHARS = "_-";
 const USERNAME_MIN_LENGTH = 1;
 const USERNAME_MAX_LENGTH = 15;
 
@@ -13,6 +11,7 @@ export const validateUsername = (username: string) => {
     return "Username must be a non-empty string.";
   }
 
+  // Trim spaces for checking, but spaces are not allowed
   if (username.includes(" ")) {
     return "Username cannot contain spaces.";
   }
@@ -25,12 +24,23 @@ export const validateUsername = (username: string) => {
     return `Username must be at most ${USERNAME_MAX_LENGTH} characters long.`;
   }
 
-  const allowedCharsRegex = new RegExp(
-    `^[a-zA-Z0-9${ALLOWED_SPECIAL_CHARS.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}]+$`
-  );
-
+  // Allowed characters: lowercase letters, digits, underscore, dot
+  const allowedCharsRegex = /^[a-z0-9._]+$/;
   if (!allowedCharsRegex.test(username)) {
-    return `Username can only contain letters, numbers, and these special characters: ${ALLOWED_SPECIAL_CHARS}`;
+    return "Username can only contain lowercase letters, numbers, underscores (_), and dots (.)";
+  }
+
+  // Format restrictions
+  if (username.startsWith("_") || username.endsWith("_")) {
+    return "Username cannot start or end with an underscore (_).";
+  }
+
+  if (username.startsWith(".") || username.endsWith(".")) {
+    return "Username cannot start or end with a dot (.).";
+  }
+
+  if (username.includes("..")) {
+    return "Username cannot contain consecutive dots (..).";
   }
 
   return true;
