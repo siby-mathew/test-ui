@@ -10,3 +10,5 @@ export const MAXIMUM_MAIL_SUBJECT_LENGTH = 80;
 export const RPC_ENDPOINT = `${import.meta.env.VITE_SOLMAIL_RPC_ENDPOINT}?api-key=${import.meta.env.VITE_SOLMAIL_RPC_API_KEY}`;
 
 export const HELIUS_API_ENDPOINT = `https://api-devnet.helius.xyz/v0/`;
+
+export const NO_BALANCE_LABEL = `Insufficient Balance`;

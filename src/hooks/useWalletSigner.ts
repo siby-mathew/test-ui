@@ -76,6 +76,7 @@ export const useWalletSignerApi = () => {
           source: "nodejs_signer",
           signedTransaction: transactionObject,
           mailAccountPda: data.data.mailAccountPda,
+          userWallet: address,
         };
 
         await fetch("/create-mail-box", "POST", executionPayload);

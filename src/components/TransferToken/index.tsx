@@ -15,6 +15,7 @@ import { BASE_TOKEN } from "@const/tokens";
 import { useBalance } from "@hooks/useBalance";
 import { useEstimatedFee } from "@hooks/useEstimatedFee";
 import BigNumber from "bignumber.js";
+import { NO_BALANCE_LABEL } from "@const/config";
 
 export const TransferToken: React.FC = () => {
   const methods = useForm<TokenTransferForm>({
@@ -53,10 +54,10 @@ export const TransferToken: React.FC = () => {
       const balance = new BigNumber(tokenBalance?.amount ?? 0);
       const spendableBalance = isBaseToken ? balance.minus(fee ?? 0) : balance;
 
-      if (spendableBalance.lt(0)) return ["Insufficient fund", !1];
-      if (rawAmount.gt(spendableBalance)) return ["Insufficient fund", !1];
+      if (spendableBalance.lt(0)) return [NO_BALANCE_LABEL, !1];
+      if (rawAmount.gt(spendableBalance)) return [NO_BALANCE_LABEL, !1];
       if (new BigNumber(walletBalance ?? 0).lt(fee ?? 0))
-        return ["Insufficient fee", !1];
+        return [NO_BALANCE_LABEL, !1];
 
       return [true, !0];
     },

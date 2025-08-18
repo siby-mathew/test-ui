@@ -110,7 +110,8 @@ export const useMailBody = (
       if (isInternalMail(mail?.version as StorageVersion)) {
         return [mail?.body ?? "", [], mail?.body ?? "", [], []];
       }
-      if (!content || !content)
+      if (!content || !content) {
+        console.log("yepie");
         return [
           "",
           [],
@@ -120,11 +121,14 @@ export const useMailBody = (
           [],
           [],
         ];
+      }
 
       try {
         const decryptedContent = JSON.parse(
           decryptData(content ?? "", mail?.iv, data)
         ) as unknown as MailBodyResponse;
+
+        console.log(decryptedContent);
 
         if (!decryptedContent) return ["", [], "", [], []];
 

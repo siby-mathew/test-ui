@@ -21,7 +21,6 @@ export const Subject: React.FC = () => {
         bg="transparent !important"
         variant={"secondary"}
         {...register("subject", {
-          required: "Subject cannot be empty",
           maxLength: {
             value: MAXIMUM_MAIL_SUBJECT_LENGTH,
             message: `Maximum length should be ${MAXIMUM_MAIL_SUBJECT_LENGTH}`,

@@ -27,6 +27,7 @@ import {
   useGetMailProgramInstance,
   useMailBody,
   Attachment,
+  useBalance,
 } from "@hooks/index";
 
 import { useSendTransaction } from "@privy-io/react-auth/solana";
@@ -48,7 +49,7 @@ import { usePinataUploader } from "@hooks/usePinataUploader";
 import { v4 as uuidv4 } from "uuid";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { MailShareTypes } from "@state/index";
-import { MAXIMUM_MAIL_SUBJECT_LENGTH } from "@const/config";
+import { MAXIMUM_MAIL_SUBJECT_LENGTH, NO_BALANCE_LABEL } from "@const/config";
 const initialValues = {
   to: "",
   subject: "",
@@ -143,6 +144,7 @@ export const ComposerLegacy: React.FC = () => {
   const { account } = useGetLinkedUsernameById(address);
   const { showToast } = useToast();
   const [id, set] = useState(0);
+  const { hasEnoughBalance } = useBalance();
 
   const sleep = async (delay: number) => {
     return new Promise((r) => {
@@ -407,8 +409,9 @@ export const ComposerLegacy: React.FC = () => {
                 variant={"green"}
                 type="submit"
                 colorScheme="red"
+                isDisabled={!hasEnoughBalance}
               >
-                Send
+                {hasEnoughBalance ? "Send" : NO_BALANCE_LABEL}
               </Button>
             </Flex>
           </Flex>

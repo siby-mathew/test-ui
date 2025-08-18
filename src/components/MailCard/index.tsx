@@ -16,7 +16,6 @@ import { MailBoxLabels, type FormattedMailBox } from "src/types";
 
 export const MailCard: React.FC<FormattedMailBox> = ({
   from,
-  subject,
   createdAt,
   id,
   to,
@@ -28,6 +27,7 @@ export const MailCard: React.FC<FormattedMailBox> = ({
     hasSmartView,
     isLoading: isMailBoxLoading,
     isInternalMail,
+    subject,
   } = useMailBody(id, context);
   const addres =
     context !== MailBoxLabels.outbox ? from?.toString() : to?.toString();
@@ -65,23 +65,25 @@ export const MailCard: React.FC<FormattedMailBox> = ({
         </Flex>
         <Flex fontSize={12}>{formatTime(Number(createdAt) * 1000)}</Flex>
       </Flex>
-      <Box
-        maxW={"100%"}
-        whiteSpace={"nowrap"}
-        overflow={"hidden"}
-        textOverflow={"ellipsis"}
-      >
-        <CustomSkeleton isLoading={isMailBoxLoading}>
-          <chakra.span
-            textOverflow={"ellipsis"}
-            overflow={"hidden"}
-            w={"100%"}
-            whiteSpace={"nowrap"}
-          >
-            {subject}
-          </chakra.span>
-        </CustomSkeleton>
-      </Box>
+      {subject && (
+        <Box
+          maxW={"100%"}
+          whiteSpace={"nowrap"}
+          overflow={"hidden"}
+          textOverflow={"ellipsis"}
+        >
+          <CustomSkeleton isLoading={isMailBoxLoading}>
+            <chakra.span
+              textOverflow={"ellipsis"}
+              overflow={"hidden"}
+              w={"100%"}
+              whiteSpace={"nowrap"}
+            >
+              {subject}
+            </chakra.span>
+          </CustomSkeleton>
+        </Box>
+      )}
       <Box fontSize={12}>
         <CustomSkeleton isLoading={hasPendingState}>
           <chakra.span

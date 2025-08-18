@@ -3,8 +3,8 @@ import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { getAvatarColor } from "@utils/string";
 import Piegion from "@assets/piegion.png";
 export const Avatar: React.FC<
-  { name: string; isInternalMail: boolean } & BoxProps
-> = ({ name = "", isInternalMail, ...boxProps }) => {
+  { name: string; isInternalMail?: boolean } & BoxProps
+> = ({ name = "", isInternalMail = !1, ...boxProps }) => {
   const { displayName } = useGetLinkedUsernameById(name);
   const bg = getAvatarColor(displayName ?? "");
   return (

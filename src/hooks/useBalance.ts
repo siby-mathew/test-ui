@@ -8,14 +8,16 @@ import { formatTokenBalance, toRawAmount } from "@utils/formating";
 import { useToken } from "./useToken";
 import { useMemo } from "react";
 import BigNumber from "bignumber.js";
+import { useEstimatedFee } from "./useEstimatedFee";
 
 export const useBalance = (
   tokenMint?: string,
-  requestedAmount?: string | number
+  requestedAmount: string | number = 0
 ) => {
   const { wallet } = usePrivyWallet();
   const connection = useSolanaConnection();
   const { symbol, decimals } = useToken(tokenMint);
+  const { fee } = useEstimatedFee();
 
   const enabled = !!wallet?.address;
 
@@ -44,11 +46,11 @@ export const useBalance = (
     });
 
   const hasEnoughBalance = useMemo(() => {
-    if (!requestedAmount || !data) return !0;
+    if (!data) return !1;
     const amount = toRawAmount(requestedAmount, decimals);
-    const balance = new BigNumber(data);
-    return balance.gt(amount);
-  }, [data, decimals, requestedAmount]);
+    const balance = new BigNumber(data).minus(toRawAmount(fee, decimals));
+    return balance.gt(new BigNumber(0)) && balance.gt(amount);
+  }, [data, decimals, fee, requestedAmount]);
 
   return {
     data,

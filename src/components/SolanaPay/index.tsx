@@ -31,6 +31,7 @@ import { useMailBoxContext } from "@hooks/useMailBoxContext";
 import { useToken } from "@hooks/useToken";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { useBalance } from "@hooks/useBalance";
+import { NO_BALANCE_LABEL } from "@const/config";
 export const SolanaPay: React.FC<
   Omit<ModalProps, "children"> &
     PaymentConfig & {
@@ -150,7 +151,7 @@ export const SolanaPay: React.FC<
                   <Flex>
                     <Alert status="error" borderRadius={5}>
                       <AlertIcon />
-                      Insufficient balance
+                      {NO_BALANCE_LABEL}
                     </Alert>
                   </Flex>
                 )}

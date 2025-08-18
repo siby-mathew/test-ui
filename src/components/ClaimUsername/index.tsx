@@ -13,6 +13,8 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { SolmailSuffixInput } from "@components/SolmailSuffixInput";
+import { NO_BALANCE_LABEL } from "@const/config";
+import { useBalance } from "@hooks/useBalance";
 import { useClaimUserName } from "@hooks/useUsername";
 
 import { useId, useState, useTransition } from "react";
@@ -32,6 +34,7 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
       username: "",
     },
   });
+  const { hasEnoughBalance } = useBalance();
   const { mutateAsync, isPending } = useClaimUserName();
   const [isPendingStatus, startTransition] = useTransition();
   const onSubmitHandler: SubmitHandler<FormClaimUsername> = ({ username }) => {
@@ -108,8 +111,20 @@ export const ClaimUserName: React.FC<Omit<ModalProps, "children">> = ({
         </ModalBody>
         <ModalFooter gap={3}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="green" type="submit" form={id}>
-            Make it yours {isClaimingUsername && <Spinner ml={1} size={"sm"} />}
+          <Button
+            isDisabled={!hasEnoughBalance}
+            variant="green"
+            type="submit"
+            form={id}
+          >
+            {hasEnoughBalance && (
+              <>
+                Make it yours{" "}
+                {isClaimingUsername && <Spinner ml={1} size={"sm"} />}
+              </>
+            )}
+
+            {!hasEnoughBalance && <>{NO_BALANCE_LABEL}</>}
           </Button>
         </ModalFooter>
       </ModalContent>
