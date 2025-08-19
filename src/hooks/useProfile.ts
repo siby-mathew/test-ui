@@ -13,6 +13,7 @@ type Profile = {
     boost_factor: number;
     maximum: number;
     icon: string;
+    display_message: string;
   };
   xp: {
     amount: number;

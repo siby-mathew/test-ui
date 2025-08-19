@@ -1,6 +1,7 @@
 import { chakra, Flex, IconButton, Tooltip } from "@chakra-ui/react";
 import { Avatar } from "@components/Avatar";
 import { ClipboardText } from "@components/ClipboardText";
+import { MailOptionRenderer } from "@components/MailOptionRenderer";
 import { DOMAINS } from "@const/domain";
 import { useComposer } from "@hooks/useComposer";
 import { useMailBody } from "@hooks/useMailBody";
@@ -75,57 +76,59 @@ export const MailPreviewHeader: React.FC = () => {
         </Flex>
       </Flex>
       <Flex gap={1} display={{ base: "none", md: "flex" }}>
-        {context !== MailBoxLabels.outbox && (
-          <>
-            <Tooltip label="Reply" placement="auto">
-              <IconButton
-                size={"sm"}
-                aria-label="Reply"
-                icon={<RiReplyFill />}
-                onClick={onReplay}
-              />
-            </Tooltip>
+        <MailOptionRenderer renderWhen={[MailBoxLabels.inbox]}>
+          <Tooltip label="Reply" placement="auto">
+            <IconButton
+              size={"sm"}
+              aria-label="Reply"
+              icon={<RiReplyFill />}
+              onClick={onReplay}
+            />
+          </Tooltip>
+        </MailOptionRenderer>
 
-            <Tooltip label="Forward" placement="auto">
-              <IconButton
-                size={"sm"}
-                aria-label="Forward"
-                icon={<IoIosShareAlt />}
-                onClick={onForward}
-              />
-            </Tooltip>
-          </>
-        )}
+        <MailOptionRenderer
+          renderWhen={[MailBoxLabels.inbox, MailBoxLabels.outbox]}
+        >
+          <Tooltip label="Forward" placement="auto">
+            <IconButton
+              size={"sm"}
+              aria-label="Forward"
+              icon={<IoIosShareAlt />}
+              onClick={onForward}
+            />
+          </Tooltip>
+        </MailOptionRenderer>
 
-        {context !== MailBoxLabels.trash &&
-          context !== MailBoxLabels.outbox && (
-            <Tooltip placement="auto" label="Delete" isDisabled={isPending}>
-              <IconButton
-                onClick={() => onStatusUpdate(MailLabelIndex.trash)}
-                size={"sm"}
-                aria-label="Delete"
-                icon={<MdDelete />}
-                disabled={isPending}
-              />
-            </Tooltip>
-          )}
-        {context === MailBoxLabels.inbox && (
-          <>
-            <Tooltip
-              placement="auto"
-              label="Mark as spam"
-              isDisabled={isPending}
-            >
-              <IconButton
-                onClick={() => onStatusUpdate(MailLabelIndex.spam)}
-                size={"sm"}
-                aria-label="Spam"
-                icon={<RiSpam3Fill />}
-                disabled={isPending}
-              />
-            </Tooltip>
-          </>
-        )}
+        <MailOptionRenderer
+          renderWhen={[
+            MailBoxLabels.inbox,
+            MailBoxLabels.outbox,
+            MailBoxLabels.spam,
+          ]}
+        >
+          <Tooltip placement="auto" label="Delete" isDisabled={isPending}>
+            <IconButton
+              onClick={() => onStatusUpdate(MailLabelIndex.trash)}
+              size={"sm"}
+              aria-label="Delete"
+              icon={<MdDelete />}
+              disabled={isPending}
+            />
+          </Tooltip>
+        </MailOptionRenderer>
+
+        <MailOptionRenderer renderWhen={[MailBoxLabels.inbox]}>
+          <Tooltip placement="auto" label="Mark as spam" isDisabled={isPending}>
+            <IconButton
+              onClick={() => onStatusUpdate(MailLabelIndex.spam)}
+              size={"sm"}
+              aria-label="Spam"
+              icon={<RiSpam3Fill />}
+              disabled={isPending}
+            />
+          </Tooltip>
+        </MailOptionRenderer>
       </Flex>
     </Flex>
   );

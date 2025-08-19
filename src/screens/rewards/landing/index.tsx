@@ -22,16 +22,30 @@ export const ReferralDashboard = () => {
           templateRows="repeat(3, auto)"
           gap={2}
         >
-          <GridItem rowSpan={3} colSpan={1}>
+          <GridItem
+            rowSpan={{
+              base: 1,
+              md: 3,
+            }}
+            colSpan={{
+              md: 1,
+              base: 4,
+            }}
+          >
             <RewardsProfile />
           </GridItem>
-          <GridItem colSpan={3} rowSpan={1}>
+          <GridItem
+            colSpan={{
+              md: 3,
+              base: 4,
+            }}
+          >
             <AnalyticsHeader />
           </GridItem>
-          <GridItem colSpan={1} rowSpan={1}>
+          <GridItem colSpan={{ md: 1, base: 4 }}>
             <AnalyticCard icon={config.logo} label="Mail claimed" value="0" />
           </GridItem>
-          <GridItem colSpan={1} rowSpan={1}>
+          <GridItem colSpan={{ md: 1, base: 4 }}>
             <AnalyticCard
               icon={BsPeopleFill}
               label="Friends Referred"
@@ -41,15 +55,26 @@ export const ReferralDashboard = () => {
           <GridItem
             alignItems={"center"}
             justifyContent={"center"}
-            colSpan={1}
-            rowSpan={2}
+            colSpan={{
+              base: 4,
+              md: 1,
+            }}
+            rowSpan={{
+              md: 2,
+              base: 1,
+            }}
             borderRadius={15}
             bg="surface.600"
           >
             <RewardsChart />
           </GridItem>
 
-          <GridItem colSpan={2}>
+          <GridItem
+            colSpan={{
+              md: 2,
+              base: 4,
+            }}
+          >
             <Flex
               direction={"row"}
               w="100%"
@@ -81,10 +106,20 @@ export const ReferralDashboard = () => {
               </Flex>
             </Flex>
           </GridItem>
-          <GridItem colSpan={3}>
+          <GridItem
+            colSpan={{
+              md: 3,
+              base: 4,
+            }}
+          >
             <AnalyticsList />
           </GridItem>
-          <GridItem>
+          <GridItem
+            colSpan={{
+              md: 1,
+              base: 4,
+            }}
+          >
             <Flex h="100%" bg="surface.600" borderRadius={15}>
               <Quests />
             </Flex>

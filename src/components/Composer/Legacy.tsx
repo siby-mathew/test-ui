@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import {
   MailBoxLabels,
+  QueryKeys,
   StorageVersion,
   type ComposerFormInputs,
   type SolanaPayPayload,
@@ -50,6 +51,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { MailShareTypes } from "@state/index";
 import { MAXIMUM_MAIL_SUBJECT_LENGTH, NO_BALANCE_LABEL } from "@const/config";
+import { useQueryClient } from "@tanstack/react-query";
 const initialValues = {
   to: "",
   subject: "",
@@ -65,6 +67,7 @@ export const ComposerLegacy: React.FC = () => {
   const { thread, action, ref, onClose: closeComposer } = useComposer();
   const [sharedAttachments, setSharedAttachments] = useState<Attachment[]>([]);
   const [isComposerReady, setComposerState] = useState<boolean>(!1);
+  const queryClient = useQueryClient();
   const {
     subject,
     isLoading: isMailLoading,
@@ -323,13 +326,14 @@ export const ComposerLegacy: React.FC = () => {
           showWalletUIs: !1,
         },
       });
-
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.MAILBOX] });
       showToast("Mail sent successfully", {
         type: "success",
       });
       close();
       refetch();
     } catch {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.MAILBOX] });
       refetch();
       expandComposer();
       showToast("Failed to send mail", {

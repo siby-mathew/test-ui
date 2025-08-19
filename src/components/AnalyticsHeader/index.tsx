@@ -63,7 +63,7 @@ export const AnalyticsHeader: React.FC = () => {
         />
       </Flex>
       <Flex fontSize={13} opacity={0.5} mt={1}>
-        Invite 7 more friends to reach level Crab 🦀 and 2x Boost 🚀
+        {data?.milestone?.display_message}
       </Flex>
     </Flex>
   );

@@ -108,6 +108,7 @@ export const Quests = () => {
         py={3}
         flex={"auto"}
         alignItems={"center"}
+        maxH={"70"}
       >
         <Flex fontWeight={"bold"} fontSize={20}>
           Quests
