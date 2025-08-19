@@ -1,4 +1,4 @@
-import { chakra, Flex, Icon, Link } from "@chakra-ui/react";
+import { chakra, Flex, Icon, Link, Tooltip } from "@chakra-ui/react";
 import { FaXTwitter } from "react-icons/fa6";
 import { BsTelegram } from "react-icons/bs";
 import { FaInstagram } from "react-icons/fa6";
@@ -37,17 +37,19 @@ export const SocialShare: React.FC = () => {
     <Flex direction={"row"} gap={3} alignItems={"center"} my={4}>
       {SOCIAL_LINKS.map((option) => {
         return (
-          <Link
-            target="_blank"
-            href={option.link}
-            display={"inline-flex"}
-            _hover={{
-              opacity: 0.7,
-            }}
-          >
-            {option.icon && <Icon as={option.icon as any} />}
-            {!option.icon && <chakra.span>{option.name}</chakra.span>}
-          </Link>
+          <Tooltip label={option.name} key={option.name}>
+            <Link
+              target="_blank"
+              href={option.link}
+              display={"inline-flex"}
+              _hover={{
+                opacity: 0.7,
+              }}
+            >
+              {option.icon && <Icon as={option.icon as any} />}
+              {!option.icon && <chakra.span>{option.name}</chakra.span>}
+            </Link>
+          </Tooltip>
         );
       })}
     </Flex>

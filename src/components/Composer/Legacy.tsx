@@ -7,7 +7,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {
-  MailBoxLabels,
   QueryKeys,
   StorageVersion,
   type ComposerFormInputs,

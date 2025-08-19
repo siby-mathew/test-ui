@@ -1,16 +1,8 @@
-import {
-  Button,
-  Flex,
-  Icon,
-  Link as ChakraLink,
-  Image,
-} from "@chakra-ui/react";
-import { LINKS } from "@const/links";
+import { Button, Flex, Link as ChakraLink } from "@chakra-ui/react";
+
 import { usePrivy } from "@privy-io/react-auth";
 
-import { FaXTwitter } from "react-icons/fa6";
-import { SiTelegram } from "react-icons/si";
-import JupiterLogo from "@assets/jupiter.svg";
+import { SocialShare } from "@components/SocialShare";
 export const Login: React.FC = () => {
   const { login } = usePrivy();
 
@@ -39,7 +31,9 @@ export const Login: React.FC = () => {
           </Button>
         </Flex>
       </Flex>
-
+      <Flex direction={"column"} alignItems={"center"} w="100%">
+        <SocialShare />
+      </Flex>
       <Flex
         alignItems={"center"}
         gap={5}
@@ -48,51 +42,11 @@ export const Login: React.FC = () => {
         opacity={0.5}
       >
         <Flex>Solmail © {new Date().getFullYear()}</Flex>
-        {/* <Flex>
+        <Flex>
           <ChakraLink href="#">Terms & Conditions</ChakraLink>
         </Flex>
         <Flex>
           <ChakraLink href="#">Privacy policy</ChakraLink>
-        </Flex>
-        <Flex>
-          <ChakraLink href="#">FAQ</ChakraLink>
-        </Flex> */}
-
-        <Flex alignItems={"center"} justifyContent={"center"} gap={2}>
-          <ChakraLink
-            href={LINKS.twitter}
-            target="_blank"
-            _hover={{
-              opacity: 0.5,
-            }}
-            alignItems={"center"}
-            display={"inline-flex"}
-          >
-            <Icon as={FaXTwitter} />
-          </ChakraLink>
-          <ChakraLink
-            href={LINKS.telegram}
-            target="_blank"
-            _hover={{
-              opacity: 0.5,
-            }}
-            alignItems={"center"}
-            display={"inline-flex"}
-          >
-            <Icon as={SiTelegram} />
-          </ChakraLink>
-
-          <ChakraLink
-            href={LINKS.jupiter}
-            target="_blank"
-            _hover={{
-              opacity: 0.5,
-            }}
-            alignItems={"center"}
-            display={"inline-flex"}
-          >
-            <Image w="15px" src={JupiterLogo} />
-          </ChakraLink>
         </Flex>
       </Flex>
     </Flex>

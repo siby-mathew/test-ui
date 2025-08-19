@@ -2,25 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { QueryKeys } from "src/types";
 
-export interface SolPriceResponse {
-  symbol: string;
-  mins: number;
-  price: string;
-  closeTime: number;
-}
-
-const fetchSOLPrice = async (): Promise<SolPriceResponse> => {
-  const { data } = await axios.get<SolPriceResponse>(
-    `${import.meta.env.VITE_SOLMAIL_PRICE_API}?symbol=SOLUSDT`
+const fetchSOLPrice = async (): Promise<any> => {
+  const { data } = await axios.get<any>(
+    `${import.meta.env.VITE_SOLMAIL_PRICE_API}simple/price?ids=solana&vs_currencies=usd`
   );
-  return data;
+  if (data && data.solana && data.solana.usd) {
+    return data.solana.usd;
+  }
+
+  return 0;
 };
 
 export function useSOLPrice() {
-  return useQuery<SolPriceResponse>({
+  return useQuery<number>({
     queryKey: [QueryKeys.SOL_PRICE],
     queryFn: fetchSOLPrice,
-    refetchInterval: 5000,
+    refetchInterval: 30 * 1000,
     refetchOnWindowFocus: false,
   });
 }

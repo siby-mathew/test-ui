@@ -18,7 +18,7 @@ export const PageNotFound: React.FC = () => {
         </chakra.span>
       </Flex>
       <Flex opacity={0.5}>
-        Oops! The page you’re looking for can’t be found.
+        Oops! The page you're looking for can’t be found.
       </Flex>
     </Flex>
   );

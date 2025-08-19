@@ -245,7 +245,7 @@ const SidebarFooter: React.FC = () => {
         </chakra.span>
       </Flex>
       <Flex mt={1} opacity={0.7} fontSize={12}>
-        Solmail © 2025 All rights reserved.
+        Solmail © {new Date().getFullYear()} All rights reserved.
       </Flex>
     </Flex>
   );
