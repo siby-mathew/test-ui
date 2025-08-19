@@ -12,9 +12,18 @@ import { client } from "@integrations/idl/graphql";
 import { ApolloProvider } from "@apollo/client";
 import { ToastContainer } from "react-toastify";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
-const queryclient = new QueryClient();
+import * as Sentry from "@sentry/react";
+
 import { DevTools } from "jotai-devtools";
 import "jotai-devtools/styles.css";
+
+const queryclient = new QueryClient();
+
+Sentry.init({
+  dsn: import.meta.env.VITE_SOLMAIL_SENTRY_DSN,
+  sendDefaultPii: true,
+});
+
 export const ALL_SUPPORTED_WALLETS: WalletListEntry[] = [
   "metamask",
   "coinbase_wallet",

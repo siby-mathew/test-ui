@@ -12,7 +12,9 @@ import GooglePlay from "@assets/playstore.png";
 import { PulseLoader } from "@components/PulseLoader";
 import { useExistingQueries } from "@hooks/useExistingQueries";
 import LogoFull from "@assets/logo-full.png";
-
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundaryPage } from "@components/ErrorBoundary";
+import * as Sentry from "@sentry/react";
 export const AppMainLayout: React.FC = () => {
   const { ready, authenticated } = usePrivy();
   const navigate = useNavigate();
@@ -47,50 +49,60 @@ export const AppMainLayout: React.FC = () => {
       navigate({ to: `/${query ? `?${query}` : ``}` });
     }
   }
+
   return (
-    <Flex minH={"100vh"} w="full" direction={"column"}>
-      {location.pathname === "/" && (
-        <Flex
-          px={5}
-          py={3}
-          direction={"row"}
-          gap={5}
-          justifyContent={"space-between"}
-        >
-          <Flex>
-            <Link
-              as={TanstackLink}
-              display={"inline-flex"}
-              to={"/"}
-              alignItems={"center"}
-            >
-              <Image w={140} src={LogoFull} alt="solmail" />
-            </Link>
-          </Flex>
-          <Flex gap={3} fontWeight={"medium"} alignItems={"center"}>
-            Get the app
-            <Tooltip label="Coming soon">
-              <Flex
+    <ErrorBoundary
+      FallbackComponent={ErrorBoundaryPage}
+      onError={(error, info) => {
+        Sentry.captureException(error, {
+          extra: { componentStack: info.componentStack },
+        });
+      }}
+    >
+      <Flex minH={"100vh"} w="full" direction={"column"}>
+        {location.pathname === "/" && (
+          <Flex
+            px={5}
+            py={3}
+            direction={"row"}
+            gap={5}
+            justifyContent={"space-between"}
+          >
+            <Flex>
+              <Link
+                as={TanstackLink}
                 display={"inline-flex"}
-                bg="surface.400"
-                px={4}
-                py={2}
-                borderRadius={20}
-                cursor={"pointer"}
-                transition={"all ease .2s"}
-                _hover={{
-                  opacity: 0.8,
-                }}
+                to={"/"}
+                alignItems={"center"}
               >
-                <Image w="120px" src={GooglePlay} />
-              </Flex>
-            </Tooltip>
+                <Image w={140} src={LogoFull} alt="solmail" />
+              </Link>
+            </Flex>
+            <Flex gap={3} fontWeight={"medium"} alignItems={"center"}>
+              Get the app
+              <Tooltip label="Coming soon">
+                <Flex
+                  display={"inline-flex"}
+                  bg="surface.400"
+                  px={4}
+                  py={2}
+                  borderRadius={20}
+                  cursor={"pointer"}
+                  transition={"all ease .2s"}
+                  _hover={{
+                    opacity: 0.8,
+                  }}
+                >
+                  <Image w="120px" src={GooglePlay} />
+                </Flex>
+              </Tooltip>
+            </Flex>
           </Flex>
+        )}
+        <Flex flex={"auto"}>
+          <Outlet />
         </Flex>
-      )}
-      <Flex flex={"auto"}>
-        <Outlet />
       </Flex>
-    </Flex>
+    </ErrorBoundary>
   );
 };

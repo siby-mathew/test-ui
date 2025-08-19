@@ -5,7 +5,7 @@ import type {
   AxiosRequestConfig,
   AxiosResponse,
 } from "axios";
-
+import * as Sentry from "@sentry/react";
 /**
  * Axios api config to use to call api calls
  * @param url path
@@ -71,6 +71,9 @@ export const apiConfig = async <T>(
       }
       localStorage.clear();
       window.location.reload();
+      Sentry.captureException(error, {
+        tags: { type: "axios-request" },
+      });
       return Promise.reject(errorMessage);
     }
   );

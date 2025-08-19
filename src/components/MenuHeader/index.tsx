@@ -13,8 +13,8 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   const { onUpdate } = useUsernamePopup();
   const logo = useColorModeValue(SomailLogoTextDark, SolmailLogoText);
   return (
-    <Flex direction={"column"} mb={2}>
-      <Flex fontWeight={"bold"} fontSize={18} px={1} mb={"5px"}>
+    <Flex direction={"column"}>
+      <Flex fontWeight={"bold"} fontSize={18} px={1}>
         <chakra.span>
           <Image
             h="18px"
@@ -65,7 +65,11 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
           </chakra.span>
         </Flex>
       )}
-      {header && <Flex py={2}>{header()}</Flex>}
+      {header && (
+        <Flex mt={2} py={2}>
+          {header()}
+        </Flex>
+      )}
     </Flex>
   );
 };
