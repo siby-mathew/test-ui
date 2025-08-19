@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NotFoundRouteImport } from './routes/$not-found'
 import { Route as StatIndexRouteImport } from './routes/stat/index'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as ULayoutRouteImport } from './routes/u/_layout'
@@ -34,6 +35,11 @@ const ULayoutWalletRouteImport = createFileRoute('/u/_layout/wallet')()
 const URoute = URouteImport.update({
   id: '/u',
   path: '/u',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotFoundRoute = NotFoundRouteImport.update({
+  id: '/$not-found',
+  path: '/$not-found',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StatIndexRoute = StatIndexRouteImport.update({
@@ -126,6 +132,7 @@ const ULayoutWalletLayoutActivityIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/$not-found': typeof NotFoundRoute
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
   '/stat': typeof StatIndexRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/u/wallet/pay': typeof ULayoutWalletLayoutPayIndexRoute
 }
 export interface FileRoutesByTo {
+  '/$not-found': typeof NotFoundRoute
   '/u': typeof ULayoutRouteWithChildren
   '/': typeof LayoutIndexRoute
   '/stat': typeof StatIndexRoute
@@ -163,6 +171,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$not-found': typeof NotFoundRoute
   '/u': typeof URouteWithChildren
   '/u/_layout': typeof ULayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
@@ -185,6 +194,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$not-found'
     | '/u'
     | '/'
     | '/stat'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/u/wallet/pay'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/$not-found'
     | '/u'
     | '/'
     | '/stat'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/u/wallet/pay'
   id:
     | '__root__'
+    | '/$not-found'
     | '/u'
     | '/u/_layout'
     | '/_layout/'
@@ -242,6 +254,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  NotFoundRoute: typeof NotFoundRoute
   URoute: typeof URouteWithChildren
   LayoutIndexRoute: typeof LayoutIndexRoute
   StatIndexRoute: typeof StatIndexRoute
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/u'
       fullPath: '/u'
       preLoaderRoute: typeof URouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$not-found': {
+      id: '/$not-found'
+      path: '/$not-found'
+      fullPath: '/$not-found'
+      preLoaderRoute: typeof NotFoundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stat/': {
@@ -445,6 +465,7 @@ const URouteChildren: URouteChildren = {
 const URouteWithChildren = URoute._addFileChildren(URouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  NotFoundRoute: NotFoundRoute,
   URoute: URouteWithChildren,
   LayoutIndexRoute: LayoutIndexRoute,
   StatIndexRoute: StatIndexRoute,

@@ -276,8 +276,7 @@ export const LoginInfo: React.FC = () => {
       displayName,
       icon: !isWallet
         ? getWalletIcon(displayName)
-        : (get(displayName)?.meta.icon ??
-          ` ${JSON.stringify(get(displayName))}`),
+        : (get(displayName, account?.walletClientType)?.meta.icon ?? ``),
       isWallet,
     };
   }, [get, user?.linkedAccounts]);
@@ -287,7 +286,6 @@ export const LoginInfo: React.FC = () => {
       <Flex fontWeight={"bold"}>Logged in via</Flex>
       <Flex direction={"row"} gap={1} mt={"3px"} alignItems={"center"}>
         <Flex>
-          --{icon}--
           <Image boxSize={"16px"} src={icon} />
         </Flex>
 

@@ -19,6 +19,7 @@ import { MailBoxLabels, MailLabelIndex } from "src/types";
 export const MailPreviewHeader: React.FC = () => {
   const { context, id } = useMailBoxContext();
   const { onOpen } = useComposer();
+  const { isInternalMail } = useMailBody(id, context);
   const { isPending, mutateAsync } = useLabelIndexUpdate(id ?? "");
 
   const label = context !== MailBoxLabels.outbox ? "From" : "To";
@@ -57,6 +58,7 @@ export const MailPreviewHeader: React.FC = () => {
           boxSize={"40px"}
           name={address?.toString() ?? ""}
           position={"initial"}
+          isInternalMail={isInternalMail}
         />
       </Flex>
       <Flex direction={"column"} flex={"auto"}>

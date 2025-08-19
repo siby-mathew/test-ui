@@ -8,6 +8,7 @@ import {
   TELEGRAM_URL,
   TWITTER_URL,
 } from "@const/config";
+import { SiGoogledocs } from "react-icons/si";
 
 const SOCIAL_LINKS = [
   {
@@ -26,7 +27,7 @@ const SOCIAL_LINKS = [
     link: INSTAGRAM_URL,
   },
   {
-    icon: null,
+    icon: SiGoogledocs,
     name: "Docs",
     link: DOCS_URL,
   },
