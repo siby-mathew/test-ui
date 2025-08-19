@@ -1,5 +1,5 @@
-import { chakra, Flex } from "@chakra-ui/react";
-
+import { chakra, Flex, Image } from "@chakra-ui/react";
+import Piegion from "@assets/piegion.png";
 export const PageNotFound: React.FC = () => {
   return (
     <Flex
@@ -9,6 +9,9 @@ export const PageNotFound: React.FC = () => {
       w="100%"
       h="100%"
     >
+      <Flex my={5}>
+        <Image w={100} borderRadius={"50%"} src={Piegion} />
+      </Flex>
       <Flex justifyContent={"center"} alignItems={"center"} w="100%">
         <chakra.span fontWeight={"bold"} fontSize={20}>
           Page not found

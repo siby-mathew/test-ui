@@ -11,7 +11,6 @@ import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { MailShareTypes } from "@state/index";
 import { shortenPrincipalId } from "@utils/string";
 import { format } from "@utils/time";
-
 import { IoIosShareAlt } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { RiReplyFill, RiSpam3Fill } from "react-icons/ri";

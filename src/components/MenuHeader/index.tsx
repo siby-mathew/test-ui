@@ -6,6 +6,7 @@ import SolmailLogoText from "@assets/logo.light.text.svg";
 import SomailLogoTextDark from "@assets/logo.darker.text.svg";
 import { BiSolidDownArrow } from "react-icons/bi";
 import { useUsernamePopup } from "@hooks/useUsernamePopup";
+import { Link } from "@tanstack/react-router";
 
 export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   const { wallet } = usePrivyWallet();
@@ -15,7 +16,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   return (
     <Flex direction={"column"}>
       <Flex fontWeight={"bold"} fontSize={18} px={1}>
-        <chakra.span>
+        <Link to={"/"}>
           <Image
             h="18px"
             data-block={name}
@@ -24,7 +25,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
             position={"relative"}
             left={"-3px"}
           />
-        </chakra.span>
+        </Link>
       </Flex>
       {username && displayName && (
         <Flex
@@ -55,11 +56,13 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
               overflow={"hidden"}
               textOverflow={"ellipsis"}
               position={"relative"}
-              paddingRight={"10px"}
+              paddingRight={"14px"}
+              display={"inline-flex"}
+              alignItems={"center"}
             >
               {displayName}
-              <chakra.span position={"absolute"} right={0} top={0} bottom={0}>
-                <Icon ml={1} mt={"1px"} fontSize={9} as={BiSolidDownArrow} />
+              <chakra.span position={"absolute"} right={0} my="auto" bottom={0}>
+                <Icon ml={2} fontSize={9} as={BiSolidDownArrow} />
               </chakra.span>
             </chakra.span>
           </chakra.span>
