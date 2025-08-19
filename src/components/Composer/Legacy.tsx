@@ -68,13 +68,15 @@ export const ComposerLegacy: React.FC = () => {
   const [sharedAttachments, setSharedAttachments] = useState<Attachment[]>([]);
   const [isComposerReady, setComposerState] = useState<boolean>(!1);
   const queryClient = useQueryClient();
+  const { context } = useComposer();
+
   const {
     subject,
     isLoading: isMailLoading,
     content,
     attachments,
     attachmentRef,
-  } = useMailBody(ref, MailBoxLabels.inbox);
+  } = useMailBody(ref, context);
   const {
     account: _account,
     displayName,

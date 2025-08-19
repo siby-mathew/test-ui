@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { MailBoxLabels } from "src/types";
 
 export type AtomType = {
   isComposerOpen: boolean;
@@ -8,6 +9,7 @@ export type AtomType = {
   ref: string;
   updatingUsername: boolean;
   action: MailShareTypes;
+  context: MailBoxLabels;
 };
 
 export enum MailShareTypes {
@@ -24,6 +26,7 @@ export const appState = atom<AtomType>({
   ref: "",
   action: MailShareTypes.none,
   updatingUsername: !1,
+  context: MailBoxLabels.inbox,
 });
 
 appState.debugLabel = "AppState";

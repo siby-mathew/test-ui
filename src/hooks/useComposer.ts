@@ -50,6 +50,7 @@ export const useComposer = () => {
     });
   };
   return {
+    update,
     ...other,
     isOpen: isComposerOpen,
     onOpen,

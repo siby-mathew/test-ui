@@ -76,7 +76,9 @@ export const MailPreviewHeader: React.FC = () => {
         </Flex>
       </Flex>
       <Flex gap={1} display={{ base: "none", md: "flex" }}>
-        <MailOptionRenderer renderWhen={[MailBoxLabels.inbox]}>
+        <MailOptionRenderer
+          renderWhen={[MailBoxLabels.inbox, MailBoxLabels.spam]}
+        >
           <Tooltip label="Reply" placement="auto">
             <IconButton
               size={"sm"}
@@ -88,7 +90,12 @@ export const MailPreviewHeader: React.FC = () => {
         </MailOptionRenderer>
 
         <MailOptionRenderer
-          renderWhen={[MailBoxLabels.inbox, MailBoxLabels.outbox]}
+          renderWhen={[
+            MailBoxLabels.inbox,
+            MailBoxLabels.outbox,
+            MailBoxLabels.trash,
+            MailBoxLabels.spam,
+          ]}
         >
           <Tooltip label="Forward" placement="auto">
             <IconButton
@@ -118,7 +125,9 @@ export const MailPreviewHeader: React.FC = () => {
           </Tooltip>
         </MailOptionRenderer>
 
-        <MailOptionRenderer renderWhen={[MailBoxLabels.inbox]}>
+        <MailOptionRenderer
+          renderWhen={[MailBoxLabels.inbox, MailBoxLabels.trash]}
+        >
           <Tooltip placement="auto" label="Mark as spam" isDisabled={isPending}>
             <IconButton
               onClick={() => onStatusUpdate(MailLabelIndex.spam)}
