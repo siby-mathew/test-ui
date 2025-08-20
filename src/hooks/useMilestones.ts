@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Milestone, QueryKeys } from "src/types";
-import { useHttp } from "./useHttp";
+import { useHttp } from "@hooks/useHttp";
 
 type Milestones = {
   [key: `MILESTONE#${number}`]: Milestone;

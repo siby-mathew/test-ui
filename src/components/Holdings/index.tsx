@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { TokenCard } from "@components/TokenCard";
 import { TransactionsList } from "@components/TransactionsList";
-
 import { useTokensOwned } from "@hooks/useTokensOwned";
 
 export const Holdings: React.FC = () => {

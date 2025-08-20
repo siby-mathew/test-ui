@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { QueryKeys } from "src/types";
 import { usePrivyWallet } from "./usePrivyWallet";
 
-import { useHttp } from "./useHttp";
+import { useHttp } from "@hooks/useHttp";
 import { VersionedTransaction } from "@solana/web3.js";
 import { useSignTransaction } from "@privy-io/react-auth/solana";
 import { useSolanaConnection } from "./useConnection";

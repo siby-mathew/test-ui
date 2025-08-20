@@ -1,7 +1,7 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { useMutation } from "@tanstack/react-query";
 import { QueryKeys } from "src/types";
-import { useHttp } from "./useHttp";
+import { useHttp } from "@hooks/useHttp";
 type Payload = {
   code: string;
 };

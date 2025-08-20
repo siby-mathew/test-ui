@@ -15,6 +15,7 @@ import {
 import { FieldWrapper } from "@components/Field";
 import { useCreateProfile } from "@hooks/useCreateProfile";
 import { useExistingQueries } from "@hooks/useExistingQueries";
+import { useRefCodeValidation } from "@hooks/useReferralCodeValidation";
 import { validateCode } from "@utils/string/code";
 
 import { useId } from "react";
@@ -29,6 +30,7 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
 }) => {
   const { params } = useExistingQueries();
   const { isPending, mutateAsync } = useCreateProfile();
+  const j = useRefCodeValidation();
   const id = useId();
   const methods = useForm<Form>({
     mode: "all",
@@ -38,6 +40,9 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
       code: params?.r,
     },
   });
+
+  const { getValues } = methods;
+  const code = getValues().code ?? "";
 
   const createProfile = async (code: string = "") => {
     try {
@@ -112,7 +117,10 @@ export const ReferalCodeClaim: React.FC<Omit<ModalProps, "children">> = ({
                     id="code"
                     {...methods.register("code", {
                       validate: validateCode,
-                      required: "Please enter a valid referral code",
+                      required: {
+                        value: !!code.trim(),
+                        message: "Please enter a valid referral code",
+                      },
                     })}
                   />
                 </FieldWrapper>

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { QueryKeys } from "src/types";
-import { useHttp } from "./useHttp";
+import { useHttp } from "@hooks/useHttp";
 
 import { useAuthStatus } from "./useAuthState";
 
