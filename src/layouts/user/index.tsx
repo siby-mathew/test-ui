@@ -140,11 +140,10 @@ export const UserLayout: React.FC = () => {
     <Flex w="100%" direction={"row"}>
       <ReferalCodeClaim
         isOpen={
-          true ||
-          (isAuthenticated &&
-            !requestWalletCreation &&
-            !isModalOpen &&
-            requestProfileCreation)
+          isAuthenticated &&
+          !requestWalletCreation &&
+          !isModalOpen &&
+          requestProfileCreation
         }
         onClose={onCloseHandler}
       />
