@@ -6,6 +6,5 @@ export const WithSolPrice: React.FC<{ amount: number | string }> = ({
   const { data } = useSOLPrice();
   const price =
     parseFloat(amount.toString()) * (parseFloat(data?.toString() ?? "0") ?? 0);
-
-  return <>${parseFloat(price as any).toFixed(2)}</>;
+  return <>${parseFloat(price.toString()).toFixed(2)}</>;
 };
