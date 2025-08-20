@@ -20,12 +20,9 @@ export const Login: React.FC = () => {
         <Flex my={2}>
           <Button
             onClick={login}
-            _hover={{
-              opacity: 0.8,
-            }}
-            borderRadius={"25px"}
             size={"lg"}
-            bg="solana !important"
+            borderRadius={"25px"}
+            variant={"solana"}
           >
             Connect Wallet
           </Button>

@@ -5,6 +5,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import path from "path";
 import { visualizer } from "rollup-plugin-visualizer";
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const ignore = env.VITE_SOLMAIL_INGORE_MODULES ?? undefined;

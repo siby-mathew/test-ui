@@ -1,4 +1,5 @@
 import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 
 const danger = defineStyle({
   bg: "red.500",
@@ -32,6 +33,15 @@ const red = defineStyle({
     bg: "red.500 !important",
   },
 });
+
+const solana = defineStyle((props) => ({
+  bg: "solana",
+  color: mode("white", "black")(props),
+  _hover: {
+    opacity: 0.8,
+  },
+}));
+
 export const Button = defineStyleConfig({
-  variants: { danger, green, red },
+  variants: { danger, green, red, solana },
 });
