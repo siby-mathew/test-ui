@@ -21,7 +21,7 @@ import { useTransfer } from "@hooks/useTransfer";
 import { useQueryClient } from "@tanstack/react-query";
 import { shortenPrincipalId } from "@utils/string";
 import { isValidAddress } from "@utils/string/isValidAddress";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import { QueryKeys, type PaymentConfig } from "src/types";

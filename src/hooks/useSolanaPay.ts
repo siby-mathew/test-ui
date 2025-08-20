@@ -12,7 +12,7 @@ import { useSolanaConnection } from "./useConnection";
 import { usePrivyWallet } from "./usePrivyWallet";
 import { useToast } from "./useToast";
 import { PublicKey, Transaction } from "@solana/web3.js";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 
 import type { StatusType } from "src/types";
 import {

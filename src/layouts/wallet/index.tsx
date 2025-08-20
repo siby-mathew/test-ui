@@ -15,7 +15,7 @@ import { LuQrCode } from "react-icons/lu";
 import { FiArrowUpRight } from "react-icons/fi";
 import { ShareAddress } from "@components/ShareAddress";
 import { Link, Outlet } from "@tanstack/react-router";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 import { WithSolPrice } from "@components/WithSolPrice";
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 

@@ -24,7 +24,7 @@ import { tokens } from "@const/tokens";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 
 import { FieldWrapper } from "@components/Field";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 import type { SolanaPayPayload } from "src/types";
 
 type SolanaPayForm = {

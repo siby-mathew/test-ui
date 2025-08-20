@@ -4,6 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import path from "path";
+import { visualizer } from "rollup-plugin-visualizer";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const ignore = env.VITE_SOLMAIL_INGORE_MODULES ?? undefined;
@@ -15,6 +16,16 @@ export default defineConfig(({ mode }) => {
         routeFileIgnorePattern: ignore,
       }),
       react(),
+      ...(mode === "analyze"
+        ? [
+            visualizer({
+              filename: "bundle-report.html",
+              open: true,
+              gzipSize: true,
+              brotliSize: true,
+            }),
+          ]
+        : []),
       nodePolyfills({
         exclude: ["fs"],
         globals: {

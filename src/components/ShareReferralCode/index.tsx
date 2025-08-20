@@ -26,7 +26,7 @@ import { useEffect, useId, useMemo } from "react";
 import { FaCopy, FaPencil, FaXTwitter } from "react-icons/fa6";
 import { TbCopyCheckFilled } from "react-icons/tb";
 import { getTelegramLink, getWhatsAppLink, getXShareUrl } from "@utils/string";
-import { noop } from "lodash";
+import noop from "lodash/noop";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FieldWrapper } from "@components/Field";
 import { useReferralCodeUpdate } from "@hooks/useReferralCodeUpdate";

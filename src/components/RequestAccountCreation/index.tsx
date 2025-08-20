@@ -14,7 +14,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { useSessionHandler } from "@hooks/useSessionHandler";
 import { useWalletSignerApi } from "@hooks/useWalletSigner";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 
 import { RiShutDownLine } from "react-icons/ri";
 

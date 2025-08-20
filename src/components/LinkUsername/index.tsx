@@ -25,7 +25,7 @@ import {
 import { useGetMyUsernames } from "@hooks/useUsernames";
 import { PublicKey } from "@solana/web3.js";
 
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 import { useState } from "react";
 
 type LinkableMail = {

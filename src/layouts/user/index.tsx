@@ -8,7 +8,7 @@ import { Outlet } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMailAccount } from "@hooks/useMailAccount";
 import { RequestAccountCreation } from "@components/RequestAccountCreation";
-import { noop } from "lodash";
+import noop from "lodash/noop";
 import { useEmbeddedWallet } from "@hooks/useEmbeddedWallet";
 
 import { useProfile } from "@hooks/useProfile";

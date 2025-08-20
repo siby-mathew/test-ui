@@ -3,7 +3,7 @@ import { Box, Flex, Spinner, VStack } from "@chakra-ui/react";
 import { MailCard } from "@components/MailCard";
 import { useGetInbox } from "@hooks/useGetInbox";
 import { useMailBoxContext } from "@hooks/useMailBoxContext";
-import { isFunction } from "lodash";
+import isFunction from "lodash/isFunction";
 
 export interface InboxRef {
   refresh: () => void;

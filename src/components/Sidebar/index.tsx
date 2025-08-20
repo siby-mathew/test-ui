@@ -29,7 +29,7 @@ import { ClipboardText } from "@components/ClipboardText";
 import { getSolscanAddress } from "@utils/string/getSolscanUrl";
 import { useMemo } from "react";
 import { MenuHeader } from "@components/MenuHeader";
-import { noop } from "lodash";
+import noop from "lodash/noop";
 
 import { DOMAINS } from "@const/domain";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
