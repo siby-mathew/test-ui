@@ -50,7 +50,7 @@ export const UserProfileCard: React.FC = () => {
   const { toggleColorMode } = useColorMode();
   return (
     <Flex direction={"row"} alignItems={"center"} gap={3}>
-      <Flex fontSize={20} cursor={"pointer"} onClick={toggleColorMode} hidden>
+      <Flex fontSize={20} cursor={"pointer"} onClick={toggleColorMode}>
         {isLightTheme && <Icon as={MdDarkMode} />}
         {!isLightTheme && <Icon as={MdLightMode} />}
       </Flex>

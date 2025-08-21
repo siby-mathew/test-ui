@@ -9,7 +9,7 @@ import { Tabs } from "./components/Tab";
 import { Table } from "./components/Table";
 
 export const AppTheme = extendTheme({
-  config: { initialColorMode: "dark", useSystemColorMode: true },
+  config: { initialColorMode: "system", useSystemColorMode: true },
   fonts: {
     body: `"Inter", sans-serif`,
   },
@@ -20,7 +20,7 @@ export const AppTheme = extendTheme({
       body: {
         bg: "surface.100",
         fontSize: 15,
-        color: mode("dark.100", "#b6b6b6")(props),
+        color: mode("rgb(78 88 99)", "#b6b6b6")(props),
       },
       ".Toastify__toast-theme--dark": {
         background: "#101527ab",

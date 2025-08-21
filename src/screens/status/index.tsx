@@ -4,18 +4,30 @@ import {
   Link as ChakraLink,
   Icon,
   VStack,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
+
 import IDL from "@integrations/idl/solmail/solmail.json";
 import { Link } from "@tanstack/react-router";
+import { isValidUrl } from "@utils/string";
+
 import { TbExternalLink } from "react-icons/tb";
 
 const Card: React.FC<{ label: string; value: string }> = ({ label, value }) => {
+  const isUrlString = isValidUrl(value);
   return (
-    <Flex w="100%" direction={"column"} fontSize={12}>
+    <Flex
+      w="100%"
+      direction={"column"}
+      fontSize={12}
+      as={isUrlString ? LinkBox : "div"}
+    >
       <Flex mt={5} fontWeight={"bold"}>
         {label}
       </Flex>
       <Flex>{value}</Flex>
+      {isUrlString && <LinkOverlay href={encodeURI(value)} />}
     </Flex>
   );
 };

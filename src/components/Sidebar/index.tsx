@@ -140,13 +140,9 @@ export const Sidebar: React.FC = () => {
             const active = isActive(menu.id, pathname);
             return (
               <Flex key={menu.id}>
-                <Tooltip
-                  label={menu.name}
-                  bg={"surface.100"}
-                  color={"light.100"}
-                >
+                <Tooltip label={menu.name}>
                   <ChakraLink
-                    color={active ? "solana.middle" : ""}
+                    opacity={active ? 0.3 : 1}
                     as={Link}
                     py={2}
                     to={menu.link}

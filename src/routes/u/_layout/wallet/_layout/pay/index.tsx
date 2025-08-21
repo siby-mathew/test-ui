@@ -1,4 +1,4 @@
-import { PaymentScreen }  from "@screens/wallet/PaymentScreen";
+import { PaymentScreen } from "@screens/wallet/paymentscreen";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/u/_layout/wallet/_layout/pay/")({

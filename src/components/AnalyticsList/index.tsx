@@ -40,7 +40,7 @@ const NodataTable: React.FC<{ colspan?: number }> = ({ colspan = 3 }) => {
 export const AnalyticsList: React.FC = () => {
   const { data } = useProfile();
   return (
-    <Flex bg="surface.600" borderRadius={15} p={5}>
+    <Flex bg="surface.600" borderRadius={15} p={5} h="100%">
       <Tabs w="100%">
         <TabList>
           <Tab>Referrals</Tab>

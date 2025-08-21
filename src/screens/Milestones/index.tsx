@@ -25,7 +25,6 @@ const MileStoneCard: React.FC<
       transition={"all ease .2s"}
       cursor={"pointer"}
       bg={"surface.500"}
-      color={"light.100"}
       position={"relative"}
       bgGradient={isActive ? "" : ""}
       border={"solid 2px"}

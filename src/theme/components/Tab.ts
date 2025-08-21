@@ -4,10 +4,10 @@ import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(tabsAnatomy.keys);
 
-const primary = definePartsStyle({
+const primary = definePartsStyle(() => ({
   tab: {
     borderBottom: "solid 1px",
-    borderBottomColor: "dark.800",
+    borderBottomColor: "surface.900",
     _selected: {
       color: "green.500",
       borderBottomColor: "green.500",
@@ -16,12 +16,12 @@ const primary = definePartsStyle({
   },
   tablist: {},
   tabpanel: {},
-});
+}));
 
 const wallet = definePartsStyle({
   tab: {
     borderBottom: "solid 1px",
-    borderBottomColor: "dark.800",
+    borderBottomColor: "surface.800",
     fontWeight: "normal",
     _selected: {
       color: "green.500",

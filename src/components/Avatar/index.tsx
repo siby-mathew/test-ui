@@ -1,4 +1,10 @@
-import { chakra, Flex, Image, type BoxProps } from "@chakra-ui/react";
+import {
+  chakra,
+  Flex,
+  Image,
+  useColorModeValue,
+  type BoxProps,
+} from "@chakra-ui/react";
 import { useGetLinkedUsernameById } from "@hooks/useUsernames";
 import { getAvatarColor } from "@utils/string";
 import Piegion from "@assets/piegion.png";
@@ -7,9 +13,11 @@ export const Avatar: React.FC<
 > = ({ name = "", isInternalMail = !1, ...boxProps }) => {
   const { displayName } = useGetLinkedUsernameById(name);
   const bg = getAvatarColor(displayName ?? "");
+  const color = useColorModeValue("light.100", "");
   return (
     <Flex
       boxSize={"30px"}
+      color={color}
       bg={bg}
       borderRadius={8}
       left={0}

@@ -136,7 +136,7 @@ Let’s grow together `;
           </Flex>
         )}
         <FormProvider {...methods}>
-          <ModalHeader textAlign={"center"} color={"light.100"}>
+          <ModalHeader textAlign={"center"}>
             Refer and Earn
             <ModalCloseButton />
           </ModalHeader>

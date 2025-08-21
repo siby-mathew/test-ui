@@ -32,7 +32,6 @@ export const TransferCard: React.FC<TransferCard> = ({ transaction }) => {
       as={LinkBox}
       w="100%"
       gap={3}
-      color={"light.100"}
       transition={"all ease .2s"}
       p={2}
       borderRadius={8}
@@ -55,7 +54,7 @@ export const TransferCard: React.FC<TransferCard> = ({ transaction }) => {
           <Flex
             color={isCredit ? "green.500" : "red.500"}
             fontSize={16}
-            fontWeight={"bold"}
+            fontWeight={"medium"}
           >
             {formatTokenBalance({
               rawAmount: amount,
