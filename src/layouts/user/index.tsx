@@ -76,7 +76,7 @@ export const UserLayout: React.FC = () => {
     if (authenticated && !requestProfileCreation && !requestWalletCreation) {
       timer = setTimeout(() => {
         setIsUserReady(!0);
-      }, 5000);
+      }, 3000);
     }
     return () => {
       if (timer) {
