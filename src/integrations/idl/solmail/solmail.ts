@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solmail.json`.
  */
 export type Solmail = {
-  "address": "MAiLX6A4AC9HUaet45d7uT8LPaAAgzqu7auSw2YJBjQ",
+  "address": "MAiLwYjBrBVbCZ4EEUrieKyVCBccbE3mVJJRiNzV1dg",
   "metadata": {
     "name": "solmail",
     "version": "0.1.0",
@@ -66,7 +66,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -80,13 +80,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -125,8 +128,40 @@ export type Solmail = {
       ],
       "accounts": [
         {
-          "name": "bidAccount",
-          "writable": true
+          "name": "bidAccount"
+        },
+        {
+          "name": "marketplaceTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "marketplaceSettings",
@@ -161,7 +196,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -175,13 +210,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -250,7 +288,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -264,13 +302,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "claimer"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -346,8 +387,40 @@ export type Solmail = {
       ],
       "accounts": [
         {
-          "name": "bidAccount",
-          "writable": true
+          "name": "bidAccount"
+        },
+        {
+          "name": "marketplaceTreasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "marketplaceSettings",
@@ -382,7 +455,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -396,13 +469,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "claimer"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -422,7 +498,7 @@ export type Solmail = {
     {
       "name": "claimUsernameFromMailBid",
       "docs": [
-        "Claim username after winning a MAIL token bid"
+        "Claim username after winning a MAIL token bid - NO RATE LIMITING as requested"
       ],
       "discriminator": [
         67,
@@ -503,34 +579,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "rateLimit",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  114,
-                  97,
-                  116,
-                  101,
-                  95,
-                  108,
-                  105,
-                  109,
-                  105,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "winner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -544,13 +593,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "winner"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -562,7 +614,7 @@ export type Solmail = {
         {
           "name": "marketplaceTreasuryTokenAccount",
           "docs": [
-            "Treasury token account to receive winning bid tokens - must be owned by official treasury PDA"
+            "Treasury token account to receive winning bid tokens"
           ],
           "writable": true,
           "optional": true
@@ -586,7 +638,7 @@ export type Solmail = {
     {
       "name": "claimUsernameFromSolBid",
       "docs": [
-        "Claim username after winning a SOL bid"
+        "Claim username after winning a SOL bid - NO RATE LIMITING as requested"
       ],
       "discriminator": [
         136,
@@ -667,34 +719,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "rateLimit",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  114,
-                  97,
-                  116,
-                  101,
-                  95,
-                  108,
-                  105,
-                  109,
-                  105,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "winner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -708,13 +733,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "winner"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -732,23 +760,79 @@ export type Solmail = {
       "args": []
     },
     {
-      "name": "cleanupExpiredUserBids",
+      "name": "cleanupExpiredMailBidAccount",
       "docs": [
-        "Clean up expired user bids"
+        "NEW: Cleanup expired MAIL token bid accounts to prevent storage bloat"
       ],
       "discriminator": [
-        212,
-        246,
-        171,
-        19,
-        5,
-        45,
-        109,
-        176
+        72,
+        150,
+        74,
+        57,
+        236,
+        15,
+        241,
+        51
       ],
       "accounts": [
         {
-          "name": "userBids",
+          "name": "bidAccount",
+          "writable": true
+        },
+        {
+          "name": "cleanupAuthority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cleanupExpiredSolBidAccount",
+      "docs": [
+        "NEW: Cleanup expired SOL bid accounts to prevent storage bloat"
+      ],
+      "discriminator": [
+        147,
+        104,
+        250,
+        143,
+        53,
+        87,
+        60,
+        251
+      ],
+      "accounts": [
+        {
+          "name": "bidAccount",
+          "writable": true
+        },
+        {
+          "name": "cleanupAuthority",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "closeUserSolBidAccount",
+      "docs": [
+        "Allow users to close their own UserBid accounts and reclaim rent"
+      ],
+      "discriminator": [
+        215,
+        78,
+        20,
+        176,
+        246,
+        98,
+        185,
+        148
+      ],
+      "accounts": [
+        {
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -762,19 +846,24 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "user_bid.bid_account",
+                "account": "userBid"
               }
             ]
           }
         },
         {
           "name": "user",
+          "writable": true,
           "signer": true
         }
       ],
@@ -1128,7 +1217,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1142,13 +1231,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -1457,7 +1549,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "userBids",
+          "name": "userBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -1471,13 +1563,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -1762,7 +1857,7 @@ export type Solmail = {
     {
       "name": "createUsername",
       "docs": [
-        "Create a new username account without mailbox assignment"
+        "Create a new username account without mailbox assignment - RATE LIMITED for direct creation only"
       ],
       "discriminator": [
         166,
@@ -2251,62 +2346,6 @@ export type Solmail = {
           }
         }
       ]
-    },
-    {
-      "name": "emergencyPauseMarketplace",
-      "docs": [
-        "Emergency pause for bidding (admin only)"
-      ],
-      "discriminator": [
-        39,
-        202,
-        192,
-        66,
-        29,
-        240,
-        182,
-        228
-      ],
-      "accounts": [
-        {
-          "name": "marketplaceSettings",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  109,
-                  97,
-                  114,
-                  107,
-                  101,
-                  116,
-                  112,
-                  108,
-                  97,
-                  99,
-                  101,
-                  95,
-                  115,
-                  101,
-                  116,
-                  116,
-                  105,
-                  110,
-                  103,
-                  115
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "admin",
-          "signer": true
-        }
-      ],
-      "args": []
     },
     {
       "name": "initializeMailTreasury",
@@ -3238,7 +3277,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "newUserBids",
+          "name": "newUserBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -3252,13 +3291,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "newBidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -3281,7 +3323,7 @@ export type Solmail = {
           "signer": true
         },
         {
-          "name": "previousUserBids",
+          "name": "previousUserBid",
           "writable": true,
           "optional": true,
           "pda": {
@@ -3296,14 +3338,17 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bid_account.current_highest_bidder",
                 "account": "bidAccount"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -3543,7 +3588,7 @@ export type Solmail = {
           }
         },
         {
-          "name": "newUserBids",
+          "name": "newUserBid",
           "writable": true,
           "pda": {
             "seeds": [
@@ -3557,13 +3602,16 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "newBidder"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -3579,7 +3627,7 @@ export type Solmail = {
           "optional": true
         },
         {
-          "name": "previousUserBids",
+          "name": "previousUserBid",
           "writable": true,
           "optional": true,
           "pda": {
@@ -3594,14 +3642,17 @@ export type Solmail = {
                   95,
                   98,
                   105,
-                  100,
-                  115
+                  100
                 ]
               },
               {
                 "kind": "account",
                 "path": "bid_account.current_highest_bidder",
                 "account": "bidAccount"
+              },
+              {
+                "kind": "account",
+                "path": "bidAccount"
               }
             ]
           }
@@ -3982,16 +4033,16 @@ export type Solmail = {
       ]
     },
     {
-      "name": "userBids",
+      "name": "userBid",
       "discriminator": [
-        146,
-        79,
-        182,
-        223,
-        41,
-        20,
-        192,
-        47
+        13,
+        209,
+        228,
+        159,
+        155,
+        166,
+        149,
+        53
       ]
     },
     {
@@ -4163,19 +4214,6 @@ export type Solmail = {
         126,
         189,
         43
-      ]
-    },
-    {
-      "name": "enhancedFinancialTransactionEvent",
-      "discriminator": [
-        174,
-        213,
-        7,
-        23,
-        186,
-        231,
-        12,
-        149
       ]
     },
     {
@@ -4716,7 +4754,7 @@ export type Solmail = {
     {
       "code": 6013,
       "name": "invalidUsername",
-      "msg": "Invalid username - must be 3-32 characters, alphanumeric and underscores only"
+      "msg": "Invalid username - must be 1-32 characters, alphanumeric and underscores only"
     },
     {
       "code": 6014,
@@ -5206,6 +5244,10 @@ export type Solmail = {
             "type": "u64"
           },
           {
+            "name": "cleanupDeadline",
+            "type": "u32"
+          },
+          {
             "name": "username",
             "type": "string"
           },
@@ -5465,6 +5507,9 @@ export type Solmail = {
           },
           {
             "name": "expired"
+          },
+          {
+            "name": "cleanedUp"
           }
         ]
       }
@@ -5614,63 +5659,6 @@ export type Solmail = {
           {
             "name": "totalAmountProcessed",
             "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "enhancedFinancialTransactionEvent",
-      "docs": [
-        "Enhanced financial transaction event with fee details"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "transactionType",
-            "type": "string"
-          },
-          {
-            "name": "fromAccount",
-            "type": "pubkey"
-          },
-          {
-            "name": "toAccount",
-            "type": "pubkey"
-          },
-          {
-            "name": "primaryAmount",
-            "type": "u64"
-          },
-          {
-            "name": "platformFee",
-            "type": "u64"
-          },
-          {
-            "name": "totalAmount",
-            "type": "u64"
-          },
-          {
-            "name": "feeRateBasisPoints",
-            "type": "u16"
-          },
-          {
-            "name": "success",
-            "type": "bool"
-          },
-          {
-            "name": "executedAt",
-            "type": "u32"
-          },
-          {
-            "name": "relatedUsername",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "marketplaceSettings",
-            "type": "pubkey"
           }
         ]
       }
@@ -6599,12 +6587,6 @@ export type Solmail = {
           {
             "name": "bump",
             "type": "u8"
-          },
-          {
-            "name": "linkedUsername",
-            "type": {
-              "option": "pubkey"
-            }
           }
         ]
       }
@@ -6803,10 +6785,17 @@ export type Solmail = {
       }
     },
     {
-      "name": "userBidInfo",
+      "name": "userBid",
+      "docs": [
+        "Individual UserBid account - one per (user, bid_account) pair"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
           {
             "name": "bidAccount",
             "type": "pubkey"
@@ -6864,42 +6853,16 @@ export type Solmail = {
             }
           },
           {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
             "name": "username",
             "type": "string"
           },
           {
             "name": "domain",
             "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "userBids",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "user",
-            "type": "pubkey"
-          },
-          {
-            "name": "activeBids",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "userBidInfo"
-                }
-              }
-            }
-          },
-          {
-            "name": "totalBidsCreated",
-            "type": "u32"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
