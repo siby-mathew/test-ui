@@ -9,7 +9,7 @@ import { Tabs } from "./components/Tab";
 import { Table } from "./components/Table";
 
 export const AppTheme = extendTheme({
-  config: { initialColorMode: "system", useSystemColorMode: true },
+  config: { initialColorMode: "dark", useSystemColorMode: true },
   fonts: {
     body: `"Inter", sans-serif`,
   },
