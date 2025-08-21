@@ -15,7 +15,6 @@ import {
 import { FieldWrapper } from "@components/Field";
 import { useCreateProfile } from "@hooks/useCreateProfile";
 import { useExistingQueries } from "@hooks/useExistingQueries";
-
 import { validateCode } from "@utils/string/code";
 
 import { useId } from "react";
