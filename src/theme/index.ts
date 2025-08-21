@@ -23,11 +23,18 @@ export const AppTheme = extendTheme({
         color: mode("rgb(78 88 99)", "#b6b6b6")(props),
       },
       ".Toastify__toast-theme--dark": {
-        background: "#101527ab",
-        color: "var(--toastify-text-color-dark)",
         "backdrop-filter": "blur(10px)",
-        border: "solid 1px #161927",
         borderRadius: "20px",
+      },
+      "[data-theme=dark] .Toastify__toast-theme--dark": {
+        background: "#101527ab",
+        border: "solid 1px #161927",
+        color: "var(--toastify-text-color-dark)",
+      },
+      "[data-theme=light] .Toastify__toast-theme--dark": {
+        background: "#f3f3f34a",
+        border: "solid 1px #e1e1e1",
+        color: "var(--toastify-text-color-light)",
       },
       ".Toastify__close-button>svg": {
         width: "11px !important",

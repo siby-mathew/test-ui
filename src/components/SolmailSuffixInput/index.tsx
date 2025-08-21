@@ -1,5 +1,6 @@
 import { Box, chakra, Flex, Input, Spinner } from "@chakra-ui/react";
 import { DOMAINS } from "@const/domain";
+
 import { useUsernameStatus } from "@hooks/useUsername";
 import { validateUsername } from "@utils/string/username";
 import { useRef } from "react";
@@ -99,7 +100,6 @@ export const SolmailSuffixInput: React.FC<{
             placeholder={PLACEHOLDER}
             fontSize="inherit"
             bg="transparent"
-            color="light.100"
             autoComplete="off"
             readOnly={isPending}
             textTransform={disablePlaceholder ? "initial" : "lowercase"}
