@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build:analyze": "set NODE_OPTIONS=--max-old-space-size=4096 && tsc -b && vite build --mode analyze",
-    "build": "set NODE_OPTIONS=--max-old-space-size=4096 && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts",
