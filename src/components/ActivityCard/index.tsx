@@ -39,13 +39,13 @@ export const TransferCard: React.FC<TransferCard> = ({ transaction }) => {
         bg: "surface.900",
       }}
     >
-      <Flex w="40px">
+      <Flex w="43px" alignItems={"center"}>
         <Image
           objectFit={"cover"}
           src={token?.logo}
           alt={token?.name}
           borderRadius={"50%"}
-          boxSize="40px"
+          boxSize="43px"
         />
       </Flex>
       <Flex direction={"column"} flex={"auto"}>

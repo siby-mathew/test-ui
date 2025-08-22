@@ -22,6 +22,7 @@ export const ActivityPage: React.FC = () => {
     from: "/u/_layout/wallet/_layout/activity/$id",
   });
   const index = ["assets", "transactions"].indexOf(id) || 0;
+
   return (
     <Box w="100%" borderRadius={5}>
       <WalletContainerSmall>
