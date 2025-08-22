@@ -4,7 +4,6 @@ import {
   chakra,
   Flex,
   Input,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
