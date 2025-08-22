@@ -1,10 +1,12 @@
 import { chakra, Flex, Image } from "@chakra-ui/react";
+import { useSolanaPayLogo } from "@hooks/useSolanaPayLogo";
 import { useToken } from "@hooks/useToken";
-import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+
 export const SolanaPayRequest: React.FC<{ amount: string; token: string }> = ({
   amount,
   token,
 }) => {
+  const SolanaPayLogo = useSolanaPayLogo();
   const { symbol } = useToken(token ?? "");
   return (
     <Flex

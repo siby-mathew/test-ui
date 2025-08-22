@@ -82,11 +82,11 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
           color: "#444444",
           left: 0,
           right: 0,
+          opacity: 0.8,
         },
       }}
       h={"300px"}
       w="100%"
-      color={"#fff"}
     >
       <Box ref={editorRef} />
     </Box>

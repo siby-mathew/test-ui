@@ -18,7 +18,6 @@ import {
   type ModalProps,
 } from "@chakra-ui/react";
 
-import SolanaPayIcon from "@assets/solanapay-logo.light.svg";
 import { ClipboardText } from "@components/ClipboardText";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -32,6 +31,7 @@ import { useToken } from "@hooks/useToken";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { useBalance } from "@hooks/useBalance";
 import { NO_BALANCE_LABEL } from "@const/config";
+import { useSolanaPayLogo } from "@hooks/useSolanaPayLogo";
 export const SolanaPay: React.FC<
   Omit<ModalProps, "children"> &
     PaymentConfig & {
@@ -57,6 +57,7 @@ export const SolanaPay: React.FC<
   const [reference, setReference] = useState<PublicKey | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
   const { isOpen: isDone, onOpen } = useDisclosure();
+  const SolanaPayLogo = useSolanaPayLogo();
   const { isPending, sendTransaction } = useSolanaPay({
     ref: reference,
     qrUrl: paymentUrl,
@@ -124,7 +125,7 @@ export const SolanaPay: React.FC<
       <ModalContent position={"relative"}>
         <ModalCloseButton />
         <ModalHeader>
-          <Image w="70px" src={SolanaPayIcon} />
+          <Image w="70px" src={SolanaPayLogo} />
         </ModalHeader>
         <ModalBody pb={5}>
           <VStack w="100%">

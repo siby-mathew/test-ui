@@ -1,9 +1,10 @@
 import { Box, Button, chakra, Icon, Image } from "@chakra-ui/react";
-import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+
 import { useFormContext } from "react-hook-form";
 import { type ComposerFormInputs } from "src/types";
 import { useToken } from "@hooks/useToken";
 import { IoClose } from "react-icons/io5";
+import { useSolanaPayLogo } from "@hooks/useSolanaPayLogo";
 export const SolanaPayButton: React.FC<{ onOpenSolanaPay: () => void }> = ({
   onOpenSolanaPay,
 }) => {
@@ -12,7 +13,7 @@ export const SolanaPayButton: React.FC<{ onOpenSolanaPay: () => void }> = ({
   const solanaPay = getValues().solanaPay;
   const hasSolanaPay = Object.keys(solanaPay ?? {}).length > 0;
   const { symbol } = useToken(solanaPay?.["tokenaddress"] ?? "");
-
+  const SolanaPayLogo = useSolanaPayLogo();
   const onClickRemove = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setValue("solanaPay", undefined);

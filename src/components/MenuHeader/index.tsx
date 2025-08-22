@@ -15,7 +15,7 @@ export const MenuHeader: React.FC<MenuConfig> = ({ name, header }) => {
   const logo = useColorModeValue(SomailLogoTextDark, SolmailLogoText);
   const color = useColorModeValue("green.600", "green.200");
   return (
-    <Flex direction={"column"}>
+    <Flex direction={"column"} mb={3}>
       <Flex fontWeight={"bold"} fontSize={18} px={1}>
         <Link to={"/"}>
           <Image

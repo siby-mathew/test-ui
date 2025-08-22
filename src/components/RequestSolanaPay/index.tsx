@@ -17,7 +17,7 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import type { ReactNode } from "react";
 import { tokens } from "@const/tokens";
@@ -26,6 +26,7 @@ import { usePrivyWallet } from "@hooks/usePrivyWallet";
 import { FieldWrapper } from "@components/Field";
 import isFunction from "lodash/isFunction";
 import type { SolanaPayPayload } from "src/types";
+import { useSolanaPayLogo } from "@hooks/useSolanaPayLogo";
 
 type SolanaPayForm = {
   message: string;
@@ -108,6 +109,7 @@ export const RequestSolanaPay: React.FC<
       });
     }
   };
+  const SolanaPayLogo = useSolanaPayLogo();
   const { wallet } = usePrivyWallet();
   return (
     <Modal onClose={onClose} isCentered size={"md"} {...props}>

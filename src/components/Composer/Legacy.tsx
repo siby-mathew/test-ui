@@ -4,6 +4,7 @@ import {
   chakra,
   Flex,
   Input,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -391,13 +392,19 @@ export const ComposerLegacy: React.FC = () => {
         <Flex direction={"column"}>
           <Flex
             borderBottom={"solid 1px"}
-            borderBottomColor={"#1a1e28"}
+            borderBottomColor={"surface.700"}
             direction={"row"}
             justifyContent={"space-between"}
             py={3}
+            mx="-20px"
+            px="20px"
+            bg="surface.500"
+            borderTopRadius={10}
           >
-            <Flex alignItems={"center"} fontSize={18}>
-              <chakra.span fontWeight={"bold"}>Compose new message</chakra.span>
+            <Flex alignItems={"center"} fontSize={16}>
+              <chakra.span fontWeight={"600jekej"}>
+                Compose new message
+              </chakra.span>
             </Flex>
             <Flex gap={3}>
               <Button

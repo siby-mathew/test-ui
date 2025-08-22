@@ -9,7 +9,7 @@ import BigNumber from "bignumber.js";
  */
 
 type Options = {
-  rawAmount: number | bigint;
+  rawAmount: number | bigint | string;
   mintDecimals?: number;
   suffix?: string;
   decimals?: number | "auto"; // allow "auto"
@@ -25,11 +25,12 @@ export function formatTokenBalance({
   compact = true,
   prefix = "",
 }: Options): string {
-  const divisor = 10 ** mintDecimals;
-  const balance = Number(rawAmount) / divisor;
+  const divisor = new BigNumber(10).pow(mintDecimals);
+  const balance = new BigNumber(rawAmount).div(divisor);
 
+  // 🔹 Compact formatting (K, M, B, T)
   if (compact) {
-    const absBalance = Math.abs(balance);
+    const absBalance = balance.abs();
     const units = [
       { value: 1e12, symbol: "T" },
       { value: 1e9, symbol: "B" },
@@ -38,40 +39,43 @@ export function formatTokenBalance({
     ];
 
     for (const unit of units) {
-      if (absBalance >= unit.value) {
-        const val = balance / unit.value;
-
-        if (decimals === "auto") {
-          return `${val.toString()}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
-        }
-
-        return `${val.toLocaleString(undefined, {
-          minimumFractionDigits: decimals > 0 ? 1 : 0,
-          maximumFractionDigits: decimals,
-        })}${unit.symbol}${suffix ? ` ${suffix}` : ""}`;
+      if (absBalance.gte(unit.value)) {
+        const val = balance.div(unit.value);
+        return (
+          `${prefix ? prefix + " " : ""}` +
+          `${formatWithAutoDecimals(val, decimals)}` +
+          unit.symbol +
+          `${suffix ? ` ${suffix}` : ""}`
+        );
       }
     }
   }
 
-  // 🔹 handle non-compact formatting
-  if (decimals === "auto") {
-    // Show all decimals but trim trailing zeros
-    return `${prefix ? `${prefix} ` : ""}${balance
-      .toString()
-      .replace(/(\.\d*?[1-9])0+$/, "$1")}${suffix ? ` ${suffix}` : ""}`;
-  } else {
-    const hasDecimals = balance % 1 !== 0;
-    const formatted =
-      decimals === 0
-        ? Math.trunc(balance).toLocaleString() // avoid rounding
-        : balance.toLocaleString(undefined, {
-            minimumFractionDigits: hasDecimals ? 1 : 0,
-            maximumFractionDigits: decimals,
-          });
+  // 🔹 Non-compact formatting
+  return (
+    `${prefix ? prefix + " " : ""}` +
+    `${formatWithAutoDecimals(balance, decimals)}` +
+    `${suffix ? ` ${suffix}` : ""}`
+  );
+}
 
-    return `${prefix ? `${prefix} ` : ""}${formatted}${
-      suffix ? ` ${suffix}` : ""
-    }`;
+function formatWithAutoDecimals(
+  val: BigNumber,
+  decimals: number | "auto"
+): string {
+  if (decimals === "auto") {
+    if (val.gte(1)) {
+      // Show up to 2 decimals for >= 1
+      return val.decimalPlaces(2).toFormat();
+    } else if (val.gte(0.0001)) {
+      // Show up to 4 decimals for small values
+      return val.decimalPlaces(4).toFormat();
+    } else {
+      // Tiny balances → scientific or trimmed
+      return val.toPrecision(2);
+    }
+  } else {
+    return val.decimalPlaces(decimals).toFormat();
   }
 }
 

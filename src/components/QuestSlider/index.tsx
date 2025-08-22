@@ -101,7 +101,7 @@ const quests: QuestsType[] = [
 
 export const Quests = () => {
   return (
-    <Flex color="white" direction={"column"}>
+    <Flex direction={"column"}>
       <Flex
         justifyContent={"space-between"}
         px={5}

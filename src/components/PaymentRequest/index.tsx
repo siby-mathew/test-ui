@@ -7,9 +7,11 @@ import { useToken } from "@hooks/useToken";
 import { useCallback, useState } from "react";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import type { PaymentConfig, StatusType } from "src/types";
-import SolanaPayLogo from "@assets/solanapay-logo.light.svg";
+
 import { usePrivyWallet } from "@hooks/usePrivyWallet";
+import { useSolanaPayLogo } from "@hooks/useSolanaPayLogo";
 const PymentButton: React.FC<PaymentConfig> = ({ ...props }) => {
+  const SolanaPayLogo = useSolanaPayLogo();
   const { id, context } = useMailBoxContext();
   const { mail } = useMailBody(id, context);
   const { amount, token } = props;
