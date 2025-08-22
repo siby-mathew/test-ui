@@ -40,10 +40,20 @@ export const Login: React.FC = () => {
       >
         <Flex>Solmail © {new Date().getFullYear()}</Flex>
         <Flex>
-          <ChakraLink href="#">Terms & Conditions</ChakraLink>
+          <ChakraLink
+            href="https://elastic-grip-d07.notion.site/Terms-and-conditions-25750f9ac7168058b39ded4c2316ec37"
+            target="_blank"
+          >
+            Terms & Conditions
+          </ChakraLink>
         </Flex>
         <Flex>
-          <ChakraLink href="#">Privacy policy</ChakraLink>
+          <ChakraLink
+            href="https://elastic-grip-d07.notion.site/Privacy-Policy-25750f9ac71680129ef5e99dc1ac860f"
+            target="_blank"
+          >
+            Privacy policy
+          </ChakraLink>
         </Flex>
       </Flex>
     </Flex>
