@@ -16,4 +16,4 @@ export const NO_BALANCE_LABEL = `Insufficient Balance`;
 export const TELEGRAM_URL = `https://t.me/solmailofficial`;
 export const TWITTER_URL = `https://x.com/SolMailOfficial`;
 export const INSTAGRAM_URL = `https://www.instagram.com/solmailofficial/`;
-export const DOCS_URL = `/docs`;
+export const DOCS_URL = `https://solmail-1.gitbook.io/solmail/`;
