@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "build:prod": "set NODE_OPTIONS=--max-old-space-size=4096 && tsc -b && vite build",
     "build:analyze": "set NODE_OPTIONS=--max-old-space-size=4096 && tsc -b && vite build --mode analyze",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts",
     "deploy": "node ./deploy.cjs dev",
-    "deploy:dev": "npm run build && npm run deploy"
+    "deploy:dev": "npm run build && npm run deploy",
+    "preview:prod": "http-server ./dist -p 3030 -o"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
