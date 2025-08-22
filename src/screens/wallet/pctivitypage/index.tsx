@@ -14,19 +14,28 @@ import { TransactionsList } from "@components/TransactionsList";
 import { WalletContainerSmall } from "@components/WalletContainerSmall";
 
 import { useTokensOwned } from "@hooks/useTokensOwned";
+import { Link, useParams } from "@tanstack/react-router";
 
 export const ActivityPage: React.FC = () => {
   const { tokens, isLoading } = useTokensOwned();
-
+  const { id } = useParams({
+    from: "/u/_layout/wallet/_layout/activity/$id",
+  });
+  const index = ["assets", "transactions"].indexOf(id) || 0;
   return (
     <Box w="100%" borderRadius={5}>
       <WalletContainerSmall>
-        <Tabs variant={"wallet"}>
+        <Tabs variant={"wallet"} index={index}>
           <TabList>
-            <Tab py={4} flex={"auto"}>
+            <Tab py={4} flex={"auto"} as={Link} to="/u/wallet/activity/assets">
               Tokens
             </Tab>
-            <Tab py={4} flex={"auto"}>
+            <Tab
+              py={4}
+              flex={"auto"}
+              as={Link}
+              to="/u/wallet/activity/transactions"
+            >
               Activity
             </Tab>
           </TabList>

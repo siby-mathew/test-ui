@@ -1,17 +1,15 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBVNUAy0jwECUukyM8o2NuTfVldk2sKNU",
-  authDomain: "solmail-b0fe6.firebaseapp.com",
-  projectId: "solmail-b0fe6",
-  storageBucket: "solmail-b0fe6.firebasestorage.app",
-  messagingSenderId: "876765604345",
-  appId: "1:876765604345:web:8a91d17c04ed995b6af528",
-  measurementId: "G-0X49VLGKBP",
+  apiKey: "AIzaSyCYITakAirGzZIsQtrva0ZJdAYfhQFwn_M",
+  authDomain: "solmail-280c6.firebaseapp.com",
+  projectId: "solmail-280c6",
+  storageBucket: "solmail-280c6.firebasestorage.app",
+  messagingSenderId: "293819852954",
+  appId: "1:293819852954:web:5bd60925509765e7391723",
+  measurementId: "G-D0CKNMWCBG",
 };
 
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
-
-export { messaging, getToken, onMessage };
+export const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);

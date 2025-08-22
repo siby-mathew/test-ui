@@ -116,7 +116,12 @@ export const MENU: MenuConfig[] = [
     link: `/u/feature/`,
     id: "feature",
   },
-  { icon: FaWallet, name: "Wallet", link: `/u/wallet/activity`, id: "wallet" },
+  {
+    icon: FaWallet,
+    name: "Wallet",
+    link: `/u/wallet/activity/assets`,
+    id: "wallet",
+  },
   {
     icon: FaWallet,
     name: "Wallet",
