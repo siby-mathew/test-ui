@@ -16,6 +16,7 @@ import * as Sentry from "@sentry/react";
 
 import { DevTools } from "jotai-devtools";
 import "jotai-devtools/styles.css";
+import { PRIVACY_POLICY_LINK, TERMS_AND_CONDITIONS_LINK } from "@const/config";
 
 const queryclient = new QueryClient();
 
@@ -71,8 +72,8 @@ createRoot(document.getElementById("root")!).render(
             },
 
             legal: {
-              termsAndConditionsUrl: "/?t",
-              privacyPolicyUrl: "/?p",
+              termsAndConditionsUrl: TERMS_AND_CONDITIONS_LINK,
+              privacyPolicyUrl: PRIVACY_POLICY_LINK,
             },
           }}
         >

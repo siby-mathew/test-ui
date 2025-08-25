@@ -1,5 +1,5 @@
 import { RPC_ENDPOINT } from "@const/config";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import axios from "axios";
 import { QueryKeys } from "src/types";
 
@@ -8,13 +8,18 @@ type PayLoad = {
     | "getTokenAccounts"
     | "getAsset"
     | "getSignaturesForAddress"
-    | "getTransaction";
+    | "getTransaction"
+    | "getAssetBatch";
 
   params: any;
 };
-export const useHeliusApi = <T>({ method, params }: PayLoad) => {
+export const useHeliusApi = <T>(
+  { method, params }: PayLoad,
+  queryOptions?: Partial<UseQueryOptions<T>>
+) => {
   return useQuery({
-    queryKey: [QueryKeys.TOKENS, method, params],
+    queryKey: [QueryKeys.HELIUS_GNERIC, method, params],
+    staleTime: 60 * 1000,
     queryFn: async () => {
       try {
         const { data } = await axios.post(
@@ -37,5 +42,6 @@ export const useHeliusApi = <T>({ method, params }: PayLoad) => {
         return {} as T;
       }
     },
+    ...queryOptions,
   });
 };

@@ -3,6 +3,7 @@ import { Button, Flex, Link as ChakraLink } from "@chakra-ui/react";
 import { usePrivy } from "@privy-io/react-auth";
 
 import { SocialShare } from "@components/SocialShare";
+import { PRIVACY_POLICY_LINK, TERMS_AND_CONDITIONS_LINK } from "@const/config";
 export const Login: React.FC = () => {
   const { login } = usePrivy();
 
@@ -40,18 +41,12 @@ export const Login: React.FC = () => {
       >
         <Flex>Solmail © {new Date().getFullYear()}</Flex>
         <Flex>
-          <ChakraLink
-            href="https://elastic-grip-d07.notion.site/Terms-and-conditions-25750f9ac7168058b39ded4c2316ec37"
-            target="_blank"
-          >
+          <ChakraLink href={TERMS_AND_CONDITIONS_LINK} target="_blank">
             Terms & Conditions
           </ChakraLink>
         </Flex>
         <Flex>
-          <ChakraLink
-            href="https://elastic-grip-d07.notion.site/Privacy-Policy-25750f9ac71680129ef5e99dc1ac860f"
-            target="_blank"
-          >
+          <ChakraLink href={PRIVACY_POLICY_LINK} target="_blank">
             Privacy policy
           </ChakraLink>
         </Flex>

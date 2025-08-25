@@ -7,6 +7,7 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Spinner,
   VStack,
 } from "@chakra-ui/react";
 import { TokenCard } from "@components/TokenCard";
@@ -18,7 +19,7 @@ export const TokenList: React.FC<
     selected?: string;
   }
 > = ({ selected, onClose, onSelect, ...props }) => {
-  const { tokens } = useTokensOwned();
+  const { formattedTokens: tokens, isLoading } = useTokensOwned();
   return (
     <Modal isCentered {...props} onClose={onClose}>
       <ModalOverlay />
@@ -29,7 +30,13 @@ export const TokenList: React.FC<
         </ModalHeader>
         <ModalBody pt={0}>
           <VStack w="100%" pb={5}>
-            {tokens &&
+            {isLoading && (
+              <Flex minH={100} alignItems={"center"} justifyContent={"center"}>
+                <Spinner />
+              </Flex>
+            )}
+            {!isLoading &&
+              tokens &&
               tokens.length > 0 &&
               tokens.map((token) => {
                 const isSelected = selected && token.mint === selected;

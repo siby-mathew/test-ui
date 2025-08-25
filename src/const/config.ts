@@ -17,3 +17,8 @@ export const TELEGRAM_URL = `https://t.me/solmailofficial`;
 export const TWITTER_URL = `https://x.com/SolMailOfficial`;
 export const INSTAGRAM_URL = `https://www.instagram.com/solmailofficial/`;
 export const DOCS_URL = `https://solmail-1.gitbook.io/solmail/`;
+
+export const PRIVACY_POLICY_LINK =
+  "https://elastic-grip-d07.notion.site/Privacy-Policy-25750f9ac71680129ef5e99dc1ac860f";
+export const TERMS_AND_CONDITIONS_LINK =
+  "https://elastic-grip-d07.notion.site/Terms-and-conditions-25750f9ac7168058b39ded4c2316ec37";

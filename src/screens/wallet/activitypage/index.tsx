@@ -17,7 +17,7 @@ import { useTokensOwned } from "@hooks/useTokensOwned";
 import { Link, useParams } from "@tanstack/react-router";
 
 export const ActivityPage: React.FC = () => {
-  const { tokens, isLoading } = useTokensOwned();
+  const { formattedTokens, isLoading } = useTokensOwned();
   const { id } = useParams({
     from: "/u/_layout/wallet/_layout/activity/$id",
   });
@@ -49,9 +49,10 @@ export const ActivityPage: React.FC = () => {
                     <Spinner />
                   </Flex>
                 )}
-                {tokens &&
-                  tokens.length > 0 &&
-                  tokens.map((token) => {
+                {!isLoading &&
+                  formattedTokens &&
+                  formattedTokens.length > 0 &&
+                  formattedTokens.map((token) => {
                     return (
                       <Flex
                         w="100%"

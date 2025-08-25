@@ -8,18 +8,21 @@ import {
   LinkBox,
   LinkOverlay,
   useDisclosure,
+  Skeleton,
 } from "@chakra-ui/react";
-import { useBalance } from "@hooks/useBalance";
+
 import { IconType } from "react-icons";
 import { LuQrCode } from "react-icons/lu";
 import { FiArrowUpRight } from "react-icons/fi";
 import { ShareAddress } from "@components/ShareAddress";
 import { Link, Outlet } from "@tanstack/react-router";
 import isFunction from "lodash/isFunction";
-import { WithSolPrice } from "@components/WithSolPrice";
+
 import { CustomScrollbarWrapper } from "@components/ScrollWrapper";
 
 import { TiThListOutline } from "react-icons/ti";
+import { usePortfolioValue } from "@hooks/usePortfolioValue";
+import { formatUsdValue } from "@utils/formating";
 
 const MenuButton: React.FC<{
   name: string;
@@ -60,8 +63,9 @@ const MenuButton: React.FC<{
   );
 };
 export const WalletLayout: React.FC = () => {
-  const { formattedBalance } = useBalance();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { usd, isLoading, solana } = usePortfolioValue();
+
   return (
     <Flex as={Container} maxW={"100%"} py={5} w="100%">
       <CustomScrollbarWrapper>
@@ -73,13 +77,22 @@ export const WalletLayout: React.FC = () => {
           py={5}
           textAlign={"center"}
         >
-          <Flex>
+          <Flex direction={"column"}>
             <chakra.span fontWeight={"bold"} fontSize={25}>
-              {formattedBalance}
+              <Skeleton
+                startColor="surface.900"
+                endColor="surface.300"
+                minW={50}
+                isLoaded={!isLoading}
+              >
+                {formatUsdValue(usd)}
+              </Skeleton>
             </chakra.span>
-          </Flex>
-          <Flex color={"green.500"}>
-            <WithSolPrice amount={formattedBalance} />
+            {solana && solana.address && (
+              <Flex>
+                {`1 ${solana?.symbol} ≈ ${formatUsdValue(solana?.price?.usdPrice ?? 0)}`}
+              </Flex>
+            )}
           </Flex>
         </Flex>
 
@@ -88,9 +101,8 @@ export const WalletLayout: React.FC = () => {
             <MenuButton
               name="Overview"
               icon={TiThListOutline}
-              link="/u/wallet/activity"
+              link="/u/wallet/activity/assets"
             />
-
             <MenuButton name="Receive" icon={LuQrCode} onClick={onOpen} />
             <MenuButton
               name="Send"

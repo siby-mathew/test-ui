@@ -131,8 +131,6 @@ export const useMailBody = (
           decryptData(content ?? "", mail?.iv, data)
         ) as unknown as MailBodyResponse;
 
-        console.log(decryptedContent);
-
         if (!decryptedContent) return ["", [], "", [], []];
 
         const div = document.createElement("div");

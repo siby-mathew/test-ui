@@ -55,8 +55,7 @@ export const useGetUsernames = (
               },
             ]);
             return allAccounts;
-          } catch (e) {
-            console.log(e);
+          } catch {
             return [];
           }
         }

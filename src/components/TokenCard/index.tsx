@@ -1,12 +1,19 @@
-import { Flex, Image } from "@chakra-ui/react";
-import { useTokenMeta } from "@hooks/useTokensOwned";
-import { formatTokenBalance } from "@utils/formating";
+import { chakra, Flex, Icon, Image, Tooltip } from "@chakra-ui/react";
+import { BASE_TOKEN } from "@const/tokens";
+import { FormattedTokens } from "@hooks/useTokensOwned";
+import { formatTokenBalance, formatUsdValue } from "@utils/formating";
+import { FaCircleInfo } from "react-icons/fa6";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 
-import { TokenAccount } from "src/types/token";
-
-export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
-  const { token } = useTokenMeta(mint);
-
+export const TokenCard: React.FC<FormattedTokens> = ({
+  name,
+  amount,
+  symbol,
+  icon,
+  decimals,
+  price,
+  mint,
+}) => {
   return (
     <Flex
       flexDirection={"row"}
@@ -20,10 +27,10 @@ export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
       <Flex boxSize={"40px"} bg="surface.300" borderRadius={"50%"}>
         <Image
           borderRadius={"50%"}
-          src={token?.logo ?? ""}
+          src={icon ?? ""}
           boxSize={"100%"}
           objectFit={"cover"}
-          alt={token?.name ?? ""}
+          alt={name ?? ""}
           opacity={0}
           onLoad={(e) => {
             e.currentTarget.style.opacity = "1";
@@ -33,17 +40,49 @@ export const TokenCard: React.FC<TokenAccount> = ({ mint, amount }) => {
 
       <Flex flex={"auto"} direction={"column"}>
         <Flex direction={"row"} justifyContent={"space-between"}>
-          <Flex fontWeight={"bold"}>{token?.symbol}</Flex>
+          <Flex fontWeight={"bold"}>{symbol ?? ""}</Flex>
           <Flex fontWeight={"bold"}>
-            {formatTokenBalance({
-              rawAmount: amount,
-              mintDecimals: token?.decimals ?? 9,
-              decimals: 2,
-            })}
+            <chakra.span>{formatUsdValue(price?.usdPrice ?? 0)}</chakra.span>
           </Flex>
         </Flex>
         <Flex direction={"row"} justifyContent={"space-between"}>
-          <Flex opacity={0.5}>{token?.name ?? ""}</Flex>
+          <Flex opacity={0.5}>
+            {formatTokenBalance({
+              rawAmount: amount,
+              mintDecimals: decimals ?? 9,
+              decimals: 2,
+              suffix: symbol ?? "",
+            })}
+          </Flex>
+          <Flex>
+            {price && price?.priceChange24h && (
+              <chakra.span
+                display={"inline-flex"}
+                alignItems={"center"}
+                fontSize={13}
+                color={price?.priceChange24h < 0 ? "red.500" : "green.500"}
+              >
+                <Icon
+                  as={
+                    price?.priceChange24h < 0
+                      ? TiArrowSortedDown
+                      : TiArrowSortedUp
+                  }
+                />
+                {price?.priceChange24h.toFixed(2) ?? ""}%
+              </chakra.span>
+            )}
+
+            {import.meta.env.MODE === "development" &&
+              mint !== BASE_TOKEN.mint && (
+                <Tooltip
+                  placement="right"
+                  label="Prices are only available for mainnet tokens"
+                >
+                  <Icon color={"red.500"} as={FaCircleInfo} />
+                </Tooltip>
+              )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
