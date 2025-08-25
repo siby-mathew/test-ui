@@ -2,10 +2,12 @@ import { useMemo } from "react";
 import { useTokensOwned } from "./useTokensOwned";
 import { fromRawAmount } from "@utils/formating";
 import { BASE_TOKEN } from "@const/tokens";
+import { useQueryClient } from "@tanstack/react-query";
+import { QueryKeys } from "src/types";
 
 export const usePortfolioValue = () => {
   const { formattedTokens, isLoading } = useTokensOwned();
-
+  const quercClient = useQueryClient();
   const solana = useMemo(() => {
     return formattedTokens.find(({ mint }) => BASE_TOKEN.mint === mint);
   }, [formattedTokens]);
@@ -29,9 +31,14 @@ export const usePortfolioValue = () => {
 
     return totalUsd;
   }, [formattedTokens]);
+
+  const refetch = () => {
+    quercClient.invalidateQueries({ queryKey: [QueryKeys.JUPITER_PRICE] });
+  };
   return {
     usd,
     isLoading,
     solana,
+    refetch,
   };
 };

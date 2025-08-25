@@ -90,7 +90,9 @@ export const WalletLayout: React.FC = () => {
             </chakra.span>
             {solana && solana.address && (
               <Flex>
-                {`1 ${solana?.symbol} ≈ ${formatUsdValue(solana?.price?.usdPrice ?? 0)}`}
+                <Skeleton isLoaded={!isLoading}>
+                  {`1 ${solana?.symbol} ≈ ${formatUsdValue(solana?.price?.usdPrice ?? 0)}`}
+                </Skeleton>
               </Flex>
             )}
           </Flex>
